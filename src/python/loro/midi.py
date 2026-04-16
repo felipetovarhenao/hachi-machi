@@ -16,20 +16,16 @@ class MidiParser:
                 'Invalid MIDI file type 2. Expected type 0 (single track) or 1 (multi-track).')
         midi.tracks = [mido.merge_tracks(midi.tracks)]
         self._midi = midi
+        self._numvoices = 0
         self._events = self._parse()
 
-    def events(self):
-        return self._events
-
     def _parse(self) -> torch.Tensor:
-        if self._events is not None:
-            return self._events
         onset = 0
         last_onset = 0
         last_onset_per_voice = {}
         events = []
         voice_map = {}
-        voice_count = 0
+        numvoices = 0
         active_notes = {}
 
         for msg in self._midi:
@@ -38,8 +34,8 @@ class MidiParser:
                 continue
             channel = msg.channel
             if channel not in voice_map:
-                voice_map[channel] = voice_count
-                voice_count += 1
+                voice_map[channel] = numvoices
+                numvoices += 1
             pitch = int(round(msg.note * 100))
             velocity = msg.velocity
             voice = voice_map[channel]
@@ -60,6 +56,12 @@ class MidiParser:
                 duration = onset - event[0]
                 event.append(duration)
                 events.append((event[0], event[1:]))
-
+        self._numvoices = numvoices
         events.sort(key=lambda x: x[0])
-        return torch.tensor([e for _, e in events]).round()
+        return torch.tensor([e for _, e in events]).to(torch.float32)
+
+    def events(self):
+        return self._events
+
+    def numvoices(self):
+        return self._numvoices
