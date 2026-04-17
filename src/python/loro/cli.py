@@ -27,17 +27,37 @@ def main():
               default='model.pt',
               help='Length of sequence segments to use during training.',
               type=click.Path(file_okay=True, dir_okay=False))
-@click.option('--context', default=200, help='Length of sequence segments to use during training.')
-@click.option('--split', default=0.7, help='Training split factor.')
-@click.option('--mixtures', default=10, help='Number of Gaussian mixtures in the model.')
-@click.option('--hidden-size', default=256, help='Hidden size.')
-@click.option('--batch-size', default=32, help='Batch size.')
-@click.option('--lr', default=0.0025, help='Learning rate.')
-@click.option('--patience', default=15, help='Number of iterations the model is allowed to not improve before stopping training.')
-@click.option('--epochs', default=1000, help='Maximum number of epochs.')
-@click.option('--dropout', default=0.25, help='Dropout rate.')
-@click.option('--betas', default=[0.9, 0.99], help='Betas for Adam optimizer.', multiple=True)
-@click.option('--slope', default=0.001, help='Negative slope for Leaky ReLU activations.')
+@click.option('--context',
+              default=200,
+              help='Length of sequence segments to use during training.')
+@click.option('--split',
+              default=0.7,
+              help='Training split factor.')
+@click.option('--mixtures',
+              default=10,
+              help='Number of Gaussian mixtures in the model.')
+@click.option('--hidden-size',
+              default=256,
+              help='Hidden size.')
+@click.option('--batch-size',
+              default=32,
+              help='Batch size.')
+@click.option('--lr',
+              default=0.0025,
+              help='Learning rate.')
+@click.option('--patience',
+              default=15, help='Number of iterations the model is allowed to not improve before stopping training.')
+@click.option('--epochs',
+              default=1000, help='Maximum number of epochs.')
+@click.option('--dropout',
+              default=0.25,
+              help='Dropout rate.')
+@click.option('--betas',
+              default=[0.9, 0.99],
+              help='Betas for Adam optimizer.', multiple=True)
+@click.option('--slope',
+              default=0.001,
+              help='Negative slope for Leaky ReLU activations.')
 def train(input, **kwargs):
     global DEVICE
     if input.endswith('.json'):
