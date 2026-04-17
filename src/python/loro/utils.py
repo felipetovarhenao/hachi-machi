@@ -1,7 +1,17 @@
 import click
 import os
 import torch
-import enum
+import json
+
+
+DEVICE = torch.accelerator.current_accelerator()
+
+COLORS = {
+    'success': (85, 219, 158),
+    'error': (234, 79, 79),
+    'info': (120, 190, 250),
+    'neutral': (141, 165, 166),
+}
 
 
 def validate_path(file, ext: str | list) -> bool:
@@ -16,18 +26,18 @@ def validate_path(file, ext: str | list) -> bool:
     return file
 
 
-COLORS = {
-    'success': (85, 219, 158),
-    'error': (234, 79, 79),
-    'info': (120, 190, 250),
-    'neutral': (141, 165, 166),
-}
-
-
 def echo(text: str, type: int = 'neutral'):
     global COLORS
     color = COLORS[type]
     click.echo(click.style(text=text, fg=color))
 
 
-DEVICE = torch.accelerator.current_accelerator()
+def load_config(file: str):
+    file = validate_path(file, '.json')
+    path_keys = ['input', 'output']
+    with open(file, 'r') as f:
+        config: dict = json.load(f)
+    if 'input' not in config:
+        raise RuntimeError(click.style(
+            "config .json file must provide an input path to MIDI data.", fg=COLORS['error']))
+    return config

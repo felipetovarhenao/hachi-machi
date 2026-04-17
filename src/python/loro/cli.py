@@ -6,6 +6,7 @@ from .dataset import EventDataset
 from .model import Normalizer, RMDN
 from .pipeline import Pipeline
 from .utils import (validate_path,
+                    load_config,
                     echo,
                     DEVICE,
                     COLORS)
@@ -63,18 +64,16 @@ def main():
 def train(input, **kwargs):
     global DEVICE
     if input.endswith('.json'):
-        config_path = validate_path(input, '.json')
-        with open(config_path, 'r') as f:
-            config: dict = json.load(f)
-        if 'input' not in config:
-            raise RuntimeError(click.style(
-                "config .json file must provide an input path to MIDI data.", fg=COLORS['error']))
+        config = load_config(input)
         midi_file = config.pop('input')
     else:
         midi_file = input
         config = {}
     params = {**kwargs, **config}
     parser = MidiParser(midi_file)
+    if parser.numvoices() < 2:
+        raise RuntimeError(click.style(text="MIDI file must contain of two or more channels.",
+                                       fg=COLORS['error']))
     data = parser.events().to(DEVICE)
     scaler = Normalizer(data)
     dataset = EventDataset(data=data,
@@ -85,14 +84,12 @@ def train(input, **kwargs):
                  dropout=params['dropout'],
                  slope=params['slope'],
                  device=DEVICE)
-    pipeline = Pipeline(
-        model=model,
-        scaler=scaler,
-        dataset=dataset,
-        batch_size=params['batch_size'],
-        lr=params['lr'],
-        betas=tuple(params['betas']),
-    )
+    pipeline = Pipeline(model=model,
+                        scaler=scaler,
+                        dataset=dataset,
+                        batch_size=params['batch_size'],
+                        lr=params['lr'],
+                        betas=tuple(params['betas']),)
     pipeline.run(file=params['output'],
                  epochs=params['epochs'],
                  patience=params['patience'])
