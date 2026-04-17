@@ -64,7 +64,7 @@ class Session:
 
         def handle_reset(_):
             self.model.clear_hidden()
-            echo(f"Clearing hidden state")
+            echo(f"Clearing hidden state.")
 
         def handle_input(_, *args):
             if len(args) != self.model.input_size:
