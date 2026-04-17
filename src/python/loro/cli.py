@@ -25,7 +25,7 @@ def main():
                                 resolve_path=True,))
 @click.option('--output', '-o',
               default='model.pt',
-              help='Length of sequence segments to use during training.',
+              help='Output path for trained Pytorch model (.pt).',
               type=click.Path(file_okay=True, dir_okay=False))
 @click.option('--context',
               default=200,
