@@ -1,9 +1,11 @@
 import torch
 from tqdm import tqdm
+import click
 from torch.optim import AdamW
-from model import EventModel, Scaler, MusicAgent
-from loss import NLLLoss
-from dataset import EventDataset, EventLoader
+from .model import EventModel, Scaler, MusicAgent
+from .loss import NLLLoss
+from .dataset import EventDataset, EventLoader
+from .utils import validate_path, echo, COLORS
 
 
 class Pipeline:
@@ -43,18 +45,24 @@ class Pipeline:
         stop = self.patience > self.max_patience
         percent = min(100, int(round(100 * self.patience/self.max_patience)))
         if epoch > 5 and self.patience == 0:
-            torch.save(obj=self.model,
+            agent = MusicAgent(model=self.model,
+                               scaler=self.scaler)
+            torch.save(obj=agent,
                        f=self.file)
         self.pbar.set_postfix_str(
-            f"{percent:3d}% | epoch: {epoch:4d} | T-loss: {train_loss:1.6f} | E-loss: {self.min_loss:.6f} | learning: {(prev_loss - eval_loss):.6f}")
+            click.style(
+                text=f"{percent:3d}% | epoch: {epoch:4d} | T-loss: {train_loss:1.6f} | E-loss: {self.min_loss:.6f} | learning: {(prev_loss - eval_loss):.6f}",
+                fg=COLORS['neutral'],
+                italic=True))
         if stop:
             self.pbar.close()
-            print(
-                f"***\nEpochs: {epoch:4d}\tFinal loss: {self.min_loss:.6f}")
+            echo(
+                text=f"***\nEpochs: {epoch:4d}\tFinal loss: {self.min_loss:.6f}",
+                type='success')
         return stop
 
     def run(self, file: str, epochs: int = 1000, patience: int = 15):
-        self.file = file
+        self.file = validate_path(file, '.pt')
         self.max_patience = patience
         self.patience = 0
         self.min_loss = float('inf')

@@ -1,19 +1,17 @@
-import os
 import mido
 import torch
+import click
+from .utils import validate_path, COLORS
 
 
 class MidiParser:
     def __init__(self, file: str):
-        file_path = os.path.abspath(file)
-        ext = os.path.splitext(file_path)[1]
-        if ext not in ['.mid', '.midi']:
-            raise TypeError(
-                f"Invalid file extension: {ext}. Expected .mid or .midi")
-        midi = mido.MidiFile(filename=file)
+        file_path = validate_path(file, ['.mid', '.midi'])
+        midi = mido.MidiFile(filename=file_path)
         if midi.type == 2:
             raise TypeError(
-                'Invalid MIDI file type 2. Expected type 0 (single track) or 1 (multi-track).')
+                click.style('Invalid MIDI file type 2. Expected type 0 (single track) or 1 (multi-track).', fg=COLORS['error']))
+
         midi.tracks = [mido.merge_tracks(midi.tracks)]
         self._midi = midi
         self._numvoices = 0
@@ -54,7 +52,7 @@ class MidiParser:
             elif key in active_notes:
                 event: list = active_notes.pop(key)
                 duration = onset - event[0]
-                event.append(duration)
+                # event.append(duration)
                 events.append((event[0], event[1:]))
         self._numvoices = numvoices
         events.sort(key=lambda x: x[0])

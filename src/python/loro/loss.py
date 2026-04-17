@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 from torch.distributions import Normal
-from model import EventModel
+from .model import EventModel
 
 
 class NLLLoss(nn.Module):

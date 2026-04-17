@@ -1,6 +1,6 @@
 import torch
 from torch.utils.data import Dataset, DataLoader
-from loro.midi import MidiParser
+from .utils import echo
 
 
 EventLoader = DataLoader
@@ -46,8 +46,8 @@ class EventDataset(Dataset):
     def _clamp_context(self, context_length: int, data_size: int):
         y = max(2, min(context_length, data_size // 2))
         if y != context_length:
-            print(
-                f'Adjusting context length due to insufficient data samples: {context_length} -> {y}')
+            echo(text=f'Adjusting context length due to insufficient data samples: {context_length} -> {y}',
+                 type='info')
         return y
 
     def get_split(self) -> torch.Tensor:
