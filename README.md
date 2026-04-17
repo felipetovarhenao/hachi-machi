@@ -8,8 +8,8 @@
 ```sh
 conda create -n loro python=3.10
 conda activate loro
-conda install pytorch tqdm
-conda install mido --channel conda-forge
+conda install python-osc pytorch mido click tqdm
+python -m pip install python-osc
 ```
 
 ## Before each session
