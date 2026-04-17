@@ -27,18 +27,21 @@ def main():
               default='model.pt',
               help='Output path for trained Pytorch model (.pt).',
               type=click.Path(file_okay=True, dir_okay=False))
-@click.option('--context',
-              default=200,
-              help='Length of sequence segments to use during training.')
-@click.option('--split',
-              default=0.7,
-              help='Training split factor.')
 @click.option('--mixtures',
               default=10,
               help='Number of Gaussian mixtures in the model.')
 @click.option('--hidden-size',
               default=256,
               help='Hidden size.')
+@click.option('--context',
+              default=200,
+              help='Length of sequence segments to use during training.')
+@click.option('--split',
+              default=0.7,
+              help='Training split factor.')
+@click.option('--epochs',
+              default=1000,
+              help='Maximum number of epochs.')
 @click.option('--batch-size',
               default=32,
               help='Batch size.')
@@ -48,9 +51,6 @@ def main():
 @click.option('--patience',
               default=15,
               help='Number of iterations the model is allowed to not improve before stopping training.')
-@click.option('--epochs',
-              default=1000,
-              help='Maximum number of epochs.')
 @click.option('--dropout',
               default=0.25,
               help='Dropout rate.')
