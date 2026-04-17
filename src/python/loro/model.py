@@ -110,7 +110,13 @@ class RMDN(nn.Module):
 
 class MusicAgent(nn.Module):
 
-    def __init__(self,  model: RMDN, scaler:  Normalizer, player_voices: list[int] = [0], device: str = 'mps', *args, **kwargs):
+    def __init__(self,
+                 model: RMDN,
+                 scaler:  Normalizer,
+                 player_voices: list[int] = [0],
+                 device: str = 'mps',
+                 *args,
+                 **kwargs):
         super().__init__(*args, **kwargs)
         self.model = model
         self.device = device
@@ -156,6 +162,6 @@ class MusicAgent(nn.Module):
         y: torch.Tensor = self.scaler(
             self.next_event.clone(), inverse=True)
         y = y.clip(0).squeeze().round().int()
-        if y[-1] in self.player_voices:
+        if y[0] in self.player_voices:
             return
         return y
