@@ -26,10 +26,10 @@ def validate_path(file, ext: str | list) -> bool:
     return file
 
 
-def echo(text: str, type: int = 'neutral'):
+def echo(text: str, type: int = 'neutral', nl: bool = True):
     global COLORS
     color = COLORS[type]
-    click.echo(click.style(text=text, fg=color))
+    click.echo(click.style(text=text, fg=color), nl=nl)
 
 
 def load_config(file: str):
