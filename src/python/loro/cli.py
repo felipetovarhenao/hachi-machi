@@ -3,7 +3,7 @@ import json
 import click
 from .midi import MidiParser
 from .dataset import EventDataset
-from .model import Scaler, EventModel
+from .model import Normalizer, RMDN
 from .pipeline import Pipeline
 from .utils import (validate_path,
                     echo,
@@ -46,15 +46,17 @@ def main():
               default=0.0025,
               help='Learning rate.')
 @click.option('--patience',
-              default=15, help='Number of iterations the model is allowed to not improve before stopping training.')
+              default=15,
+              help='Number of iterations the model is allowed to not improve before stopping training.')
 @click.option('--epochs',
-              default=1000, help='Maximum number of epochs.')
+              default=1000,
+              help='Maximum number of epochs.')
 @click.option('--dropout',
               default=0.25,
               help='Dropout rate.')
 @click.option('--betas',
               default=[0.9, 0.99],
-              help='Betas for Adam optimizer.', multiple=True)
+              help='Betas for AdamW (Adaptive Moment Estimation) optimizer.', multiple=True)
 @click.option('--slope',
               default=0.001,
               help='Negative slope for Leaky ReLU activations.')
@@ -74,15 +76,15 @@ def train(input, **kwargs):
     params = {**kwargs, **config}
     parser = MidiParser(midi_file)
     data = parser.events().to(DEVICE)
-    scaler = Scaler(data)
+    scaler = Normalizer(data)
     dataset = EventDataset(data=data,
                            context_length=params['context'],
                            split=params['split'])
-    model = EventModel(k=params['mixtures'],
-                       input_size=dataset.dims,
-                       dropout=params['dropout'],
-                       slope=params['slope'],
-                       device=DEVICE)
+    model = RMDN(k=params['mixtures'],
+                 input_size=dataset.dims,
+                 dropout=params['dropout'],
+                 slope=params['slope'],
+                 device=DEVICE)
     pipeline = Pipeline(
         model=model,
         scaler=scaler,

@@ -3,7 +3,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 
-class Scaler(nn.Module):
+class Normalizer(nn.Module):
 
     def __init__(self, data: torch.Tensor, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -69,7 +69,7 @@ class MixtureDensityNetwork(nn.Module):
         return pi, mu, sigma
 
 
-class EventModel(nn.Module):
+class RMDN(nn.Module):
 
     def __init__(self,
                  k: int = 2,
@@ -110,7 +110,7 @@ class EventModel(nn.Module):
 
 class MusicAgent(nn.Module):
 
-    def __init__(self,  model: EventModel, scaler:  Scaler, player_voices: list[int] = [0], device: str = 'mps', *args, **kwargs):
+    def __init__(self,  model: RMDN, scaler:  Normalizer, player_voices: list[int] = [0], device: str = 'mps', *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.model = model
         self.device = device
