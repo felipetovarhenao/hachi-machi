@@ -1,3 +1,4 @@
+import os
 import time
 import threading
 import torch
@@ -17,6 +18,7 @@ class Session:
                  device: str = 'mps'):
         self.device = device
         self.host = host
+        self.name = os.path.basename(model)
         self.model: MusicAgent = torch.load(f=model,
                                             map_location=device,
                                             weights_only=False)
@@ -24,6 +26,7 @@ class Session:
         self.client = SimpleUDPClient(host, out_port)
         self.dispatcher = Dispatcher()
         self.in_port = in_port
+        self.out_port = out_port
         self._lock = threading.Lock()
 
         self._last_voice_time: dict[int, float] = {}
@@ -128,5 +131,6 @@ class Session:
             server_address=(self.host, self.in_port),
             dispatcher=self.dispatcher
         )
-        echo(f"Listening on {self.host}:{self.in_port}", 'info')
+        echo(
+            f"Running model: {self.name} 🤖\nOSC input: {self.host}:{self.in_port}\nOSC output: {self.host}:{self.out_port}", 'info')
         server.serve_forever()
