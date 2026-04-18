@@ -24,14 +24,20 @@ class EventDataset(Dataset):
         data = data[torch.randperm(n=self.size)]
         self.train_set, self.eval_set = data[:split], data[split:]
         self.training = True
-        self.dim_map = {
-            'voice': 0,
-            'pitch': 1,
-            'velocity': 2,
-            'ioi': 3,
-            'ioi_voice': 4,
-            'duration': 5
+        self._feature_to_dim_map = {
+            k: i for i, k in enumerate(
+                [
+                    'voice',
+                    'pitch',
+                    'velocity',
+                    'ioi',
+                    'ioi_voice',
+                    # 'duration',
+                ]
+            )
         }
+        self._in_dims = list(self._feature_to_dim_map.values())
+        self._out_dims = list(self._feature_to_dim_map.values())
         self._augmentators = [
             self._augment_time,
             self._augment_pitch,
@@ -41,7 +47,7 @@ class EventDataset(Dataset):
         ]
 
     def _dims(self, *labels) -> list[int]:
-        return [self.dim_map[key] for key in labels]
+        return [self._feature_to_dim_map[key] for key in labels if key in self._feature_to_dim_map]
 
     def _clamp_context(self, context_length: int, data_size: int):
         y = max(2, min(context_length, data_size // 2))
@@ -115,5 +121,6 @@ class EventDataset(Dataset):
         item = data[index]
         if self.training:
             item = self._apply_data_augmentation(item)
-        x, y = item[..., :-1, :], item[..., 1:, :]
+        x, y = item[..., :-1, self._in_dims], item[...,
+                                                   1:, self._out_dims]
         return x, y
