@@ -72,7 +72,7 @@ def train(input, **kwargs):
     params = {**kwargs, **config}
     parser = MidiParser(midi_file)
     if parser.numvoices() < 2:
-        raise RuntimeError(click.style(text="MIDI file must contain of two or more channels.",
+        raise RuntimeError(click.style(text="MIDI file must contain of two or more channels, one for each player.",
                                        fg=COLORS['error']))
     data = parser.events().to(DEVICE)
     scaler = Normalizer(data)
