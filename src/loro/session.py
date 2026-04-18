@@ -3,7 +3,7 @@ import time
 import threading
 import torch
 from .model import MusicAgent
-from .utils import echo
+from .utils import echo, safe_handler
 from pythonosc.dispatcher import Dispatcher
 from pythonosc.osc_server import BlockingOSCUDPServer
 from pythonosc.udp_client import SimpleUDPClient
@@ -75,6 +75,7 @@ class Session:
         self._schedule_emission(event, delay_ms)
 
     def get_handlers(self):
+        @safe_handler
         def handle_input(_, *args):
             if len(args) != 3:
                 echo(
@@ -96,14 +97,17 @@ class Session:
 
             self._predict_and_schedule(full_event)
 
+        @safe_handler
         def handle_temp(_, *args):
             self.model.set_temp(args[0])
             echo(f"Temperature: {args[0]}")
 
+        @safe_handler
         def handle_alpha(_, *args):
             self.model.set_alpha(args[0])
             echo(f"Alpha: {args[0]}")
 
+        @safe_handler
         def handle_reset(_):
             with self._lock:
                 self.model.clear_hidden()
@@ -111,6 +115,7 @@ class Session:
                 self._last_global_time = None
             echo("\nClearing hidden state.")
 
+        @safe_handler
         def handle_weights(_, *args):
             if len(args) != self.model.input_size:
                 echo(f"Invalid weight size. Expected: {self.model.input_size}")

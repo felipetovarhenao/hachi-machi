@@ -1,8 +1,9 @@
+
 import click
 import os
 import torch
 import json
-
+from typing import Callable
 
 if torch.cuda.is_available():
     DEVICE = torch.device('cuda')
@@ -46,3 +47,12 @@ def load_config(file: str):
         raise RuntimeError(click.style(
             "config .json file must provide an input path to MIDI data.", fg=COLORS['error']))
     return config
+
+
+def safe_handler(func: Callable) -> Callable:
+    def wrapper(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except Exception as e:
+            echo(e, 'error')
+    return wrapper
