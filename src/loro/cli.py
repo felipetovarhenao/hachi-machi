@@ -3,7 +3,7 @@ import json
 import click
 from .midi import MidiParser
 from .dataset import EventDataset
-from .model import Normalizer, RMDN
+from .model import Normalizer, RecurrentMDN
 from .pipeline import Pipeline
 from .utils import (validate_path,
                     load_config,
@@ -79,7 +79,7 @@ def train(input, **kwargs):
     dataset = EventDataset(data=data,
                            context_length=params['context'],
                            split=params['split'])
-    model = RMDN(k=params['mixtures'],
+    model = RecurrentMDN(k=params['mixtures'],
                  input_size=dataset.dims,
                  dropout=params['dropout'],
                  slope=params['slope'],

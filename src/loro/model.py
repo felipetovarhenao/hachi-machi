@@ -69,7 +69,7 @@ class MixtureDensityNetwork(nn.Module):
         return pi, mu, sigma
 
 
-class RMDN(nn.Module):
+class RecurrentMDN(nn.Module):
 
     def __init__(self,
                  k: int = 2,
@@ -111,7 +111,7 @@ class RMDN(nn.Module):
 class MusicAgent(nn.Module):
 
     def __init__(self,
-                 model: RMDN,
+                 model: RecurrentMDN,
                  scaler:  Normalizer,
                  player_voices: list[int] = [0],
                  device: str = 'mps',

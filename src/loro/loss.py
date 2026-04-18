@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 from torch.distributions import Normal
-from .model import RMDN
+from .model import RecurrentMDN
 
 
 class NLLLoss(nn.Module):

@@ -2,7 +2,7 @@ import torch
 from tqdm import tqdm
 import click
 from torch.optim import AdamW
-from .model import RMDN, Normalizer, MusicAgent
+from .model import RecurrentMDN, Normalizer, MusicAgent
 from .loss import NLLLoss
 from .dataset import EventDataset, EventLoader
 from .utils import validate_path, echo, COLORS
@@ -11,7 +11,7 @@ from .utils import validate_path, echo, COLORS
 class Pipeline:
 
     def __init__(self,
-                 model: RMDN,
+                 model: RecurrentMDN,
                  scaler: Normalizer,
                  dataset: EventDataset,
                  batch_size: int = 32,
