@@ -40,7 +40,7 @@ def echo(text: str, type: int = 'neutral', nl: bool = True):
 
 def load_config(file: str):
     file = validate_path(file, '.json')
-    path_keys = ['input', 'output']
+    os.chdir(os.path.dirname(file))
     with open(file, 'r') as f:
         config: dict = json.load(f)
     if 'input' not in config:
