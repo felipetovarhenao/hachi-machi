@@ -162,6 +162,6 @@ class MusicAgent(nn.Module):
         y: torch.Tensor = self.scaler(
             self.next_event.clone(), inverse=True)
         y = y.clip(0).squeeze().round().int()
-        if y[0] in self.player_voices:
+        if y[2] in self.player_voices:
             return
         return y

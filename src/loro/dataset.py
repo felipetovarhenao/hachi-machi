@@ -27,11 +27,11 @@ class EventDataset(Dataset):
         self._feature_to_dim_map = {
             k: i for i, k in enumerate(
                 [
+                    'ioi',
+                    'ioi_voice',
                     'voice',
                     'pitch',
                     'velocity',
-                    'ioi',
-                    'ioi_voice',
                     # 'duration',
                 ]
             )

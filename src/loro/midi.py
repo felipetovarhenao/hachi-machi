@@ -44,14 +44,14 @@ class MidiParser:
                 voice_ioi = onset - last_onset_per_voice.get(voice, 0)
                 last_onset_per_voice[voice] = onset
                 active_notes[key] = [onset,
+                                     ioi,
+                                     voice_ioi,
                                      voice,
                                      pitch,
-                                     velocity,
-                                     ioi,
-                                     voice_ioi]
+                                     velocity]
             elif key in active_notes:
                 event: list = active_notes.pop(key)
-                duration = onset - event[0]
+                # duration = onset - event[0]
                 # event.append(duration)
                 events.append((event[0], event[1:]))
         self._numvoices = numvoices

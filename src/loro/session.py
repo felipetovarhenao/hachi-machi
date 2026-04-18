@@ -49,10 +49,9 @@ class Session:
     def _schedule_emission(self, event: torch.Tensor, delay_ms: float) -> None:
         def emit():
             out = event.tolist()
-            msg = out[:3] + out[5:]
+            msg = out[2:]
             self.client.send_message("/output", msg)
-
-            voice = int(event[0].item())
+            voice = msg[0]
             if voice not in self.model.player_voices:
                 self._predict_and_schedule(event)
 
@@ -72,7 +71,7 @@ class Session:
                 return
             event = y.squeeze()
 
-        delay_ms = event[3].item()
+        delay_ms = event[0].item()
         self._schedule_emission(event, delay_ms)
 
     def get_handlers(self):
@@ -92,10 +91,9 @@ class Session:
                 self._update_timestamps(voice, now)
 
             full_event = torch.tensor(
-                [*args, global_delta, voice_delta],
+                [global_delta, voice_delta, *args],
                 dtype=torch.float32
             )
-
             self._predict_and_schedule(full_event)
 
         @safe_handler
