@@ -1,5 +1,5 @@
 
-import json
+from .augment import MidiAugmentator
 import click
 from .midi import MidiParser
 from .dataset import EventDataset
@@ -76,14 +76,16 @@ def train(input, **kwargs):
                                        fg=COLORS['error']))
     data = parser.events().to(DEVICE)
     scaler = Normalizer(data)
+    augmentator = MidiAugmentator()
     dataset = EventDataset(data=data,
                            context_length=params['context'],
-                           split=params['split'])
+                           split=params['split'],
+                           augmentator=augmentator)
     model = RecurrentMDN(k=params['mixtures'],
-                 input_size=dataset.dims,
-                 dropout=params['dropout'],
-                 slope=params['slope'],
-                 device=DEVICE)
+                         input_size=dataset.dims,
+                         dropout=params['dropout'],
+                         slope=params['slope'],
+                         device=DEVICE)
     pipeline = Pipeline(model=model,
                         scaler=scaler,
                         dataset=dataset,
