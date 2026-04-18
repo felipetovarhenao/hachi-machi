@@ -22,6 +22,7 @@ class Session:
         self.model: MusicAgent = torch.load(f=model,
                                             map_location=device,
                                             weights_only=False)
+        self.input_size = self.model.input_size - 2
         self.model.eval()
         self.client = SimpleUDPClient(host, out_port)
         self.dispatcher = Dispatcher()
@@ -77,9 +78,9 @@ class Session:
     def get_handlers(self):
         @safe_handler
         def handle_input(_, *args):
-            if len(args) != 3:
+            if len(args) != self.input_size:
                 echo(
-                    f"Invalid input length: {len(args)}. Expected: 3", type='error')
+                    f"Invalid input length: {len(args)}. Expected: {self.input_size}", type='error')
                 return
 
             now = time.perf_counter()
@@ -91,7 +92,7 @@ class Session:
                 self._update_timestamps(voice, now)
 
             full_event = torch.tensor(
-                [args[0], args[1], args[2], global_delta, voice_delta],
+                [*args, global_delta, voice_delta],
                 dtype=torch.float32
             )
 
@@ -137,5 +138,5 @@ class Session:
             dispatcher=self.dispatcher
         )
         echo(
-            f"Running model: {self.name} 🤖\nOSC input: {self.host}:{self.in_port}\nOSC output: {self.host}:{self.out_port}", 'info')
+            f"Running model:\t{self.name} 🤖\nOSC input:\t{self.host}:{self.in_port}\nOSC output:\t{self.host}:{self.out_port}", 'info')
         server.serve_forever()
