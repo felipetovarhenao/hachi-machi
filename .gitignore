@@ -9,6 +9,6 @@
 *.midi
 *.txt
 *.bell
-src/loro/*
+src/_loro/*
 *.pt
 *.json
