@@ -99,7 +99,8 @@ def train(input, **kwargs):
                         batch_size=params['batch_size'],
                         lr=params['lr'],
                         betas=tuple(params['betas']),)
-    Console.action("Training agent...")
+    Console.action(
+        f"Training multiplayer agent ({parser.numvoices()} players found)")
     pipeline.run(file=params['output'],
                  epochs=params['epochs'],
                  patience=params['patience'])
