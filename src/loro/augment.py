@@ -48,7 +48,7 @@ class MidiAugmentator(Augmentator):
         x[..., dims] *= 2 ** s
         return x
 
-    def use_inversion(self, x: torch.Tensor) -> torch.Tensor:
+    def use_pitch_inversion(self, x: torch.Tensor) -> torch.Tensor:
         p_dim = self._dims('pitch')
         v_dim = self._dims('voice')
         for v in range(self.num_voices):
@@ -60,7 +60,7 @@ class MidiAugmentator(Augmentator):
             x[..., p_dim] = torch.where(mask, inverted, pitch)
         return x
 
-    def use_pitchshift(self, x: torch.Tensor) -> torch.Tensor:
+    def use_pitch_shift(self, x: torch.Tensor) -> torch.Tensor:
         dim = self._dims('pitch')
         s = torch.rand(1).item() * 2 - 1
         x[..., dim] += s * 700
