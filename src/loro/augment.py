@@ -17,8 +17,9 @@ class Augmentator(ABC):
 
 class MidiAugmentator(Augmentator):
 
-    def __init__(self):
+    def __init__(self, num_voices: int = 2):
         super().__init__()
+        self.num_voices = num_voices
         self._feature_to_dim_map = {
             k: i for i, k in enumerate(
                 [
@@ -70,10 +71,10 @@ class MidiAugmentator(Augmentator):
 
     def use_voice_swap(self, x: torch.Tensor) -> torch.Tensor:
         dim = self._dims('voice')
-        classes = x[..., dim].unique()
-        perm = classes[torch.randperm(len(classes))]
+        voices = x[..., dim].unique()
+        swap = voices[torch.randperm(self.num_voices)]
         result = x.clone()
-        for c, p in zip(classes, perm):
-            mask = x[..., dim] == c
-            result[..., dim] = torch.where(mask, p, result[..., dim])
+        for v, s in zip(voices, swap):
+            mask = x[..., dim] == v
+            result[..., dim] = torch.where(mask, s, result[..., dim])
         return result

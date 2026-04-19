@@ -76,7 +76,7 @@ def train(input, **kwargs):
                                        fg=COLORS['error']))
     data = parser.events().to(DEVICE)
     scaler = Normalizer(data)
-    augmentator = MidiAugmentator()
+    augmentator = MidiAugmentator(num_voices=parser.numvoices())
     dataset = EventDataset(data=data,
                            context_length=params['context'],
                            split=params['split'],

@@ -55,7 +55,7 @@ class Session:
             if voice not in self.model.player_voices:
                 self._predict_and_schedule(event)
 
-        if delay_ms < 5:
+        if delay_ms < 33:
             emit()
         else:
             t = threading.Timer(delay_ms / 1000.0, emit)
