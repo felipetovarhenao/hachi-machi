@@ -6,7 +6,7 @@ from torch.optim import AdamW
 from .model import RecurrentMDN, FeatureScaler, MusicAgent
 from .loss import NLLLoss
 from .dataset import EventDataset, EventLoader
-from .utils import validate_path
+from .utils import validate_path, DEVICE
 
 
 class Pipeline:
@@ -45,7 +45,7 @@ class Pipeline:
             self.patience += 1
         stop = self.patience > self.max_patience
         percent = min(100, int(round(100 * self.patience/self.max_patience)))
-        if epoch > 5 and self.patience == 0:
+        if epoch > self.max_patience and self.patience == 0:
             agent = MusicAgent(model=self.model,
                                scaler=self.scaler)
             torch.save(obj=agent,
@@ -59,6 +59,40 @@ class Pipeline:
             Console.success(
                 f"***\nEpochs: {epoch:4d}\tFinal loss: {self.min_loss:.6f}")
         return stop
+
+    def benchmark(self, n_warmup: int = 50, n_runs: int = 500):
+        import time
+        agent: MusicAgent = torch.load(self.file,
+                                       weights_only=False,
+                                       map_location=DEVICE)
+        model = agent.model
+        model.eval()
+
+        sample = next(iter(self.loader))[0][:1]
+        sample = self.scaler(sample)
+
+        with torch.no_grad():
+            for _ in range(n_warmup):
+                model(sample)
+            times = []
+            for _ in range(n_runs):
+                t0 = time.perf_counter()
+                model(sample)
+                times.append(time.perf_counter() - t0)
+
+        times = torch.tensor(times) * 1000
+        total = sum(p.numel() for p in model.parameters())
+        trainable = sum(p.numel()
+                        for p in model.parameters() if p.requires_grad)
+
+        Console.info(f"""Parameters:"
+    Total:      {total:,}
+    Trainable:  {trainable:,}
+Latency:"
+    Mean:       {times.mean():.3f}ms
+    Std:        {times.std():.3f}ms  
+    p99:        {times.quantile(0.99):.3f}ms  
+    Max. rate:  {1000/times.mean():.1f}Hz""")
 
     def run(self, file: str, epochs: int = 1000, patience: int = 15):
         self.file = validate_path(file, '.pt')
@@ -103,4 +137,5 @@ class Pipeline:
             if self.check(epoch=epoch,
                           train_loss=2 ** train_loss,
                           eval_loss=2 ** eval_loss):
+                self.benchmark()
                 break

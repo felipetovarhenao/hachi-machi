@@ -68,6 +68,15 @@ def train(input, **kwargs):
         midi_file = input
         config = {}
     params = {**kwargs, **config}
+
+    Console.info("Training Settings:")
+    for (key, value) in {"input": input, **params}.items():
+        key = " ".join(key.split('_'))
+        key = f"- {key}: "
+        key += " " * (16 - len(key))
+        Console.info(f"{key}{str(value)}")
+
+    Console.action("\nParsing MIDI...")
     parser = MidiParser(midi_file)
     if parser.numvoices() < 2:
         raise RuntimeError(
@@ -90,6 +99,7 @@ def train(input, **kwargs):
                         batch_size=params['batch_size'],
                         lr=params['lr'],
                         betas=tuple(params['betas']),)
+    Console.action("Training agent...")
     pipeline.run(file=params['output'],
                  epochs=params['epochs'],
                  patience=params['patience'])
