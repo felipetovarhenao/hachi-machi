@@ -1,7 +1,6 @@
 import mido
 import torch
-import click
-from .utils import validate_path, COLORS
+from .utils import validate_path
 
 
 class MidiParser:
@@ -10,7 +9,7 @@ class MidiParser:
         midi = mido.MidiFile(filename=file_path)
         if midi.type == 2:
             raise TypeError(
-                click.style('Invalid MIDI file type 2. Expected type 0 (single track) or 1 (multi-track).', fg=COLORS['error']))
+                'Invalid MIDI file type 2. Expected type 0 (single track) or 1 (multi-track).')
 
         midi.tracks = [mido.merge_tracks(midi.tracks)]
         self._midi = midi

@@ -21,8 +21,8 @@ class Console:
         print(f"{cls.YELLOW}{msg}{cls.RESET}")
 
     @classmethod
-    def error(cls, msg: str, err_cls: BaseException = Exception) -> BaseException:
-        raise err_cls(f"{cls.RED}{msg}{cls.RESET}")
+    def error(cls, msg: str):
+        print(f"{cls.RED}{msg}{cls.RESET}")
 
     @classmethod
     def action(cls, msg: str, **kwargs) -> None:

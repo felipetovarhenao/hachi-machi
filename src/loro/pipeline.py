@@ -6,7 +6,7 @@ from torch.optim import AdamW
 from .model import RecurrentMDN, Normalizer, MusicAgent
 from .loss import NLLLoss
 from .dataset import EventDataset, EventLoader
-from .utils import validate_path, COLORS
+from .utils import validate_path
 
 
 class Pipeline:
@@ -53,7 +53,6 @@ class Pipeline:
         self.pbar.set_postfix_str(
             click.style(
                 text=f"{percent:3d}% | epoch: {epoch:4d} | T-loss: {train_loss:1.6f} | E-loss: {self.min_loss:.6f} | learning: {(prev_loss - eval_loss):.6f}",
-                fg=COLORS['neutral'],
                 italic=True))
         if stop:
             self.pbar.close()

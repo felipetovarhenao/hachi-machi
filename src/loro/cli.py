@@ -8,8 +8,7 @@ from .session import Session
 from .console import Console
 from .utils import (validate_path,
                     load_config,
-                    DEVICE,
-                    COLORS)
+                    DEVICE,)
 
 
 @click.group()
@@ -71,8 +70,8 @@ def train(input, **kwargs):
     params = {**kwargs, **config}
     parser = MidiParser(midi_file)
     if parser.numvoices() < 2:
-        raise RuntimeError(click.style(text="MIDI file must contain of two or more channels, one for each player.",
-                                       fg=COLORS['error']))
+        raise RuntimeError(
+            "MIDI file must contain of two or more channels, one for each player.")
     data = parser.events().to(DEVICE)
     scaler = Normalizer(data)
     augmentator = MidiAugmentator(num_voices=parser.numvoices())

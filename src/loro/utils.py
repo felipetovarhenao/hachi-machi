@@ -30,8 +30,8 @@ def load_config(file: str):
     with open(file, 'r') as f:
         config: dict = json.load(f)
     if 'input' not in config:
-        raise Console.error(
-            "config .json file must provide an input path to MIDI data.", RuntimeError)
+        raise RuntimeError(
+            "config .json file must provide an input path to MIDI data.")
     return config
 
 

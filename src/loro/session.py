@@ -53,6 +53,7 @@ class Session:
             msg = out[2:]
             self.client.send_message("/output", msg)
             voice = msg[0]
+            Console.info(msg, end='    \r')
             if voice not in self.model.player_voices:
                 self._predict_and_schedule(event)
 
@@ -79,9 +80,8 @@ class Session:
         @safe_handler
         def handle_input(_, *args):
             if len(args) != self.input_size:
-                Console.error(
+                raise ValueError(
                     f"Invalid input length: {len(args)}. Expected: {self.input_size}")
-                return
 
             now = time.perf_counter()
             voice = int(args[0])
@@ -118,9 +118,8 @@ class Session:
         @safe_handler
         def handle_weights(_, *args):
             if len(args) != self.model.input_size:
-                Console.error(
+                raise ValueError(
                     f"Invalid weight size. Expected: {self.model.input_size}")
-                return
             with self._lock:
                 self.model.set_weights(torch.tensor(args).clip(0, 1))
 
@@ -138,5 +137,5 @@ class Session:
             dispatcher=self.dispatcher
         )
         Console.info(
-            f"Running...\n* Model:\t{self.name} 🤖\n* OSC input:\t{self.host}:{self.in_port}\n* OSC output:\t{self.host}:{self.out_port}")
+            f"Running...\n* Model:\t{self.name} 🤖\n* OSC input:\t{self.host}:{self.in_port}\n* OSC output:\t{self.host}:{self.out_port}\n")
         server.serve_forever()
