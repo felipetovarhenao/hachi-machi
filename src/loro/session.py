@@ -1,12 +1,13 @@
+from pythonosc.udp_client import SimpleUDPClient
+from pythonosc.osc_server import BlockingOSCUDPServer
+from pythonosc.dispatcher import Dispatcher
 import os
 import time
 import threading
 import torch
 from .model import MusicAgent
-from .utils import echo, safe_handler
-from pythonosc.dispatcher import Dispatcher
-from pythonosc.osc_server import BlockingOSCUDPServer
-from pythonosc.udp_client import SimpleUDPClient
+from .utils import safe_handler
+from .console import Console
 
 
 class Session:
@@ -78,8 +79,8 @@ class Session:
         @safe_handler
         def handle_input(_, *args):
             if len(args) != self.input_size:
-                echo(
-                    f"Invalid input length: {len(args)}. Expected: {self.input_size}", type='error')
+                Console.error(
+                    f"Invalid input length: {len(args)}. Expected: {self.input_size}")
                 return
 
             now = time.perf_counter()
@@ -99,12 +100,12 @@ class Session:
         @safe_handler
         def handle_temp(_, *args):
             self.model.set_temp(args[0])
-            echo(f"Temperature: {args[0]}")
+            Console.action(f"Temperature: {args[0]:.3f}")
 
         @safe_handler
         def handle_alpha(_, *args):
             self.model.set_alpha(args[0])
-            echo(f"Alpha: {args[0]}")
+            Console.action(f"Alpha: {args[0]:.3f}")
 
         @safe_handler
         def handle_reset(_):
@@ -112,12 +113,13 @@ class Session:
                 self.model.clear_hidden()
                 self._last_voice_time.clear()
                 self._last_global_time = None
-            echo("\nClearing hidden state.")
+            Console.action("\nClearing hidden state.")
 
         @safe_handler
         def handle_weights(_, *args):
             if len(args) != self.model.input_size:
-                echo(f"Invalid weight size. Expected: {self.model.input_size}")
+                Console.error(
+                    f"Invalid weight size. Expected: {self.model.input_size}")
                 return
             with self._lock:
                 self.model.set_weights(torch.tensor(args).clip(0, 1))
@@ -135,6 +137,6 @@ class Session:
             server_address=(self.host, self.in_port),
             dispatcher=self.dispatcher
         )
-        echo(
-            f"Running model:\t{self.name} 🤖\nOSC input:\t{self.host}:{self.in_port}\nOSC output:\t{self.host}:{self.out_port}", 'info')
+        Console.info(
+            f"Running...\n* Model:\t{self.name} 🤖\n* OSC input:\t{self.host}:{self.in_port}\n* OSC output:\t{self.host}:{self.out_port}")
         server.serve_forever()

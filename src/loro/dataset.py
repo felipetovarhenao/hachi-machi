@@ -1,7 +1,7 @@
 import torch
 from torch.utils.data import Dataset, DataLoader
-from .utils import echo
 from .augment import Augmentator
+from .console import Console
 
 
 EventLoader = DataLoader
@@ -33,8 +33,8 @@ class EventDataset(Dataset):
     def _clamp_context(self, context_length: int, data_size: int):
         y = max(2, min(context_length, data_size // 2))
         if y != context_length:
-            echo(text=f'Adjusting context length due to insufficient data samples: {context_length} -> {y}',
-                 type='info')
+            Console.warning(
+                f'Adjusting context length due to insufficient data samples: {context_length} -> {y}')
         return y
 
     def get_split(self) -> torch.Tensor:

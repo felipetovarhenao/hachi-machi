@@ -1,11 +1,12 @@
 import torch
-from tqdm import tqdm
 import click
+from tqdm import tqdm
+from .console import Console
 from torch.optim import AdamW
 from .model import RecurrentMDN, Normalizer, MusicAgent
 from .loss import NLLLoss
 from .dataset import EventDataset, EventLoader
-from .utils import validate_path, echo, COLORS
+from .utils import validate_path, COLORS
 
 
 class Pipeline:
@@ -56,9 +57,8 @@ class Pipeline:
                 italic=True))
         if stop:
             self.pbar.close()
-            echo(
-                text=f"***\nEpochs: {epoch:4d}\tFinal loss: {self.min_loss:.6f}",
-                type='success')
+            Console.success(
+                f"***\nEpochs: {epoch:4d}\tFinal loss: {self.min_loss:.6f}")
         return stop
 
     def run(self, file: str, epochs: int = 1000, patience: int = 15):

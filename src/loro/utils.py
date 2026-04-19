@@ -1,9 +1,8 @@
-
-import click
 import os
 import torch
 import json
 from typing import Callable
+from .console import Console
 
 if torch.cuda.is_available():
     DEVICE = torch.device('cuda')
@@ -11,13 +10,6 @@ elif torch.backends.mps.is_available():
     DEVICE = torch.device('mps')
 else:
     DEVICE = torch.device('cpu')
-
-COLORS = {
-    'success': (85, 219, 158),
-    'error': (234, 79, 79),
-    'info': (120, 190, 250),
-    'neutral': (141, 165, 166),
-}
 
 
 def validate_path(file, ext: str | list) -> bool:
@@ -32,20 +24,14 @@ def validate_path(file, ext: str | list) -> bool:
     return file
 
 
-def echo(text: str, type: int = 'neutral', nl: bool = True):
-    global COLORS
-    color = COLORS[type]
-    click.echo(click.style(text=text, fg=color), nl=nl)
-
-
 def load_config(file: str):
     file = validate_path(file, '.json')
     os.chdir(os.path.dirname(file))
     with open(file, 'r') as f:
         config: dict = json.load(f)
     if 'input' not in config:
-        raise RuntimeError(click.style(
-            "config .json file must provide an input path to MIDI data.", fg=COLORS['error']))
+        raise Console.error(
+            "config .json file must provide an input path to MIDI data.", RuntimeError)
     return config
 
 
@@ -54,5 +40,5 @@ def safe_handler(func: Callable) -> Callable:
         try:
             return func(*args, **kwargs)
         except Exception as e:
-            echo(e, 'error')
+            Console.error(e)
     return wrapper

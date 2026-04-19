@@ -1,16 +1,15 @@
-
-from .augment import MidiAugmentator
 import click
+from .augment import MidiAugmentator
 from .midi import MidiParser
 from .dataset import EventDataset
 from .model import Normalizer, RecurrentMDN
 from .pipeline import Pipeline
+from .session import Session
+from .console import Console
 from .utils import (validate_path,
                     load_config,
-                    echo,
                     DEVICE,
                     COLORS)
-from .session import Session
 
 
 @click.group()
@@ -114,7 +113,7 @@ def run(input, **kwargs):
     try:
         session.start()
     except KeyboardInterrupt:
-        echo("\nClosing session...")
+        Console.action("\nClosing session...")
         return
 
 
