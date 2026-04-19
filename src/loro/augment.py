@@ -44,7 +44,7 @@ class MidiAugmentator(Augmentator):
 
     def use_timestretch(self, x: torch.Tensor) -> torch.Tensor:
         dims = self._dims('ioi', 'ioi_voice', 'duration')
-        s = (torch.rand(1).item() * 2 - 1) * 0.25
+        s = (torch.rand(1).item() * 2 - 1) * 0.66
         x[..., dims] *= 2 ** s
         return x
 
