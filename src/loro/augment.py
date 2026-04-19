@@ -48,10 +48,17 @@ class MidiAugmentator(Augmentator):
         x[..., dims] *= 2 ** s
         return x
 
-    # def use_inversion(self, x: torch.Tensor) -> torch.Tensor:
-    #     dim = self._dims('pitch', 'velocity')
-    #     x[..., dim] = self.mean[dim] * 2 - x[..., dim]
-    #     return x
+    def use_inversion(self, x: torch.Tensor) -> torch.Tensor:
+        p_dim = self._dims('pitch')
+        v_dim = self._dims('voice')
+        for v in range(self.num_voices):
+            mask = x[..., v_dim] == v
+            pitch = x[..., p_dim]
+            mean = (pitch * mask).sum(-1, keepdim=True) / \
+                mask.sum(-1, keepdim=True)
+            inverted = mean * 2 - pitch
+            x[..., p_dim] = torch.where(mask, inverted, pitch)
+        return x
 
     def use_pitchshift(self, x: torch.Tensor) -> torch.Tensor:
         dim = self._dims('pitch')
