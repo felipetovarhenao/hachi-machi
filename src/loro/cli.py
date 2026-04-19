@@ -2,7 +2,7 @@ import click
 from .augment import MidiAugmentator
 from .midi import MidiParser
 from .dataset import EventDataset
-from .model import Normalizer, RecurrentMDN
+from .model import FeatureScaler, RecurrentMDN
 from .pipeline import Pipeline
 from .session import Session
 from .console import Console
@@ -73,7 +73,7 @@ def train(input, **kwargs):
         raise RuntimeError(
             "MIDI file must contain of two or more channels, one for each player.")
     data = parser.events().to(DEVICE)
-    scaler = Normalizer(data)
+    scaler = FeatureScaler(data)
     augmentator = MidiAugmentator(num_voices=parser.numvoices())
     dataset = EventDataset(data=data,
                            context_length=params['context'],

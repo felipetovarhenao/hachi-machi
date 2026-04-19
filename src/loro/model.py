@@ -3,7 +3,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 
-class Normalizer(nn.Module):
+class FeatureScaler(nn.Module):
 
     def __init__(self, data: torch.Tensor, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -112,7 +112,7 @@ class MusicAgent(nn.Module):
 
     def __init__(self,
                  model: RecurrentMDN,
-                 scaler:  Normalizer,
+                 scaler:  FeatureScaler,
                  player_voices: list[int] = [0],
                  device: str = 'mps',
                  *args,

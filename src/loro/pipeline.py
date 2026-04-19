@@ -3,7 +3,7 @@ import click
 from tqdm import tqdm
 from .console import Console
 from torch.optim import AdamW
-from .model import RecurrentMDN, Normalizer, MusicAgent
+from .model import RecurrentMDN, FeatureScaler, MusicAgent
 from .loss import NLLLoss
 from .dataset import EventDataset, EventLoader
 from .utils import validate_path
@@ -13,7 +13,7 @@ class Pipeline:
 
     def __init__(self,
                  model: RecurrentMDN,
-                 scaler: Normalizer,
+                 scaler: FeatureScaler,
                  dataset: EventDataset,
                  batch_size: int = 32,
                  lr: float = 0.001,
