@@ -88,7 +88,7 @@ class Pipeline:
         Console.info(f"""Parameters:"
     Total:      {total:,}
     Trainable:  {trainable:,}
-Latency:"
+Latency ({DEVICE}):"
     Mean:       {times.mean():.3f}ms
     Std:        {times.std():.3f}ms  
     p99:        {times.quantile(0.99):.3f}ms  
