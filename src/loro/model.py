@@ -14,7 +14,15 @@ class FeatureScaler(nn.Module):
         self.register_buffer('std', std)
 
     def forward(self, x: torch.Tensor, inverse: bool = False):
-        return x * self.std + self.mean if inverse else (x - self.mean) / self.std
+        e = 0.0005
+        x = x.clone()
+        if inverse:
+            y = x * self.std + self.mean
+            y[..., :2] = (torch.exp2(y[..., :2]) - e) * 1000
+        else:
+            x[..., :2] = torch.log2((x[..., :2] / 1000) + e)
+            y = (x - self.mean) / self.std
+        return y
 
 
 class MixtureDensityNetwork(nn.Module):
