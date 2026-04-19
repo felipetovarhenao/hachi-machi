@@ -36,12 +36,12 @@ class MixtureDensityNetwork(nn.Module):
                          inplace=True)
         )
         self.out_features = out_features
-        self.net = nn.ModuleList(modules=[self.layer(in_features=num_features,
+        self.net = nn.ModuleList(modules=[self.block(in_features=num_features,
                                                      out_features=out_features,
                                                      dropout=dropout,
                                                      slope=slope) for _ in range(k)])
 
-    def layer(self,
+    def block(self,
               in_features: int = 2,
               out_features: int = 2,
               dropout: float = 0.25,
