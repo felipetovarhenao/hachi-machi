@@ -33,24 +33,24 @@ class MidiAugmentator(Augmentator):
             )
         }
 
-    def _dims(self, *labels) -> list[int]:
-        return [self._feature_to_dim_map[key] for key in labels if key in self._feature_to_dim_map]
-
     def __len__(self):
         return len(self.augmentators)
 
     def __getitem__(self, key):
         return self.augmentators[key]
 
+    def get(self, *labels) -> list[int]:
+        return [self._feature_to_dim_map[key] for key in labels if key in self._feature_to_dim_map]
+
     def use_timestretch(self, x: torch.Tensor) -> torch.Tensor:
-        dims = self._dims('ioi', 'ioi_voice', 'duration')
+        dims = self.get('ioi', 'ioi_voice', 'duration')
         s = (torch.rand(1).item() * 2 - 1) * 0.66
         x[..., dims] *= 2 ** s
         return x
 
     def use_pitch_inversion(self, x: torch.Tensor) -> torch.Tensor:
-        p_dim = self._dims('pitch')
-        v_dim = self._dims('voice')
+        p_dim = self.get('pitch')
+        v_dim = self.get('voice')
         for v in range(self.num_voices):
             mask = x[..., v_dim] == v
             pitch = x[..., p_dim]
@@ -61,14 +61,14 @@ class MidiAugmentator(Augmentator):
         return x
 
     def use_pitch_shift(self, x: torch.Tensor) -> torch.Tensor:
-        dim = self._dims('pitch')
+        dim = self.get('pitch')
         s = torch.rand(1).item() * 2 - 1
         x[..., dim] += s * 700
         return x
 
     def use_dynamics(self, x: torch.Tensor) -> torch.Tensor:
         max_vel = 127
-        dim = self._dims('velocity')
+        dim = self.get('velocity')
         x[..., dim] = x[..., dim] / max_vel
         s = torch.randn(1,).item() * 0.5
         theta = (x[..., dim] + s).clip(0, 1) * torch.pi
@@ -77,7 +77,7 @@ class MidiAugmentator(Augmentator):
         return x
 
     def use_voice_swap(self, x: torch.Tensor) -> torch.Tensor:
-        dim = self._dims('voice')
+        dim = self.get('voice')
         voices = x[..., dim].unique()
         swap = voices[torch.randperm(self.num_voices)]
         result = x.clone()
