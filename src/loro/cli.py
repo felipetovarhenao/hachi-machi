@@ -132,11 +132,15 @@ def run(input, **kwargs):
         Console.action("\nClosing session...")
         return
 
+
 @click.command()
 @click.argument('input')
-def parse(input):
+@click.argument('output')
+def parse(input, output):
+    input, output = (validate_path(f, ['.mid', '.midi'])
+                     for f in (input, output))
     midi = MidiParser(file=input)
-    midi.serialize(midi.events(), '../midi/test.mid')
+    midi.serialize(midi.events(), output)
 
 
 main.add_command(train)
