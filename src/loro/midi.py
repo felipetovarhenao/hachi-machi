@@ -55,7 +55,57 @@ class MidiParser:
                 events.append((event[0], event[1:]))
         self._numvoices = numvoices
         events.sort(key=lambda x: x[0])
-        return torch.tensor([e for _, e in events]).to(torch.float32)
+        events.sort(key=lambda x: x[0])
+        # Recompute ioi from sorted onsets
+        corrected = []
+        prev_onset = 0
+        for onset, data in events:
+            ioi = onset - prev_onset
+            prev_onset = onset
+            corrected.append([ioi] + data[1:])  # replace stale ioi
+        return torch.tensor(corrected).to(torch.float32)
+
+    def serialize(self, events: torch.Tensor, output_path: str, tempo: int = 500000) -> None:
+        """
+        Serialize parsed MIDI events back into a MIDI file.
+
+        Expected tensor columns: [ioi, voice_ioi, voice, pitch, velocity, duration]
+        Pitch values are assumed to be in units of 100 (as produced by _parse).
+        """
+        mid = mido.MidiFile(type=0, ticks_per_beat=self._midi.ticks_per_beat)
+        track = mido.MidiTrack()
+        mid.tracks.append(track)
+        track.append(mido.MetaMessage('set_tempo', tempo=tempo, time=0))
+
+        ticks_per_ms = self._midi.ticks_per_beat / (tempo / 1000)
+
+        # Build flat list of (absolute_tick, msg) from events
+        messages = []
+        current_onset_ms = 0.0
+        for row in events:
+            ioi, _, voice, pitch, velocity = row.tolist()
+            current_onset_ms += ioi
+            duration = 1000
+            note = int(round(pitch / 100))
+            vel = int(round(velocity))
+            channel = int(round(voice))
+            onset_tick = int(round(current_onset_ms * ticks_per_ms))
+            off_tick = int(round((current_onset_ms + duration) * ticks_per_ms))
+            messages.append((onset_tick, mido.Message(
+                'note_on',  channel=channel, note=note, velocity=vel,   time=0)))
+            messages.append((off_tick,   mido.Message(
+                'note_on',  channel=channel, note=note, velocity=0,     time=0)))
+
+        messages.sort(key=lambda x: x[0])
+
+        # Convert absolute ticks to delta ticks
+        prev_tick = 0
+        for abs_tick, msg in messages:
+            msg.time = abs_tick - prev_tick
+            prev_tick = abs_tick
+            track.append(msg)
+
+        mid.save(output_path)
 
     def events(self):
         return self._events
