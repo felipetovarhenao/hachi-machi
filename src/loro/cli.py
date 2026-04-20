@@ -136,13 +136,22 @@ def run(input, **kwargs):
 @click.command()
 @click.argument('input')
 @click.argument('output')
-def parse(input, output):
-    input, output = (validate_path(f, ['.mid', '.midi'])
-                     for f in (input, output))
+def parse_midi(input, output):
+    input = validate_path(input, ['.mid', '.midi'])
+    output = validate_path(output, ['.mid', '.midi', '.txt'])
+
     midi = MidiParser(file=input)
-    midi.serialize(midi.events(), output)
+    is_txt = output.endswith('.txt')
+    if not is_txt:
+        midi.serialize(midi.events(), output)
+    else:
+        out = ""
+        for e in midi.events().int().tolist():
+            out += f'[ {" ".join(str(i) for i in e)} ]\n'
+        with open(output, 'w') as f:
+            f.write(out)
 
 
 main.add_command(train)
 main.add_command(run)
-main.add_command(parse)
+main.add_command(parse_midi)
