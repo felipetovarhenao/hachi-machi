@@ -85,3 +85,21 @@ class MidiAugmentator(Augmentator):
             mask = x[..., dim] == v
             result[..., dim] = torch.where(mask, s, result[..., dim])
         return result
+
+    def use_shuffle_chord(self, x: torch.Tensor):
+        y = x.clone()
+        voice_dim = self.get('voice')
+        voice_ioi_dim = self.get('ioi_voice')
+        ioi_dim = self.get('ioi')
+        y[:, ioi_dim] = torch.cumsum(y[:, ioi_dim], dim=0)
+        y = y[torch.randperm(n=len(y))]
+        order = torch.sort(y[:, ioi_dim], dim=0, stable=True).indices.flatten()
+        y = y[order]
+
+        for v in range(self.num_voices):
+            voice_mask = (y[:, voice_dim] == v).flatten()
+            voice_onsets = y[voice_mask, ioi_dim]
+            voice_iois = torch.diff(voice_onsets, dim=0)
+            y[voice_mask][1:, voice_ioi_dim] = voice_iois.unsqueeze(-1)
+        y[1:, ..., ioi_dim] = torch.diff(y[..., ioi_dim], dim=-2)
+        return y

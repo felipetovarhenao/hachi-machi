@@ -55,7 +55,7 @@ class EventDataset(Dataset):
         if not self.training or not self.augmentator:
             return y
         n = len(self.augmentator)
-        i = torch.randint(n // 2, n + 1, size=(1,)).item()
+        i = torch.randint(1, n + 1, size=(1,)).item()
         order = torch.randperm(n=n)
         order = order[:i]
         for i in order:

@@ -141,12 +141,15 @@ def parse_midi(input, output):
     output = validate_path(output, ['.mid', '.midi', '.txt'])
 
     midi = MidiParser(file=input)
+    events = midi.events()
+    # aug = MidiAugmentator(midi.numvoices())
+    # events = aug.use_shuffle_chord(events)
     is_txt = output.endswith('.txt')
     if not is_txt:
-        midi.serialize(midi.events(), output)
+        midi.serialize(events, output)
     else:
         out = ""
-        for e in midi.events().int().tolist():
+        for e in events.int().tolist():
             out += f'[ {" ".join(str(i) for i in e)} ]\n'
         with open(output, 'w') as f:
             f.write(out)
