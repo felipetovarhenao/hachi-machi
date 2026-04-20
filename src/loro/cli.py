@@ -1,4 +1,5 @@
 import click
+import torch
 from .augment import MidiAugmentator
 from .midi import MidiParser
 from .dataset import EventDataset
@@ -59,6 +60,9 @@ def main():
 @click.option('--slope',
               default=0.001,
               help='Negative slope for Leaky ReLU activations.')
+@click.option('--seed',
+              default=1,
+              help='Random seed.')
 def train(input, **kwargs):
     global DEVICE
     if input.endswith('.json'):
@@ -75,6 +79,8 @@ def train(input, **kwargs):
         key = f"- {key}: "
         key += " " * (16 - len(key))
         Console.info(f"{key}{str(value)}")
+
+    torch.manual_seed(params['seed'])
 
     Console.action("\nParsing MIDI...")
     parser = MidiParser(midi_file)
