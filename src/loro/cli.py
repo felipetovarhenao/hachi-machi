@@ -132,6 +132,13 @@ def run(input, **kwargs):
         Console.action("\nClosing session...")
         return
 
+@click.command()
+@click.argument('input')
+def parse(input):
+    midi = MidiParser(file=input)
+    midi.serialize(midi.events(), '../midi/test.mid')
+
 
 main.add_command(train)
 main.add_command(run)
+main.add_command(parse)
