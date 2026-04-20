@@ -37,10 +37,10 @@ class Session:
         for handler in self.get_handlers():
             self.dispatcher.map(**handler)
 
-    def _get_voice_delta(self, now: float, voice: int | None = None) -> float:
+    def _get_voice_ioi(self, now: float, voice: int | None = None) -> float:
         return (now - self._last_voice_time[voice]) * 1000 if voice in self._last_voice_time else 0
 
-    def _get_abs_delta(self, now: float) -> float:
+    def _get_ioi(self, now: float) -> float:
         return (now - self._last_global_time) * 1000 if self._last_global_time is not None else 0
 
     def _update_timestamps(self, voice: int, now: float) -> None:
@@ -87,12 +87,12 @@ class Session:
             voice = int(args[0])
 
             with self._lock:
-                global_delta = self._get_abs_delta(now)
-                voice_delta = self._get_voice_delta(now, voice)
+                ioi = self._get_ioi(now)
+                voice_ioi = self._get_voice_ioi(now, voice)
                 self._update_timestamps(voice, now)
 
             full_event = torch.tensor(
-                [global_delta, voice_delta, *args],
+                [ioi, voice_ioi, *args],
                 dtype=torch.float32
             )
             self._predict_and_schedule(full_event)
