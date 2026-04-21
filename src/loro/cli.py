@@ -168,7 +168,9 @@ def generate(model_path, output, **kwargs):
     is_txt = output.endswith('.txt')
     if not is_txt:
         return
-    torch.manual_seed(kwargs['seed'])
+    seed = kwargs['seed']
+    if seed != 0:
+        torch.manual_seed(kwargs['seed'])
     agent: MusicAgent = torch.load(f=model_path,
                                    weights_only=False,
                                    map_location=DEVICE)
