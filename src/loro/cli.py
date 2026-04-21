@@ -3,7 +3,7 @@ import torch
 from .augment import MidiAugmentator
 from .midi import MidiParser
 from .dataset import EventDataset
-from .model import FeatureScaler, RecurrentMDN
+from .model import FeatureScaler, RecurrentMDN, MusicAgent
 from .pipeline import Pipeline
 from .session import Session
 from .console import Console
@@ -155,6 +155,48 @@ def parse_midi(input, output):
             f.write(out)
 
 
+@click.command()
+@click.argument('model_path', type=click.Path(exists=True, file_okay=True, dir_okay=False, resolve_path=True))
+@click.argument('output', type=click.Path(file_okay=True, dir_okay=False))
+@click.option('--tokens', '-n', default=100, help='Number of tokens to generate.')
+def generate(model_path, output, tokens):
+    global DEVICE
+    validate_path(model_path, '.pt')
+    is_txt = output.endswith('.txt')
+    if not is_txt:
+        validate_path(output, ['.mid', '.midi'])
+        return
+
+    agent: MusicAgent = torch.load(f=model_path,
+                                   weights_only=False,
+                                   map_location=DEVICE)
+    model = agent.model
+    model.eval()
+    hidden = None
+
+    x = torch.zeros(1, 1, model.input_size, device=DEVICE)
+    events = []
+    with torch.no_grad():
+        for _ in range(tokens):
+            y, hidden = model.step(x=agent.scaler(x),
+                                   hidden=hidden,)
+            x: torch.Tensor = agent.scaler(y.clone(), inverse=True)
+            events.append(x.clip(0).squeeze().round().int())
+
+    events = torch.stack(events).float()
+
+    if is_txt:
+        out = ""
+        for e in events.int().tolist():
+            out += f'[ {" ".join(str(i) for i in e)} ]\n'
+        with open(output, 'w') as f:
+            f.write(out)
+    else:
+        return
+    Console.info(f"Generated {tokens} tokens -> {output}")
+
+
 main.add_command(train)
 main.add_command(run)
 main.add_command(parse_midi)
+main.add_command(generate)

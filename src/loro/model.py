@@ -7,21 +7,27 @@ class FeatureScaler(nn.Module):
 
     def __init__(self, data: torch.Tensor, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        data = data.clone()
+        self.e = 1
+        data[..., :2] = torch.log2((data[..., :2] + self.e) / 1000)
         mean = data.mean(0)
         std = data.std(0)
         std[torch.where(std == 0)] = 1.0
         self.register_buffer('mean', mean)
         self.register_buffer('std', std)
 
+    def time_scale(self, x: torch.Tensor):
+        x[..., :2] = torch.log2((x[..., :2] + self.e) / 1000)
+        return x
+
     def forward(self, x: torch.Tensor, inverse: bool = False):
-        e = 0.0005
         x = x.clone()
         if inverse:
             y = x * self.std + self.mean
-            y[..., :2] = (torch.exp2(y[..., :2]) - e) * 1000
+            y[..., :2] = torch.exp2(y[..., :2]) * 1000 - self.e
         else:
-            x[..., :2] = torch.log2((x[..., :2] / 1000) + e)
-            y = (x - self.mean) / self.std
+            y = self.time_scale(x)
+            y = (y - self.mean) / self.std
         return y
 
 
