@@ -9,9 +9,11 @@ from .session import Session
 from .console import Console
 from .utils import (validate_path,
                     load_config,
-                    DEVICE,)
+                    DEVICE,
+                    VERSION)
 
 
+@click.version_option(VERSION)
 @click.group()
 def main():
     pass
