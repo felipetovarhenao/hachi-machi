@@ -13,3 +13,4 @@ src/_loro/*
 *.pt
 *.json
 **/_*.*
+**/*.egg-info

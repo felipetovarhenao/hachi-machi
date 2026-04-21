@@ -1,0 +1,17 @@
+[project]
+name = "loro"
+authors = [
+	{ name = 'Felipe Tovar-Henao', email = 'felipe.tovar.henao@gmail.com' },
+]
+description = "A command-line interface tool to easily train and run event-based, multiplayer improvisation agents"
+readme = "README.md"
+version = "0.1.0"
+keywords = [
+	'music',
+	'machine improvisation',
+	'artificial intelligence',
+	'symbolic music',
+]
+
+[project.scripts]
+loro = "loro.cli:main"

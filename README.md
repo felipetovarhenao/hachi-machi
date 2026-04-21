@@ -10,6 +10,7 @@ conda create -n loro python=3.10
 conda activate loro
 conda install python-osc pytorch mido click tqdm
 python -m pip install python-osc
+pip install -e .
 ```
 
 ## Before each session
