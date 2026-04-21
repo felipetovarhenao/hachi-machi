@@ -8,6 +8,7 @@ from .pipeline import Pipeline
 from .session import Session
 from .console import Console
 from .utils import (validate_path,
+                    tensor_to_txt,
                     load_config,
                     DEVICE,
                     VERSION)
@@ -148,13 +149,9 @@ def parse_midi(input, output):
     # events = aug.use_shuffle_chord(events)
     is_txt = output.endswith('.txt')
     if not is_txt:
-        midi.serialize(events, output)
+        MidiParser.render(events, output)
     else:
-        out = ""
-        for e in events.int().tolist():
-            out += f'[ {" ".join(str(i) for i in e)} ]\n'
-        with open(output, 'w') as f:
-            f.write(out)
+        tensor_to_txt(events, output)
 
 
 @click.command()
@@ -196,13 +193,10 @@ def generate(model_path, output, **kwargs):
     events = torch.stack(events).float()
 
     if is_txt:
-        out = ""
-        for e in events.int().tolist():
-            out += f'[ {" ".join(str(i) for i in e)} ]\n'
-        with open(output, 'w') as f:
-            f.write(out)
+        tensor_to_txt(events, output)
     else:
-        return
+        MidiParser.render(events=events,
+                          output_path=output)
     Console.info(f"Generated {kwargs['tokens']} tokens -> {output}")
 
 

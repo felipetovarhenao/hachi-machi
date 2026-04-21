@@ -54,13 +54,21 @@ class MidiParser:
 
         return torch.tensor(rows, dtype=torch.float32)
 
-    def serialize(self, events: torch.Tensor, output_path: str, tempo: int = 500_000) -> None:
-        mid = mido.MidiFile(type=0, ticks_per_beat=self._midi.ticks_per_beat)
+    @classmethod
+    def render(cls,
+               events: torch.Tensor,
+               output_path: str,
+               tempo: int = 500_000,
+               ticks_per_beat: int = 480) -> None:
+        mid = mido.MidiFile(type=0,
+                            ticks_per_beat=ticks_per_beat)
         track = mido.MidiTrack()
         mid.tracks.append(track)
-        track.append(mido.MetaMessage('set_tempo', tempo=tempo, time=0))
+        track.append(mido.MetaMessage('set_tempo',
+                                      tempo=tempo,
+                                      time=0))
 
-        ticks_per_ms = self._midi.ticks_per_beat / (tempo / 1000)
+        ticks_per_ms = ticks_per_beat / (tempo / 1000)
 
         messages = []
         current_onset_ms = 0.0
@@ -73,13 +81,18 @@ class MidiParser:
             channel = int(round(voice))
             onset_tick = int(round(current_onset_ms * ticks_per_ms))
             off_tick = int(round((current_onset_ms + duration) * ticks_per_ms))
-            messages.append((onset_tick, mido.Message(
-                'note_on',  channel=channel, note=note, velocity=vel,   time=0)))
-            messages.append((off_tick,   mido.Message(
-                'note_on',  channel=channel, note=note, velocity=0,     time=0)))
+            messages.append((onset_tick, mido.Message(type='note_on',
+                                                      channel=channel,
+                                                      note=note,
+                                                      velocity=vel,
+                                                      time=0)))
+            messages.append((off_tick,   mido.Message(type='note_on',
+                                                      channel=channel,
+                                                      note=note,
+                                                      velocity=0,
+                                                      time=0)))
 
         messages.sort(key=lambda x: x[0])
-
         prev_tick = 0
         for abs_tick, msg in messages:
             msg.time = abs_tick - prev_tick

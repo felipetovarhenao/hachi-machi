@@ -45,3 +45,12 @@ def safe_handler(func: Callable) -> Callable:
         except Exception as e:
             Console.error(e)
     return wrapper
+
+
+def tensor_to_txt(x: torch.Tensor, output: str) -> None:
+    output = validate_path(output, '.txt')
+    out = ""
+    for e in x.int().tolist():
+        out += f'{" ".join(str(i) for i in e)}\n'
+    with open(output, 'w') as f:
+        f.write(out)
