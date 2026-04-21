@@ -179,7 +179,7 @@ def generate(model_path, output, **kwargs):
     model.eval()
     hidden = None
 
-    x = torch.zeros(1, 1, model.input_size, device=DEVICE)
+    x = torch.randn(1, 1, model.input_size, device=DEVICE)
     events = []
     with torch.no_grad():
         for _ in range(kwargs['tokens']):
