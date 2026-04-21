@@ -158,30 +158,35 @@ def parse_midi(input, output):
 @click.command()
 @click.argument('model_path', type=click.Path(exists=True, file_okay=True, dir_okay=False, resolve_path=True))
 @click.argument('output', type=click.Path(file_okay=True, dir_okay=False))
-@click.option('--tokens', '-n', default=100, help='Number of tokens to generate.')
-def generate(model_path, output, tokens):
+@click.option('--tokens',  default=100, help='Number of tokens to generate.')
+@click.option('--seed', default=0, help='Random seed.')
+@click.option('--temp', default=1, help='Temperature.')
+def generate(model_path, output, **kwargs):
     global DEVICE
-    validate_path(model_path, '.pt')
+    model_path = validate_path(model_path, '.pt')
+    output = validate_path(output, ['.mid', '.midi', '.txt'])
     is_txt = output.endswith('.txt')
     if not is_txt:
-        validate_path(output, ['.mid', '.midi'])
         return
-
+    torch.manual_seed(kwargs['seed'])
     agent: MusicAgent = torch.load(f=model_path,
                                    weights_only=False,
                                    map_location=DEVICE)
     model = agent.model
+    scaler = agent.scaler
     model.eval()
     hidden = None
 
     x = torch.zeros(1, 1, model.input_size, device=DEVICE)
     events = []
     with torch.no_grad():
-        for _ in range(tokens):
-            y, hidden = model.step(x=agent.scaler(x),
-                                   hidden=hidden,)
-            x: torch.Tensor = agent.scaler(y.clone(), inverse=True)
-            events.append(x.clip(0).squeeze().round().int())
+        for _ in range(kwargs['tokens']):
+            y, hidden = model.step(x=scaler(x),
+                                   hidden=hidden,
+                                   temp=kwargs['temp'])
+            x: torch.Tensor = scaler(y.clone(), inverse=True)
+            x = x.clip(0).round().int()
+            events.append(x.squeeze())
 
     events = torch.stack(events).float()
 
@@ -193,7 +198,7 @@ def generate(model_path, output, tokens):
             f.write(out)
     else:
         return
-    Console.info(f"Generated {tokens} tokens -> {output}")
+    Console.info(f"Generated {kwargs['tokens']} tokens -> {output}")
 
 
 main.add_command(train)
