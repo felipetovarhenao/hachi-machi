@@ -1,4 +1,5 @@
 import torch
+from typing import Callable
 from abc import ABC
 
 
@@ -86,13 +87,13 @@ class MidiAugmentator(Augmentator):
             result[..., dim] = torch.where(mask, s, result[..., dim])
         return result
 
-    def use_shuffle_chord(self, x: torch.Tensor):
+    def __handle_onsets(self, x: torch.Tensor, func: Callable[[torch.Tensor], torch.Tensor]) -> torch.Tensor:
         y = x.clone()
         voice_dim = self.get('voice')
         voice_ioi_dim = self.get('ioi_voice')
         ioi_dim = self.get('ioi')
         y[:, ioi_dim] = torch.cumsum(y[:, ioi_dim], dim=0)
-        y = y[torch.randperm(n=len(y))]
+        y = func(y)
         order = torch.sort(y[:, ioi_dim], dim=0, stable=True).indices.flatten()
         y = y[order]
 
@@ -103,3 +104,14 @@ class MidiAugmentator(Augmentator):
             y[voice_mask][1:, voice_ioi_dim] = voice_iois.unsqueeze(-1)
         y[1:, ..., ioi_dim] = torch.diff(y[..., ioi_dim], dim=-2)
         return y
+
+    def use_shuffle_chord(self, x: torch.Tensor) -> torch.Tensor:
+        return self.__handle_onsets(x, lambda y: y[torch.randperm(n=len(y))])
+
+    def use_onset_noise(self, x: torch.Tensor) -> torch.Tensor:
+        dim = self.get('ioi')
+
+        def func(y: torch.Tensor) -> torch.Tensor:
+            y[..., dim] += torch.randn_like(y[..., dim])
+            return y.clip(0)
+        return self.__handle_onsets(x, func)

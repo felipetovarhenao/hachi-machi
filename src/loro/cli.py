@@ -11,6 +11,7 @@ from .utils import (validate_path,
                     tensor_to_txt,
                     load_config,
                     DEVICE,
+                    print_device,
                     VERSION)
 
 
@@ -122,6 +123,7 @@ def train(input, **kwargs):
 @click.option('--address', default='127.0.0.1', help='OSC address')
 def run(input, **kwargs):
     global DEVICE
+    print_device()
     config = kwargs
     model = validate_path(input, '.pt')
     session = Session(model=model,
@@ -162,6 +164,7 @@ def parse_midi(input, output):
 @click.option('--temp', default=1, help='Temperature.')
 def generate(model_path, output, **kwargs):
     global DEVICE
+    print_device()
     model_path = validate_path(model_path, '.pt')
     output = validate_path(output, ['.mid', '.midi', '.txt'])
     is_txt = output.endswith('.txt')

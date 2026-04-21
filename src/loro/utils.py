@@ -15,6 +15,11 @@ else:
     DEVICE = torch.device('cpu')
 
 
+def print_device() -> None:
+    global DEVICE
+    Console.info(f"Device: {DEVICE}")
+
+
 def validate_path(file, ext: str | list) -> bool:
     if type(ext) == str:
         ext = [ext]
