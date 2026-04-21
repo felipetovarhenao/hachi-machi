@@ -179,15 +179,16 @@ def generate(model_path, output, **kwargs):
     model.eval()
     hidden = None
 
-    x = torch.randn(1, 1, model.input_size, device=DEVICE)
     events = []
     with torch.no_grad():
+        x = torch.randn(1, 1, model.input_size, device=DEVICE)
+        x = scaler(x, inverse=True)
         for _ in range(kwargs['tokens']):
             y, hidden = model.step(x=scaler(x),
                                    hidden=hidden,
                                    temp=kwargs['temp'])
             x: torch.Tensor = scaler(y.clone(), inverse=True)
-            x = x.clip(0).round().int()
+            x = x.clip(0).round()
             events.append(x.squeeze())
 
     events = torch.stack(events).float()
