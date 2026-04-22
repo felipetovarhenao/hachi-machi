@@ -81,8 +81,9 @@ def train(input, **kwargs):
     for (key, value) in {"input": input, **params}.items():
         key = " ".join(key.split('_'))
         key = f"- {key}: "
-        key += " " * (16 - len(key))
-        Console.info(f"{key}{str(value)}")
+        key += " " * (20 - len(key))
+        key = Console.style(key, "INFO")
+        Console.print(f"{key}{str(value)}")
 
     torch.manual_seed(params['seed'])
 
