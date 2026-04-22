@@ -115,3 +115,13 @@ class MidiAugmentator(Augmentator):
             y[..., dim] += torch.randn_like(y[..., dim])
             return y.clip(0)
         return self.__handle_onsets(x, func)
+
+    def use_rubato(self, x: torch.Tensor) -> torch.Tensor:
+        dim = self.get('ioi')
+        st, end = 2 ** (torch.randn(2) * 0.01)
+        warp = torch.linspace(start=st,
+                              end=end,
+                              steps=len(x)).unsqueeze(-1).to(x.device)
+
+        x[..., dim] *= warp
+        return self.__handle_onsets(x, lambda y: y)
