@@ -20,8 +20,8 @@ class _Display:
         if not self._first:
             print(f"\033[{self.n_rows}A", end="")
         for key, value in metrics.items():
-            key = click.style(self._clean_key(key),  fg=Console.INFO)
-            value = click.style(value,  fg=Console.NEUTRAL)
+            key = Console.print(self._clean_key(key), defer=True)
+            value = Console.info(value,  defer=True)
             print(f"\033[2K{key}{value}")
         self._first = False
 
@@ -29,9 +29,9 @@ class _Display:
 class Console:
 
     ERROR = (223, 39, 61)
-    SUCCESS = (87, 217, 139)
-    NEUTRAL = (209, 223, 228)
-    INFO = (180, 219, 251)
+    SUCCESS = (120, 230, 189)
+    NEUTRAL = (220, 220, 220)
+    INFO = (160, 200, 240)
     WARNING = (233, 222, 117)
     ACTION = (242, 199, 149)
 
@@ -40,29 +40,42 @@ class Console:
         return _Display(n_rows)
 
     @classmethod
-    def print(cls, text: str, type: str = 'neutral'):
-        return print(cls.style(text, type))
+    def print(cls, text: str, type: str = 'neutral', defer: bool = False, end: str | None = '\n', **kwargs):
+        text = cls.style(text, type, **kwargs)
+        return text if defer else print(text, end=end)
 
     @classmethod
-    def style(cls, text: str, type: str):
-        return click.style(text, fg=getattr(cls, type.upper()))
+    def style(cls, text: str, type: str = 'neutral', **kwargs):
+        return click.style(text=text, fg=getattr(cls, type.upper()), **kwargs)
 
     @classmethod
-    def info(cls, msg: str) -> None:
-        cls.print(msg, 'info')
+    def info(cls, msg: str, **kwargs) -> None:
+        return cls.print(msg, 'info', **kwargs)
 
     @classmethod
-    def action(cls, msg: str) -> None:
-        cls.print(msg, 'action')
+    def action(cls, msg: str, **kwargs) -> None:
+        return cls.print(msg, 'action', **kwargs)
 
     @classmethod
-    def success(cls, msg: str) -> None:
-        cls.print(msg, 'success')
+    def success(cls, msg: str, **kwargs) -> None:
+        return cls.print(msg, 'success', **kwargs)
 
     @classmethod
-    def warning(cls, msg: str) -> None:
-        cls.print(msg, 'warning')
+    def warning(cls, msg: str, **kwargs) -> None:
+        return cls.print(msg, 'warning', **kwargs)
 
     @classmethod
-    def error(cls, msg: str) -> None:
-        cls.print(msg, 'error')
+    def error(cls, msg: str, **kwargs) -> None:
+        return cls.print(msg, 'error', **kwargs)
+
+    @classmethod
+    def pretty(cls, obj: dict, header: str | None = None):
+        if header:
+            Console.print(f"\n{header}", bold=True)
+        col_size = 20
+        for (k, v) in obj.items():
+            k = f"- {k}:"
+            k += " " * max(1, col_size - len(k))
+            k = Console.style(k)
+            v = Console.info(v, defer=True)
+            Console.print(f"{k}{v}")

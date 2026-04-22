@@ -77,17 +77,11 @@ def train(input, **kwargs):
         config = {}
     params = {**kwargs, **config}
 
-    Console.info("Training Settings:")
-    for (key, value) in {"input": input, **params}.items():
-        key = " ".join(key.split('_'))
-        key = f"- {key}: "
-        key += " " * (20 - len(key))
-        key = Console.style(key, "INFO")
-        Console.print(f"{key}{str(value)}")
-
     torch.manual_seed(params['seed'])
 
-    Console.action("\nParsing MIDI...")
+    Console.pretty({"input": input, **params}, header="Training settings:")
+    Console.action("\nParsing MIDI...", italic=True)
+
     parser = MidiParser(midi_file)
     if parser.numvoices() < 2:
         raise RuntimeError(
@@ -111,7 +105,7 @@ def train(input, **kwargs):
                         lr=params['lr'],
                         betas=tuple(params['betas']),)
     Console.action(
-        f"Training multiplayer agent ({parser.numvoices()} players found)")
+        f"{parser.numvoices()} players found", italic=True)
     pipeline.run(file=params['output'],
                  epochs=params['epochs'],
                  patience=params['patience'])
@@ -174,6 +168,9 @@ def generate(model_path, output, **kwargs):
     seed = kwargs['seed']
     if seed != 0:
         torch.manual_seed(kwargs['seed'])
+    Console.pretty({'model': model_path,
+                    'output': output,
+                    **kwargs}, header="Settings")
     agent: MusicAgent = torch.load(f=model_path,
                                    weights_only=False,
                                    map_location=DEVICE)
@@ -201,7 +198,8 @@ def generate(model_path, output, **kwargs):
     else:
         MidiParser.render(events=events,
                           output_path=output)
-    Console.info(f"Generated {kwargs['tokens']} tokens -> {output}")
+
+    Console.success("\nDONE", bold=True)
 
 
 main.add_command(train)

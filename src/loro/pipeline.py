@@ -1,4 +1,5 @@
 import torch
+from .timer import Timer
 from .console import Console
 from torch.optim import AdamW
 from .model import RecurrentMDN, FeatureScaler, MusicAgent
@@ -49,17 +50,18 @@ class Pipeline:
                                scaler=self.scaler)
             torch.save(obj=agent,
                        f=self.file)
-        self.display.update(
 
+        self.display.update(
+            time=str(self.timer),
             progress=f"{percent:d}%",
             epoch=epoch,
             train_loss=f"{train_loss:1.6f}",
             validation_loss=f"{self.min_loss:.6f}"
         )
         if stop:
-            Console.print('***')
             Console.success(
-                f"Epochs: {epoch:4d}\nFinal loss: {self.min_loss:.6f}")
+                f"\nEpochs:\t\t{epoch:4d}\nFinal loss:\t{self.min_loss:.6f}", bold=True)
+
         return stop
 
     def benchmark(self, n_warmup: int = 50, n_runs: int = 500):
@@ -87,22 +89,26 @@ class Pipeline:
         trainable = sum(p.numel()
                         for p in model.parameters() if p.requires_grad)
 
-        Console.info(f"""Parameters:"
-    Total:      {total:,}
-    Trainable:  {trainable:,}
-Latency ({DEVICE}):"
-    Mean:       {times.mean():.3f}ms
-    Std:        {times.std():.3f}ms  
-    p99:        {times.quantile(0.99):.3f}ms  
-    Max. rate:  {1000/times.mean():.1f}Hz""")
+        Console.pretty({
+            'total': f'{total:,}',
+            'trainable': f'{trainable:,}',
+        }, header="Parameters:")
+        Console.pretty({
+            'mean': f"{times.mean():.3f}ms",
+            'std': f"{times.std():.3f}ms",
+            'quantile': f"{times.quantile(0.99):.3f}ms",
+            'max. rate': f"{1000/times.mean():.1f}Hz",
+        }, header=f"Latency ({DEVICE}):")
 
     def run(self, file: str, epochs: int = 1000, patience: int = 15):
         self.file = validate_path(file, '.pt')
         self.max_patience = patience
         self.patience = 0
         self.min_loss = float('inf')
-        self.display = Console.get_display(n_rows=4)
-
+        self.display = Console.get_display(n_rows=5)
+        self.timer = Timer()
+        self.timer.start()
+        Console.print("Training info:", bold=True)
         for epoch in range(epochs):
             self.model.train()
             self.scaler.train()
