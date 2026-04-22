@@ -121,6 +121,7 @@ def run(input, **kwargs):
     print_device()
     config = kwargs
     model = validate_path(input, '.pt')
+    Console.pretty(config, header='Session info:')
     session = Session(model=model,
                       in_port=config['in_port'],
                       out_port=config['out_port'],
@@ -129,7 +130,7 @@ def run(input, **kwargs):
     try:
         session.start()
     except KeyboardInterrupt:
-        Console.action("\nClosing session...")
+        Console.action("\nClosing session...", italic=True)
         return
 
 

@@ -74,6 +74,7 @@ class Console:
             Console.print(f"\n{header}", bold=True)
         col_size = 20
         for (k, v) in obj.items():
+            k: str = k.replace('_', " ")
             k = f"- {k}:"
             k += " " * max(1, col_size - len(k))
             k = Console.style(k)

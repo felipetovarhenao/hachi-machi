@@ -136,6 +136,4 @@ class Session:
             server_address=(self.host, self.in_port),
             dispatcher=self.dispatcher
         )
-        Console.info(
-            f"Running...\n* Model:\t{self.name} 🤖\n* OSC input:\t{self.host}:{self.in_port}\n* OSC output:\t{self.host}:{self.out_port}\n")
         server.serve_forever()
