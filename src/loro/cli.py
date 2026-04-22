@@ -119,7 +119,10 @@ def run(input, **kwargs):
     global DEVICE
     config = kwargs
     model = validate_path(input, '.pt')
-    Console.pretty(config, header='Session info:')
+    Console.pretty({'model': model,
+                    'device': DEVICE,
+                   **config},
+                   header='Session info:')
     session = Session(model=model,
                       in_port=config['in_port'],
                       out_port=config['out_port'],

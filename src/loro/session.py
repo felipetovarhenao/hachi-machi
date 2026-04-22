@@ -53,7 +53,6 @@ class Session:
             msg = out[2:]
             self.client.send_message("/output", msg)
             voice = msg[0]
-            Console.info(msg, end='    \r')
             if voice not in self.model.player_voices:
                 self._predict_and_schedule(event)
 
@@ -100,12 +99,12 @@ class Session:
         @safe_handler
         def handle_temp(_, *args):
             self.model.set_temp(args[0])
-            Console.action(f"Temperature: {args[0]:.3f}")
+            Console.action(f"Temperature: {args[0]:.3f}", italic=True)
 
         @safe_handler
         def handle_alpha(_, *args):
             self.model.set_alpha(args[0])
-            Console.action(f"Alpha: {args[0]:.3f}")
+            Console.action(f"Alpha: {args[0]:.3f}", italic=True)
 
         @safe_handler
         def handle_reset(_):
@@ -113,7 +112,7 @@ class Session:
                 self.model.clear_hidden()
                 self._last_voice_time.clear()
                 self._last_global_time = None
-            Console.action("\nClearing hidden state.")
+            Console.action("Hidden state reset.", italic=True)
 
         @safe_handler
         def handle_weights(_, *args):
@@ -121,6 +120,7 @@ class Session:
                 raise ValueError(
                     f"Invalid weight size. Expected: {self.model.input_size}")
             with self._lock:
+                Console.action("Setting weights", italic=True)
                 self.model.set_weights(torch.tensor(args).clip(0, 1))
 
         return [
