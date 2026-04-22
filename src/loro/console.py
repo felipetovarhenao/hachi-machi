@@ -28,7 +28,7 @@ class _Display:
 
 class Console:
 
-    ERROR = (223, 39, 61)
+    ERROR = (250, 130, 130)
     SUCCESS = (120, 230, 189)
     NEUTRAL = (220, 220, 220)
     INFO = (160, 200, 240)

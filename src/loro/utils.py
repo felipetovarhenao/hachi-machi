@@ -1,11 +1,9 @@
-import importlib.metadata
 import os
 import torch
 import json
 from typing import Callable
 from .console import Console
 
-VERSION = importlib.metadata.version("loro")
 
 if torch.cuda.is_available():
     DEVICE = torch.device('cuda')

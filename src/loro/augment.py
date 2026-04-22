@@ -55,9 +55,7 @@ class MidiAugmentator(Augmentator):
         for v in range(self.num_voices):
             mask = x[..., v_dim] == v
             pitch = x[..., p_dim]
-            mean = (pitch * mask).sum(-1, keepdim=True) / \
-                mask.sum(-1, keepdim=True)
-            inverted = mean * 2 - pitch
+            inverted = pitch[mask].mean(0) * 2 - pitch
             x[..., p_dim] = torch.where(mask, inverted, pitch)
         return x
 
@@ -112,13 +110,13 @@ class MidiAugmentator(Augmentator):
         dim = self.get('ioi')
 
         def func(y: torch.Tensor) -> torch.Tensor:
-            y[..., dim] += torch.randn_like(y[..., dim])
+            y[..., dim] += torch.randn_like(y[..., dim]) * 5
             return y.clip(0)
         return self.__handle_onsets(x, func)
 
     def use_rubato(self, x: torch.Tensor) -> torch.Tensor:
         dim = self.get('ioi')
-        st, end = 2 ** (torch.randn(2) * 0.01)
+        st, end = 2 ** (torch.randn(2) * 0.125)
         warp = torch.linspace(start=st,
                               end=end,
                               steps=len(x)).unsqueeze(-1).to(x.device)
