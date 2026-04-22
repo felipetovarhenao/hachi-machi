@@ -73,7 +73,12 @@ class Console:
         if header:
             Console.print(f"\n{header}", bold=True)
         col_size = 20
-        for (k, v) in obj.items():
+
+        for (k, v) in sorted(obj.items(), key=lambda x: x[0]):
+            indent = ''
+            if isinstance(v, list | tuple):
+                indent = ' ' * col_size
+                v = f',\n{indent}'.join([str(i) for i in v])
             k: str = k.replace('_', " ")
             k = f"- {k}:"
             k += " " * max(1, col_size - len(k))

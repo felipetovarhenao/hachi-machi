@@ -5,7 +5,7 @@ from torch.optim import AdamW
 from .model import RecurrentMDN, FeatureScaler, MusicAgent
 from .loss import NLLLoss
 from .dataset import EventDataset, EventLoader
-from .utils import validate_path, DEVICE
+from .utils import validate_path
 
 
 class Pipeline:
@@ -55,8 +55,8 @@ class Pipeline:
             time=str(self.timer),
             progress=f"{percent:d}%",
             epoch=epoch,
-            train_loss=f"{train_loss:1.6f}",
-            validation_loss=f"{self.min_loss:.6f}"
+            train_loss=f"{train_loss:1.4f}",
+            validation_loss=f"{self.min_loss:.4f}"
         )
         if stop:
             Console.success(
@@ -68,7 +68,7 @@ class Pipeline:
         import time
         agent: MusicAgent = torch.load(self.file,
                                        weights_only=False,
-                                       map_location=DEVICE)
+                                       map_location=self.model.device)
         model = agent.model
         model.eval()
 
@@ -98,7 +98,7 @@ class Pipeline:
             'std': f"{times.std():.3f}ms",
             'quantile': f"{times.quantile(0.99):.3f}ms",
             'max. rate': f"{1000/times.mean():.1f}Hz",
-        }, header=f"Latency ({DEVICE}):")
+        }, header=f"Latency ({self.model.device}):")
 
     def run(self, file: str, epochs: int = 1000, patience: int = 15):
         self.file = validate_path(file, '.pt')

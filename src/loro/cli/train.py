@@ -3,12 +3,12 @@ import torch
 from ..augment import MidiAugmentator
 from ..midi import MidiParser
 from ..dataset import EventDataset
-from ..model import FeatureScaler, RecurrentMDN, MusicAgent
+from ..model import FeatureScaler, RecurrentMDN
 from ..pipeline import Pipeline
-from ..session import Session
 from ..console import Console
 from ..utils import (load_config,
-                     DEVICE)
+                     device_option,
+                     clean_params)
 
 
 @click.command()
@@ -50,35 +50,49 @@ from ..utils import (load_config,
               help='Dropout rate.')
 @click.option('--betas',
               default=[0.9, 0.99],
-              help='Betas for AdamW (Adaptive Moment Estimation) optimizer.', multiple=True)
+              help='Betas for AdamW (Adaptive Moment Estimation) optimizer.',
+              type=click.FloatRange(0.1, 0.995),
+              nargs=2)
 @click.option('--slope',
-              default=0.001,
+              default=1e-5,
               help='Negative slope for Leaky ReLU activations.')
 @click.option('--seed',
               default=1,
               help='Random seed.')
+@click.option('--transform', '-t',
+              default=MidiAugmentator.options(),
+              type=click.Choice(MidiAugmentator.options()),
+              multiple=True)
+@device_option()
 def train(input, **kwargs):
-    global DEVICE
     if input.endswith('.json'):
         config = load_config(input)
-        midi_file = config.pop('input')
+        midi_file = config['input']
     else:
         midi_file = input
         config = {}
-    params = {**kwargs, **config}
+    params = clean_params(
+        params={**kwargs, **config},
+        file_keys=[
+            ('input', ['.json', '.mid', '.midi']),
+            ('output', '.pt')
+        ]
+    )
+    device = params['device']
+    seed = params['seed']
+    if seed != 0:
+        torch.manual_seed(params['seed'])
 
-    torch.manual_seed(params['seed'])
-
-    Console.pretty({"input": input, **params}, header="Training settings:")
     Console.action("\nParsing MIDI...", italic=True)
 
     parser = MidiParser(midi_file)
     if parser.numvoices() < 2:
         raise RuntimeError(
             "MIDI file must contain of two or more channels, one for each player.")
-    data = parser.events().to(DEVICE)
+    data = parser.events().to(device)
     scaler = FeatureScaler(data)
-    augmentator = MidiAugmentator(num_voices=parser.numvoices())
+    augmentator = MidiAugmentator(num_voices=parser.numvoices(),
+                                  transforms=params['transform'])
     dataset = EventDataset(data=data,
                            context_length=params['context'],
                            split=params['split'],
@@ -87,7 +101,7 @@ def train(input, **kwargs):
                          input_size=dataset.dims,
                          dropout=params['dropout'],
                          slope=params['slope'],
-                         device=DEVICE)
+                         device=device)
     pipeline = Pipeline(model=model,
                         scaler=scaler,
                         dataset=dataset,

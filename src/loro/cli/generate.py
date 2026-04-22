@@ -3,33 +3,37 @@ import torch
 from ..midi import MidiParser
 from ..model import MusicAgent
 from ..console import Console
-from ..utils import (validate_path,
+from ..utils import (device_option,
                      tensor_to_txt,
-                     DEVICE)
+                     clean_params)
 
 
 @click.command()
-@click.argument('model_path', type=click.Path(exists=True, file_okay=True, dir_okay=False, resolve_path=True))
+@click.argument('model', type=click.Path(exists=True, file_okay=True, dir_okay=False, resolve_path=True))
 @click.argument('output', type=click.Path(file_okay=True, dir_okay=False))
 @click.option('--tokens',  default=100, help='Number of tokens to generate.')
 @click.option('--seed', default=0, help='Random seed.')
 @click.option('--temp', default=1, help='Temperature.')
-def generate(model_path, output, **kwargs):
-    global DEVICE
-    model_path = validate_path(model_path, '.pt')
-    output = validate_path(output, ['.mid', '.midi', '.txt'])
+@device_option()
+def generate(**kwargs):
+    params = clean_params(
+        params=kwargs, file_keys=[
+            ('model', '.pt'),
+            ('output', ('.mid', '.midi', '.txt'))
+        ])
+    device = params['device']
+    model_path = params['model']
+    output = params['output']
     is_txt = output.endswith('.txt')
     if not is_txt:
         return
     seed = kwargs['seed']
     if seed != 0:
         torch.manual_seed(kwargs['seed'])
-    Console.pretty({'model': model_path,
-                    'output': output,
-                    **kwargs}, header="Settings")
+
     agent: MusicAgent = torch.load(f=model_path,
                                    weights_only=False,
-                                   map_location=DEVICE)
+                                   map_location=device)
     model = agent.model
     scaler = agent.scaler
     model.eval()
@@ -37,7 +41,7 @@ def generate(model_path, output, **kwargs):
 
     events = []
     with torch.no_grad():
-        x = torch.randn(1, 1, model.input_size, device=DEVICE)
+        x = torch.randn(1, 1, model.input_size, device=device)
         x = scaler(x, inverse=True)
         for _ in range(kwargs['tokens']):
             y, hidden = model.step(x=scaler(x),

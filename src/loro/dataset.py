@@ -50,22 +50,11 @@ class EventDataset(Dataset):
         data = self.get_split()
         return len(data)
 
-    def augment(self, x: torch.Tensor) -> torch.Tensor:
-        y = x.clone()
-        if not self.training or not self.augmentator:
-            return y
-        n = len(self.augmentator)
-        i = torch.randint(1, n + 1, size=(1,)).item()
-        order = torch.randperm(n=n)
-        order = order[:i]
-        for i in order:
-            fn = self.augmentator[i]
-            y = fn(y)
-        return y
-
     def __getitem__(self, index) -> torch.Tensor:
         data = self.get_split()
-        item = self.augment(data[index])
+        item = data[index]
+        if self.training:
+            item = self.augmentator(item)
         x, y = item[..., :-1, self._in_dims], item[...,
                                                    1:, self._out_dims]
         return x, y

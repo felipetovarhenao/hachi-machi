@@ -2,28 +2,28 @@
 import click
 from ..session import Session
 from ..console import Console
-from ..utils import (validate_path,
-                     DEVICE)
+from ..utils import (device_option,
+                     clean_params)
 
 
 @click.command()
-@click.argument('input')
+@click.argument('model')
 @click.option('--in-port', default=8000, help='Input OSC port.')
 @click.option('--out-port', default=9000, help='Output OSC port.')
 @click.option('--address', default='127.0.0.1', help='OSC address')
-def run(input, **kwargs):
-    global DEVICE
-    config = kwargs
-    model = validate_path(input, '.pt')
-    Console.pretty({'model': model,
-                    'device': DEVICE,
-                   **config},
-                   header='Session info:')
+@device_option()
+def run(**kwargs):
+    config = clean_params(kwargs,
+                          file_keys=[
+                              ('model', ['.pt'])
+                          ])
+    device = config['device']
+    model = config['model']
     session = Session(model=model,
                       in_port=config['in_port'],
                       out_port=config['out_port'],
                       host=config['address'],
-                      device=DEVICE)
+                      device=device)
     try:
         session.start()
     except KeyboardInterrupt:
