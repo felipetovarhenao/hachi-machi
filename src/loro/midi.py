@@ -57,7 +57,7 @@ class MidiParser:
                          voice,
                          pitch,
                          velocity,
-                        #  duration,
+                         duration,
                          ])
 
         return torch.tensor(rows, dtype=torch.float32)
@@ -81,7 +81,7 @@ class MidiParser:
         messages = []
         current_onset_ms = 0.0
         for row in events:
-            ioi, _, voice, pitch, velocity = row.tolist()
+            ioi, _, voice, pitch, velocity, duration = row.tolist()
             current_onset_ms += ioi
             duration = 1000
             note = int(round(pitch / 100))

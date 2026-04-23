@@ -90,7 +90,8 @@ def train(input, **kwargs):
         raise RuntimeError(
             "MIDI file must contain of two or more channels, one for each player.")
     data = parser.events().to(device)
-    scaler = FeatureScaler(data)
+    x_scaler = FeatureScaler(data[..., :-1])
+    y_scaler = FeatureScaler(data)
     augmentator = MidiAugmentator(num_voices=parser.numvoices(),
                                   transforms=params['transform'])
     dataset = EventDataset(data=data,
@@ -104,7 +105,8 @@ def train(input, **kwargs):
                          slope=params['slope'],
                          device=device)
     pipeline = Pipeline(model=model,
-                        scaler=scaler,
+                        x_scaler=x_scaler,
+                        y_scaler=y_scaler,
                         dataset=dataset,
                         batch_size=params['batch_size'],
                         lr=params['lr'],

@@ -9,7 +9,7 @@ class FeatureScaler(nn.Module):
         super().__init__(*args, **kwargs)
         data = data.clone()
         self.e = 1
-        data = self.log_time(data)
+        # data = self.log_time(data)
         mean = data.mean(0)
         std = data.std(0)
         std[torch.where(std == 0)] = 1.0
@@ -27,9 +27,10 @@ class FeatureScaler(nn.Module):
         x = x.clone()
         if inverse:
             y = x * self.std + self.mean
-            y = self.log_time(y, inverse)
+            # y = self.log_time(y, inverse)
         else:
-            y = self.log_time(x, inverse)
+            y = x
+            # y = self.log_time(x, inverse)
             y = (y - self.mean) / self.std
         return y
 
@@ -133,7 +134,8 @@ class MusicAgent(nn.Module):
 
     def __init__(self,
                  model: RecurrentMDN,
-                 scaler:  FeatureScaler,
+                 x_scaler:  FeatureScaler,
+                 y_scaler:  FeatureScaler,
                  player_voices: list[int] = [0],
                  device: str = 'mps',
                  *args,
@@ -141,7 +143,8 @@ class MusicAgent(nn.Module):
         super().__init__(*args, **kwargs)
         self.model = model
         self.device = device
-        self.scaler = scaler
+        self.x_scaler = x_scaler
+        self.y_scaler = y_scaler
         self.input_size = self.model.input_size
         self.player_voices = player_voices
         self.temp = 1.0
@@ -170,7 +173,7 @@ class MusicAgent(nn.Module):
         return torch.exp(-self.alpha * y).item()
 
     def forward(self, x: torch.Tensor) -> None | torch.Tensor:
-        x: torch.Tensor = self.scaler(x)
+        x: torch.Tensor = self.x_scaler(x)
         if self.hidden_state is not None:
             conf = self.get_confidence(x)
             (hn, cn) = self.hidden_state
@@ -180,7 +183,7 @@ class MusicAgent(nn.Module):
         self.next_event, self.hidden_state = self.model.step(x=x,
                                                              hidden=self.hidden_state,
                                                              temp=self.temp)
-        y: torch.Tensor = self.scaler(
+        y: torch.Tensor = self.y_scaler(
             self.next_event.clone(), inverse=True)
         y = y.clip(0).squeeze().round().int()
         if y[2] in self.player_voices:

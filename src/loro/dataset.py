@@ -27,8 +27,8 @@ class EventDataset(Dataset):
         self.train_set, self.eval_set = data[:split], data[split:]
         self.training = True
 
-        self._in_dims = list(range(self.dims))
-        self._out_dims = self._in_dims
+        self._in_dims = list(range(self.dims))[:-1]
+        self._out_dims = list(range(self.dims))
 
         self.input_size = len(self._in_dims)
         self.output_size = len(self._out_dims)

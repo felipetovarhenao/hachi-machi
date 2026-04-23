@@ -35,21 +35,22 @@ def generate(**kwargs):
                                    weights_only=False,
                                    map_location=device)
     model = agent.model
-    scaler = agent.scaler
+    x_scaler, y_scaler = agent.x_scaler, agent.y_scaler
     model.eval()
     hidden = None
 
     events = []
     with torch.no_grad():
         x = torch.randn(1, 1, model.input_size, device=device)
-        x = scaler(x, inverse=True)
+        x = x_scaler(x, inverse=True)
         for _ in range(kwargs['tokens']):
-            y, hidden = model.step(x=scaler(x),
+            y, hidden = model.step(x=x_scaler(x),
                                    hidden=hidden,
                                    temp=kwargs['temp'])
-            x: torch.Tensor = scaler(y.clone(), inverse=True)
+            x: torch.Tensor = y_scaler(y.clone(), inverse=True)
             x = x.clip(0).round()
             events.append(x.squeeze())
+            x = x[..., :-1]
 
     events = torch.stack(events).float()
 

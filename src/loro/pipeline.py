@@ -13,13 +13,15 @@ class Pipeline:
 
     def __init__(self,
                  model: RecurrentMDN,
-                 scaler: FeatureScaler,
+                 x_scaler: FeatureScaler,
+                 y_scaler: FeatureScaler,
                  dataset: EventDataset,
                  batch_size: int = 32,
                  lr: float = 0.001,
                  betas: tuple[float, float] = (0.9, 0.99)):
         self.model = model
-        self.scaler = scaler
+        self.x_scaler = x_scaler
+        self.y_scaler = y_scaler
         self.dataset = dataset
         self.file = None
         batch_size = min(batch_size, self.dataset.size // 2)
@@ -48,7 +50,8 @@ class Pipeline:
         percent = min(100, int(round(100 * self.progress/self.max_patience)))
         if epoch > self.max_patience and self.patience == 0:
             agent = MusicAgent(model=self.model,
-                               scaler=self.scaler)
+                               x_scaler=self.x_scaler,
+                               y_scaler=self.y_scaler)
             torch.save(obj=agent,
                        f=self.file)
 
@@ -70,7 +73,7 @@ class Pipeline:
         model.eval()
 
         sample = self.dataset[0][0]
-        sample = self.scaler(sample)
+        sample = self.x_scaler(sample)
 
         with torch.no_grad():
             for _ in range(n_warmup):
@@ -109,13 +112,14 @@ class Pipeline:
         Console.print("Training info:", bold=True)
         for epoch in range(epochs):
             self.model.train()
-            self.scaler.train()
+            self.x_scaler.train()
+            self.y_scaler.train()
             self.dataset.train()
             train_loss = 0
             train_batches = 0
             for (x, y) in self.loader:
-                x = self.scaler(x)
-                y = self.scaler(y)
+                x = self.x_scaler(x)
+                y = self.y_scaler(y)
                 pi, mu, sigma, _ = self.model(x)
                 loss: torch.Tensor = self.loss(pi, mu, sigma, y)
                 self.optim.zero_grad()
@@ -126,13 +130,14 @@ class Pipeline:
             train_loss /= train_batches
             self.model.eval()
             self.dataset.eval()
-            self.scaler.eval()
+            self.x_scaler.eval()
+            self.y_scaler.eval()
             with torch.no_grad():
                 eval_loss = 0
                 eval_batches = 0
                 for (x, y) in self.loader:
-                    x = self.scaler(x)
-                    y = self.scaler(y)
+                    x = self.x_scaler(x)
+                    y = self.y_scaler(y)
                     pi, mu, sigma, _ = self.model(x)
                     loss: torch.Tensor = self.loss(pi, mu, sigma, y)
                     eval_loss += loss.item()
