@@ -37,7 +37,9 @@ class MidiParser:
             if msg.velocity > 0:
                 active_notes[key] = (onset, voice, pitch, msg.velocity)
             elif key in active_notes:
-                events.append(active_notes.pop(key))
+                note = active_notes.pop(key)
+                duration = onset - note[0]
+                events.append((*note, duration))
 
         self._numvoices = numvoices
         events.sort(key=lambda x: x[0])
@@ -45,12 +47,18 @@ class MidiParser:
         prev_onset = 0
         prev_onset_per_voice = {}
         rows = []
-        for onset, voice, pitch, velocity in events:
+        for onset, voice, pitch, velocity, duration in events:
             ioi = onset - prev_onset
             voice_ioi = onset - prev_onset_per_voice.get(voice, 0)
             prev_onset = onset
             prev_onset_per_voice[voice] = onset
-            rows.append([ioi, voice_ioi, voice, pitch, velocity])
+            rows.append([ioi,
+                         voice_ioi,
+                         voice,
+                         pitch,
+                         velocity,
+                        #  duration,
+                         ])
 
         return torch.tensor(rows, dtype=torch.float32)
 
