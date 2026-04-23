@@ -62,6 +62,7 @@ from ..utils import (load_config,
 @click.option('--transform', '-t',
               default=MidiAugmentator.options(),
               type=click.Choice(MidiAugmentator.options()),
+              help='Data augmentation transform to randomly apply during training.',
               multiple=True)
 @device_option()
 def train(input, **kwargs):
