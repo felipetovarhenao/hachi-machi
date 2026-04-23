@@ -90,8 +90,8 @@ def train(input, **kwargs):
         raise RuntimeError(
             "MIDI file must contain of two or more channels, one for each player.")
     data = parser.events().to(device)
-    x_scaler = FeatureScaler(data[..., :-1])
-    y_scaler = FeatureScaler(data)
+    x_scaler = FeatureScaler(data[..., :-1], time_dims=[0, 1])
+    y_scaler = FeatureScaler(data, time_dims=[0, 1, -1])
     augmentator = MidiAugmentator(num_voices=parser.numvoices(),
                                   transforms=params['transform'])
     dataset = EventDataset(data=data,
