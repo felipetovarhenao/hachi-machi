@@ -1,5 +1,6 @@
 import torch
 import time
+import math
 from .timer import Timer
 from .console import Console
 from torch.optim import AdamW
@@ -39,6 +40,9 @@ class Pipeline:
         self.loss = NLLLoss()
         self.display = None
 
+    def _loss(self, x) -> float:
+        return 1 / (1 + math.exp(-min(x, 709)))
+
     def check(self, epoch: int, train_loss: float, eval_loss: float):
         if eval_loss < self.min_loss:
             self.min_loss = eval_loss
@@ -59,12 +63,12 @@ class Pipeline:
             time=str(self.timer),
             progress=f"{percent:d}%",
             epoch=epoch,
-            train_loss=f"{train_loss:1.4f}",
-            validation_loss=f"{self.min_loss:.4f}"
+            train_loss=f"{self._loss(train_loss):1.4f}",
+            validation_loss=f"{self._loss(self.min_loss):.4f}"
         )
         if stop:
             Console.success(
-                f"\nEpochs:\t\t{epoch:4d}\nFinal loss:\t{self.min_loss:.6f}", bold=True)
+                f"\nEpochs:\t\t{epoch:4d}\nFinal loss:\t{self._loss(self.min_loss):.6f}", bold=True)
 
         return stop
 
@@ -144,6 +148,6 @@ class Pipeline:
                     eval_batches += 1
                 eval_loss /= eval_batches
             if self.check(epoch=epoch,
-                          train_loss=2 ** train_loss,
-                          eval_loss=2 ** eval_loss):
+                          train_loss=train_loss,
+                          eval_loss=eval_loss):
                 break
