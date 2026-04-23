@@ -2,7 +2,7 @@ import os
 import torch
 import json
 import click
-from typing import Callable
+from typing import Callable, Any
 from .console import Console
 
 
@@ -59,12 +59,13 @@ def load_config(file: str):
     return config
 
 
-def safe_handler(func: Callable) -> Callable:
+def safe_handler(func: Callable[[str, Any], None]) -> Callable:
     def wrapper(*args, **kwargs):
         try:
-            return func(*args, **kwargs)
+            func(*args, **kwargs)
         except Exception as e:
             Console.error(e)
+    wrapper.__name__ = func.__name__.replace("handle_", "")
     return wrapper
 
 

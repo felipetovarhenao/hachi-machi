@@ -98,7 +98,8 @@ def train(input, **kwargs):
                            split=params['split'],
                            augmentator=augmentator)
     model = RecurrentMDN(k=params['mixtures'],
-                         input_size=dataset.dims,
+                         input_size=dataset.input_size,
+                         output_size=dataset.output_size,
                          dropout=params['dropout'],
                          slope=params['slope'],
                          device=device)

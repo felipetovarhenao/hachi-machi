@@ -1,4 +1,5 @@
 import torch
+import time
 from .timer import Timer
 from .console import Console
 from torch.optim import AdamW
@@ -65,14 +66,10 @@ class Pipeline:
         return stop
 
     def benchmark(self, n_warmup: int = 50, n_runs: int = 500):
-        import time
-        agent: MusicAgent = torch.load(self.file,
-                                       weights_only=False,
-                                       map_location=self.model.device)
-        model = agent.model
+        model = self.model
         model.eval()
 
-        sample = next(iter(self.loader))[0][:1]
+        sample = self.dataset[0][0]
         sample = self.scaler(sample)
 
         with torch.no_grad():
@@ -101,6 +98,7 @@ class Pipeline:
         }, header=f"Latency ({self.model.device}):")
 
     def run(self, file: str, epochs: int = 1000, patience: int = 15):
+        self.benchmark()
         self.file = validate_path(file, '.pt')
         self.max_patience = patience
         self.patience = 0
@@ -143,5 +141,4 @@ class Pipeline:
             if self.check(epoch=epoch,
                           train_loss=2 ** train_loss,
                           eval_loss=2 ** eval_loss):
-                self.benchmark()
                 break

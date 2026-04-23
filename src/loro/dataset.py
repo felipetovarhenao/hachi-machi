@@ -16,7 +16,7 @@ class EventDataset(Dataset):
                  augmentator: Augmentator | None = None):
         self.mean = data.mean(0)
         context_length = self._clamp_context(context_length, len(data))
-        self.dims = data.shape[-1]
+        self.dims = data.size(-1)
         data = data.unfold(dimension=0,
                            size=context_length + 1,
                            step=1)
@@ -26,8 +26,13 @@ class EventDataset(Dataset):
         data = data[torch.randperm(n=self.size)]
         self.train_set, self.eval_set = data[:split], data[split:]
         self.training = True
+
         self._in_dims = list(range(self.dims))
-        self._out_dims = list(range(self.dims))
+        self._out_dims = self._in_dims
+
+        self.input_size = len(self._in_dims)
+        self.output_size = len(self._out_dims)
+
         self.augmentator = augmentator
 
     def _clamp_context(self, context_length: int, data_size: int):

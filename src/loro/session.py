@@ -124,12 +124,14 @@ class Session:
                 self.model.set_weights(torch.tensor(args).clip(0, 1))
 
         return [
-            {"address": "/input",   "handler": handle_input},
-            {"address": "/temp",    "handler": handle_temp},
-            {"address": "/alpha",   "handler": handle_alpha},
-            {"address": "/reset",   "handler": handle_reset},
-            {"address": "/weights", "handler": handle_weights},
-        ]
+            {
+                'address': f'/{func.__name__}',
+                'handler': func
+            } for func in [handle_input,
+                           handle_temp,
+                           handle_alpha,
+                           handle_reset,
+                           handle_weights]]
 
     def start(self):
         server = BlockingOSCUDPServer(
