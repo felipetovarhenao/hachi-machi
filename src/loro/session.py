@@ -54,7 +54,7 @@ class Session:
             self.client.send_message("/output", msg)
             voice = msg[0]
             if voice not in self.model.player_voices:
-                self._predict_and_schedule(event)
+                self._predict_and_schedule(event[..., :-1])
 
         if delay_ms < 33:
             emit()

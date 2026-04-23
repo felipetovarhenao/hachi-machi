@@ -170,7 +170,7 @@ class MusicAgent(nn.Module):
         self.alpha = max(1, min(2, x))
 
     def get_confidence(self, x: torch.Tensor) -> float:
-        y: torch.Tensor = (x - self.next_event) ** 2 * self.weights
+        y: torch.Tensor = (x - self.next_event[..., :-1]) ** 2 * self.weights
         y = y.sum().sqrt()
         return torch.exp(-self.alpha * y).item()
 

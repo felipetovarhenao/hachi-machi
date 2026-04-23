@@ -2,6 +2,7 @@ import os
 import torch
 import json
 import click
+import traceback
 from typing import Callable, Any
 from .console import Console
 
@@ -64,7 +65,7 @@ def safe_handler(func: Callable[[str, Any], None]) -> Callable:
         try:
             func(*args, **kwargs)
         except Exception as e:
-            Console.error(e)
+            Console.error(traceback.format_exc())
     wrapper.__name__ = func.__name__.replace("handle_", "")
     return wrapper
 
