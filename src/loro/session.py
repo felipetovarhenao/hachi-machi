@@ -5,7 +5,7 @@ import os
 import time
 import threading
 import torch
-from .model import MusicAgent
+from .nn import MultiplayerAgent
 from .utils import safe_handler
 from .console import Console
 
@@ -20,7 +20,7 @@ class Session:
         self.device = device
         self.host = host
         self.name = os.path.basename(model)
-        self.model: MusicAgent = torch.load(f=model,
+        self.model: MultiplayerAgent = torch.load(f=model,
                                             map_location=device,
                                             weights_only=False)
         self.input_size = self.model.input_size - 2

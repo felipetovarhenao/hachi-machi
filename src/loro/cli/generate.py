@@ -1,7 +1,7 @@
 import click
 import torch
 from ..midi import MidiParser
-from ..model import MusicAgent
+from ..nn import MultiplayerAgent
 from ..console import Console
 from ..utils import (device_option,
                      tensor_to_txt,
@@ -31,9 +31,9 @@ def generate(**kwargs):
     if seed != 0:
         torch.manual_seed(kwargs['seed'])
 
-    agent: MusicAgent = torch.load(f=model_path,
-                                   weights_only=False,
-                                   map_location=device)
+    agent: MultiplayerAgent = torch.load(f=model_path,
+                                         weights_only=False,
+                                         map_location=device)
     model = agent.model
     x_scaler, y_scaler = agent.x_scaler, agent.y_scaler
     model.eval()

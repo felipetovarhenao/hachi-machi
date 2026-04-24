@@ -2,8 +2,8 @@ import click
 import torch
 from ..augment import MidiAugmentator
 from ..midi import MidiParser
-from ..dataset import EventDataset
-from ..model import FeatureScaler, RecurrentMDN
+from ..data import EventDataset
+from ..nn import FeatureScaler, RecurrentMDN
 from ..pipeline import Pipeline
 from ..console import Console
 from ..utils import (load_config,

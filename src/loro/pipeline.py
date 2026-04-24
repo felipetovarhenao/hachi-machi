@@ -1,12 +1,12 @@
-import torch
 import time
 import math
+import torch
+from torch.optim import AdamW
 from .timer import Timer
 from .console import Console
-from torch.optim import AdamW
-from .model import RecurrentMDN, FeatureScaler, MusicAgent
+from .nn import MultiplayerAgent, RecurrentMDN, FeatureScaler
 from .loss import NLLLoss
-from .dataset import EventDataset, EventLoader
+from .data import EventDataset, EventLoader
 from .utils import validate_path
 
 
@@ -53,9 +53,9 @@ class Pipeline:
         stop = self.patience > self.max_patience
         percent = min(100, int(round(100 * self.progress/self.max_patience)))
         if epoch > self.max_patience and self.patience == 0:
-            agent = MusicAgent(model=self.model,
-                               x_scaler=self.x_scaler,
-                               y_scaler=self.y_scaler)
+            agent = MultiplayerAgent(model=self.model,
+                                     x_scaler=self.x_scaler,
+                                     y_scaler=self.y_scaler)
             torch.save(obj=agent,
                        f=self.file)
 
