@@ -53,7 +53,7 @@ class MidiAugmentator(Augmentator):
                     'voice',
                     'pitch',
                     'velocity',
-                    # 'duration',
+                    'duration',
                 ]
             )
         }
