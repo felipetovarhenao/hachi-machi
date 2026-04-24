@@ -7,8 +7,17 @@ from ..console import Console
 
 
 @click.command()
-@click.argument('input')
-@click.argument('output')
+@click.argument('input', type=click.Path(exists=True,
+                                         file_okay=True,
+                                         dir_okay=False,
+                                         resolve_path=True,)
+                )
+@click.argument('output',
+                default='output.txt',
+                type=click.Path(file_okay=True,
+                                dir_okay=False,
+                                resolve_path=True,)
+                )
 @click.option('--transform', '-t',
               default=[],
               type=click.Choice(MidiAugmentator.options()),
@@ -16,6 +25,10 @@ from ..console import Console
 @click.option('--seed', '-s', default=0)
 @device_option()
 def render(**kwargs):
+    """INPUT: Path to MIDI file
+
+    OUTPUT: Path to output MIDI file
+    """
     params = clean_params(
         params=kwargs,
         file_keys=[

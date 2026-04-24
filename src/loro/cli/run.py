@@ -7,12 +7,18 @@ from ..utils import (device_option,
 
 
 @click.command()
-@click.argument('model')
+@click.argument('model',
+                type=click.Path(exists=True,
+                                file_okay=True,
+                                dir_okay=False,
+                                resolve_path=True,)
+                )
 @click.option('--in-port', default=8000, help='Input OSC port.')
 @click.option('--out-port', default=9000, help='Output OSC port.')
-@click.option('--address', default='127.0.0.1', help='OSC address')
+@click.option('--address', default='127.0.0.1', help='OSC IP address')
 @device_option()
 def run(**kwargs):
+    """MODEL: Path to pre-trained PyTorch model (.pt)"""
     config = clean_params(kwargs,
                           file_keys=[
                               ('model', ['.pt'])

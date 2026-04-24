@@ -10,12 +10,16 @@ from ..utils import (device_option,
 
 @click.command()
 @click.argument('model', type=click.Path(exists=True, file_okay=True, dir_okay=False, resolve_path=True))
-@click.option('output', default='out.txt', help='Path to output file, either in MIDI or TXT format.', type=click.Path(file_okay=True, dir_okay=False))
+@click.argument('output', default='out.txt', type=click.Path(file_okay=True, dir_okay=False))
 @click.option('--tokens',  default=100, help='Number of tokens to generate.')
 @click.option('--seed', default=0, help='Random seed.')
 @click.option('--temp', default=1, help='Temperature.')
 @device_option()
 def generate(**kwargs):
+    """MODEL: Path to PyTorch model
+
+    OUTPUT: Path to output file, in either MIDI or TXT format
+    """
     params = clean_params(
         params=kwargs, file_keys=[
             ('model', '.pt'),

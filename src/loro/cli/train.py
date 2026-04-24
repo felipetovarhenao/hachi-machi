@@ -17,16 +17,15 @@ from ..utils import (load_config,
                                 file_okay=True,
                                 dir_okay=False,
                                 resolve_path=True,))
-@click.option('--output', '-o',
-              default='model.pt',
-              help='Output path for trained Pytorch model (.pt).',
-              type=click.Path(file_okay=True, dir_okay=False))
+@click.argument('output',
+                default='model.pt',
+                type=click.Path(file_okay=True, dir_okay=False))
 @click.option('--mixtures',
               default=10,
               help='Number of Gaussian mixtures in the model.')
 @click.option('--hidden-size',
               default=256,
-              help='Hidden size.')
+              help='Number of dimensions to use for hidden representation.')
 @click.option('--context',
               default=200,
               help='Length of sequence segments to use during training.')
@@ -66,6 +65,10 @@ from ..utils import (load_config,
               multiple=True)
 @device_option()
 def train(input, **kwargs):
+    """INPUT: Path to MIDI file to use as training data
+
+    OUTPUT: Output path for trained Pytorch model (.pt)
+    """
     if input.endswith('.json'):
         config = load_config(input)
         midi_file = config['input']
