@@ -14,17 +14,18 @@ class EventDataset(Dataset):
                  context_length: int = 16,
                  split: float = 0.6,
                  augmentator: Augmentator | None = None):
-        self.mean = data.mean(0)
-        context_length = self._clamp_context(context_length, len(data))
-        self.dims = data.size(-1)
-        data = data.unfold(dimension=0,
-                           size=context_length + 1,
-                           step=1)
-        self.size = len(data)
-        split = int(split * self.size)
-        data = data.transpose(2, 1)
-        data = data[torch.randperm(n=self.size)]
-        self.train_set, self.eval_set = data[:split], data[split:]
+        with torch.no_grad():
+            self.mean = data.mean(0)
+            context_length = self._clamp_context(context_length, len(data))
+            self.dims = data.size(-1)
+            data = data.unfold(dimension=0,
+                               size=context_length + 1,
+                               step=1)
+            self.size = len(data)
+            split = int(split * self.size)
+            data = data.transpose(2, 1)
+            data = data[torch.randperm(n=self.size)]
+            self.train_set, self.eval_set = data[:split], data[split:]
         self.training = True
 
         self._in_dims = list(range(self.dims))[:-1]

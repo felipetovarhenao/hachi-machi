@@ -34,9 +34,10 @@ class Augmentator(ABC):
         i = torch.randint(1, n + 1, size=(1,)).item()
         order = torch.randperm(n=n)
         order = order[:i]
-        for i in order:
-            fn = self.augmentators[i]
-            y = fn(y)
+        with torch.no_grad():
+            for i in order:
+                fn = self.augmentators[i]
+                y = fn(y)
         return y
 
 

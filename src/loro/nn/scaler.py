@@ -9,14 +9,17 @@ class FeatureScaler(nn.Module):
         super().__init__(*args, **kwargs)
         data = data.clone()
         self.e = 1
-        self.oh = OneHot(dim=voice_dim, size=num_voices)
         self.time_dims = time_dims
-        data = self.log_time(data)
-        mean = data.mean(0)
-        std = data.std(0)
-        mean[voice_dim] = 0
-        std[voice_dim] = 1
-        std[torch.where(std == 0)] = 1.0
+
+        with torch.no_grad():
+            self.oh = OneHot(data=data, dim=voice_dim, size=num_voices)
+            # data = self.log_time(data)
+            mean = data.mean(0)
+            std = data.std(0)
+            mean[voice_dim] = 0
+            std[voice_dim] = 1
+            std[torch.where(std == 0)] = 1.0
+
         self.register_buffer('mean', mean)
         self.register_buffer('std', std)
 
@@ -34,9 +37,10 @@ class FeatureScaler(nn.Module):
         if inverse:
             y = self.oh(x, inverse=True)
             y = y * self.std + self.mean
-            y = self.log_time(y, inverse)
+            # y = self.log_time(y, inverse)
         else:
-            y = self.log_time(x, inverse)
+            y = x
+            # y = self.log_time(x, inverse)
             y = (y - self.mean) / self.std
             y = self.oh(y)
         return y
