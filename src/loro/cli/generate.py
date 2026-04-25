@@ -14,7 +14,10 @@ from ..utils import (device_option,
 @click.argument('output', default='out.txt', type=click.Path(file_okay=True, dir_okay=False))
 @click.option('--tokens',  default=100, help='Number of tokens to generate.')
 @click.option('--seed', default=0, help='Random seed.')
-@click.option('--temp', default=1, help='Temperature.')
+@click.option('--temp',
+              default=1,
+              type=click.FloatRange(0.001, max_open=True),
+              help='Temperature')
 @device_option()
 def generate(**kwargs):
     """MODEL: Path to PyTorch model

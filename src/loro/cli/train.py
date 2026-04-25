@@ -22,15 +22,23 @@ from ..utils import (load_config,
                 type=click.Path(file_okay=True, dir_okay=False))
 @click.option('--mixtures',
               default=10,
+              type=int,
               help='Number of Gaussian mixtures in the model.')
+@click.option('--layers',
+              default=1,
+              help='Number of recurrent layers.',
+              type=int)
 @click.option('--hidden-size',
               default=256,
+              type=int,
               help='Number of dimensions to use for hidden representation.')
 @click.option('--context',
               default=200,
+              type=int,
               help='Length of sequence segments to use during training.')
 @click.option('--split',
               default=0.7,
+              type=float,
               help='Training split factor.')
 @click.option('--epochs',
               default=1000,
@@ -110,6 +118,7 @@ def train(input, **kwargs):
     model = RecurrentMDN(k=params['mixtures'],
                          input_size=dataset.input_size + num_voices - 1,
                          output_size=dataset.output_size + num_voices - 1,
+                         num_layers=params['layers'],
                          dropout=params['dropout'],
                          slope=params['slope'],
                          device=device)
