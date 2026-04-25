@@ -52,8 +52,10 @@ class MultiplayerAgent(nn.Module):
         if self.hidden_state is not None:
             conf = self.get_confidence(x)
             (hn, cn) = self.hidden_state
-            hn = hn.clone() * conf
-            cn = cn.clone() * conf
+            hn = hn.clone()
+            cn = cn.clone()
+            hn[-1] *= conf
+            cn[-1] *= conf
             self.hidden_state = (hn, cn)
         self.next_event, self.hidden_state = self.model.step(x=x,
                                                              hidden=self.hidden_state,

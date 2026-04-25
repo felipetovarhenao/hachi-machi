@@ -9,6 +9,7 @@ class RecurrentMDN(nn.Module):
                  k: int = 2,
                  input_size: int = 2,
                  output_size: int = 2,
+                 num_layers: int = 1,
                  hidden_size: int = 100,
                  dropout: float = 0.25,
                  slope: float = 0.01,
@@ -21,6 +22,8 @@ class RecurrentMDN(nn.Module):
         self.output_size = output_size
         self.lstm = nn.LSTM(input_size=self.input_size,
                             hidden_size=hidden_size,
+                            num_layers=num_layers,
+                            dropout=0 if num_layers == 1 else dropout,
                             batch_first=True).to(device)
         self.proj = MixtureDensityNetwork(k=k,
                                           num_features=hidden_size,
