@@ -96,13 +96,13 @@ class Pipeline:
         Console.pretty({
             'total': f'{total:,}',
             'trainable': f'{trainable:,}',
-        }, header="Parameters:")
+        }, header="Parameters")
         Console.pretty({
             'mean': f"{times.mean():.3f}ms",
             'std': f"{times.std():.3f}ms",
             'max.': f"{times.quantile(0.99):.3f}ms",
             'rate': f"{1000/times.mean():.1f}Hz",
-        }, header=f"Latency ({self.model.device}):")
+        }, header=f"Latency ({self.model.device})")
 
     def run(self, file: str, epochs: int = 1000, patience: int = 15):
         self.benchmark()

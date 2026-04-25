@@ -71,7 +71,7 @@ class Console:
     @classmethod
     def pretty(cls, obj: dict, header: str | None = None):
         if header:
-            Console.print(f"\n{header}", bold=True)
+            Console.print(f"\n{header.capitalize()}", bold=True)
         col_size = 20
 
         for (k, v) in sorted(obj.items(), key=lambda x: x[0]):

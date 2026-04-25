@@ -102,5 +102,5 @@ def clean_params(params: dict,
                 continue
             params[key] = validate_path(file=params[key],
                                         ext=ext)
-    Console.pretty(params, header='Settings:')
+    Console.pretty(params, header='Settings')
     return params
