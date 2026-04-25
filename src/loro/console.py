@@ -6,7 +6,6 @@ class _Display:
         self._first = True
         self.n_rows = n_rows
         self._fields = {}
-        print()
 
     def _clean_key(self, key: str) -> str:
         if key not in self._fields:

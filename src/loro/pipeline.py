@@ -113,7 +113,7 @@ class Pipeline:
         self.display = Console.get_display(n_rows=5)
         self.timer = Timer()
         self.timer.start()
-        Console.print("Training info:", bold=True)
+        Console.print("\nTraining", bold=True)
         for epoch in range(epochs):
             self.model.train()
             self.x_scaler.train()

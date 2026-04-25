@@ -5,6 +5,7 @@ from ..nn import MultiplayerAgent
 from ..console import Console
 from ..utils import (device_option,
                      tensor_to_txt,
+                     progress,
                      clean_params)
 
 
@@ -44,10 +45,13 @@ def generate(**kwargs):
     hidden = None
 
     events = []
+    num_tokens = kwargs['tokens']
+    display = Console.get_display(n_rows=1)
     with torch.no_grad():
         x = torch.randn(1, 1, model.input_size, device=device)
         x = x_scaler(x, inverse=True)
-        for _ in range(kwargs['tokens']):
+        for i in range(num_tokens):
+            display.update(progress=progress(i, num_tokens - 1))
             y, hidden = model.step(x=x_scaler(x),
                                    hidden=hidden,
                                    temp=kwargs['temp'])
