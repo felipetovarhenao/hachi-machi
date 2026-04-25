@@ -90,12 +90,17 @@ def train(input, **kwargs):
     Console.action("\nParsing MIDI...", italic=True)
 
     parser = MidiParser(midi_file)
-    if parser.numvoices() < 2:
+    num_voices = parser.numvoices()
+    if parser.numvoices() < num_voices:
         raise RuntimeError(
             "MIDI file must contain of two or more channels, one for each player.")
     data = parser.events().to(device)
-    x_scaler = FeatureScaler(data[..., :-1], time_dims=[0, 1])
-    y_scaler = FeatureScaler(data, time_dims=[0, 1, -1])
+    x_scaler = FeatureScaler(data=data[..., :-1],
+                             time_dims=[0, 1],
+                             num_voices=num_voices)
+    y_scaler = FeatureScaler(data=data,
+                             time_dims=[0, 1, -1],
+                             num_voices=num_voices)
     augmentator = MidiAugmentator(num_voices=parser.numvoices(),
                                   transforms=params['transform'])
     dataset = EventDataset(data=data,
@@ -103,8 +108,8 @@ def train(input, **kwargs):
                            split=params['split'],
                            augmentator=augmentator)
     model = RecurrentMDN(k=params['mixtures'],
-                         input_size=dataset.input_size,
-                         output_size=dataset.output_size,
+                         input_size=dataset.input_size + num_voices - 1,
+                         output_size=dataset.output_size + num_voices - 1,
                          dropout=params['dropout'],
                          slope=params['slope'],
                          device=device)
