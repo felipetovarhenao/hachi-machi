@@ -8,8 +8,8 @@ class FeatureScaler(nn.Module):
     def __init__(self, data: torch.Tensor, time_dims: list[int] = [0, 1], voice_dim: int = 2, num_voices: int = 2, *args, **kwargs):
         super().__init__(*args, **kwargs)
         data = data.clone()
-        self.e = 1
-        self.time_dims = time_dims
+        self.register_buffer('e', torch.tensor(1))
+        self.register_buffer('time_dims', torch.tensor(time_dims))
 
         with torch.no_grad():
             self.oh = OneHot(data=data, dim=voice_dim, size=num_voices)

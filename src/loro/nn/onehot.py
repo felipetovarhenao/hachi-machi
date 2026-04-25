@@ -6,13 +6,16 @@ import torch.nn as nn
 class OneHot(nn.Module):
     def __init__(self, data: torch.Tensor, dim: int, size: int = 2, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.i = dim
-        self.size = size
+        self.register_buffer('i', torch.tensor(dim))
+        self.register_buffer('size', torch.tensor(size))
         with torch.no_grad():
             data = data[..., dim].clone()
-            data = F.one_hot(data.to(torch.long), num_classes=size).to(torch.float)
-            self.mean = data.mean(0)
-            self.std = data.std(0)
+            data = F.one_hot(data.to(torch.long),
+                             num_classes=size).to(torch.float)
+            mean = data.mean(0)
+            std = data.std(0)
+        self.register_buffer('mean', mean)
+        self.register_buffer('std', std)
 
     def forward(self, x: torch.Tensor, inverse: bool = False) -> torch.Tensor:
         i = self.i
@@ -26,12 +29,3 @@ class OneHot(nn.Module):
             m = m * self.std + self.mean
             m = torch.argmax(m, dim=-1).unsqueeze(-1)
         return torch.cat([l, m, r], dim=-1)
-
-
-if __name__ == '__main__':
-    x = torch.randn(10, 7, 5)
-    dim = 4
-    x[..., dim] = 2
-    oh = OneHot(dim=dim, size=4)
-    x_hat = oh(oh(x), inverse=True)
-    print(x_hat.shape)
