@@ -52,7 +52,7 @@ class Pipeline:
         self.progress = max(self.progress, self.patience)
         stop = self.patience > self.max_patience
         percent = min(100, int(round(100 * self.progress/self.max_patience)))
-        if epoch > self.max_patience and self.patience == 0:
+        if self.patience == 0:
             agent = MultiplayerAgent(model=self.model,
                                      x_scaler=self.x_scaler,
                                      y_scaler=self.y_scaler)
