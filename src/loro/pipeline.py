@@ -100,7 +100,7 @@ class Pipeline:
         Console.pretty({
             'mean': f"{times.mean():.3f}ms",
             'std': f"{times.std():.3f}ms",
-            'max.': f"{times.quantile(0.99):.3f}ms",
+            'max': f"{times.quantile(0.99):.3f}ms",
             'rate': f"{1000/times.mean():.1f}Hz",
         }, header=f"Latency ({self.model.device})")
 
