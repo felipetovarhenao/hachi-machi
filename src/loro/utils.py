@@ -73,14 +73,15 @@ def safe_handler(func: Callable[[str, Any], None]) -> Callable:
 def tensor_to_txt(x: torch.Tensor, output: str) -> None:
     output = validate_path(output, '.txt')
     out = ""
-    col_len = 7
+    col_len = x.max(0).values.log10().clip(1).ceil().int() + 2
+    col_len = col_len.tolist()
 
-    def col(i):
-        i = str(i)
-        i += " " * max(1, col_len - len(i))
-        return i
+    def col(x, i):
+        x = str(x)
+        x += " " * max(1, col_len[i] - len(x))
+        return x
     for e in x.int().tolist():
-        out += f'{"".join(col(i) for i in e)}\n'
+        out += f'{"".join(col(x, i) for i, x in enumerate(e))}\n'
     with open(output, 'w') as f:
         f.write(out)
 

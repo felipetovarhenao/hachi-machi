@@ -16,8 +16,7 @@ from ..console import Console
                 default='output.txt',
                 type=click.Path(file_okay=True,
                                 dir_okay=False,
-                                resolve_path=True,)
-                )
+                                resolve_path=True,))
 @click.option('--transform', '-t',
               default=[],
               type=click.Choice(MidiAugmentator.options()),
