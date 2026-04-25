@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-from . import OneHot
+from .onehot import OneHot
 
 
 class FeatureScaler(nn.Module):

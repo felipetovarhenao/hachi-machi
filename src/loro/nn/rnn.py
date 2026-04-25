@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-from . import MixtureDensityNetwork
+from .mdn import MixtureDensityNetwork
 
 
 class RecurrentMDN(nn.Module):

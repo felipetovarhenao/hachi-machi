@@ -2,7 +2,7 @@
 import torch
 import torch.nn as nn
 from .scaler import FeatureScaler
-from . import RecurrentMDN
+from .rnn import RecurrentMDN
 
 
 class MultiplayerAgent(nn.Module):
