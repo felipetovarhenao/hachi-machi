@@ -104,3 +104,12 @@ def clean_params(params: dict,
                                         ext=ext)
     Console.pretty(params, header='Settings')
     return params
+
+
+def progress(n: int, N: int = 10, size: int = 12):
+    t = min(N, n / N)
+    p = round(t * 100)
+    i = int(round(size * t))
+    l = "⣿" * i
+    r = "⣀" * (size - i - 2)
+    return f'{l}{r} {p:.1f}%'

@@ -7,7 +7,7 @@ from .console import Console
 from .nn import MultiplayerAgent, RecurrentMDN, FeatureScaler
 from .loss import NLLLoss
 from .data import EventDataset, EventLoader
-from .utils import validate_path
+from .utils import validate_path, progress
 
 
 class Pipeline:
@@ -43,7 +43,7 @@ class Pipeline:
     def _loss(self, x) -> float:
         return 1 / (1 + math.exp(-min(x, 709)))
 
-    def check(self, epoch: int, train_loss: float, eval_loss: float):
+    def check(self, epoch: int, train_loss: float, eval_loss: float) -> bool:
         if eval_loss < self.min_loss:
             self.min_loss = eval_loss
             self.patience = 0
@@ -51,7 +51,7 @@ class Pipeline:
             self.patience += 1
         self.progress = max(self.progress, self.patience)
         stop = self.patience > self.max_patience
-        percent = min(100, int(round(100 * self.progress/self.max_patience)))
+
         if self.patience == 0:
             agent = MultiplayerAgent(model=self.model,
                                      x_scaler=self.x_scaler,
@@ -61,7 +61,7 @@ class Pipeline:
 
         self.display.update(
             time=str(self.timer),
-            progress=f"{percent:d}%",
+            progress=progress(self.progress, self.max_patience),
             epoch=epoch,
             train_loss=f"{self._loss(train_loss):1.4f}",
             validation_loss=f"{self._loss(self.min_loss):.4f}"
@@ -72,7 +72,7 @@ class Pipeline:
 
         return stop
 
-    def benchmark(self, n_warmup: int = 50, n_runs: int = 500):
+    def benchmark(self, n_warmup: int = 50, n_runs: int = 500) -> None:
         model = self.model
         model.eval()
 
@@ -104,7 +104,7 @@ class Pipeline:
             'rate': f"{1000/times.mean():.1f}Hz",
         }, header=f"Latency ({self.model.device})")
 
-    def run(self, file: str, epochs: int = 1000, patience: int = 15):
+    def run(self, file: str, epochs: int = 1000, patience: int = 15) -> None:
         self.benchmark()
         self.file = validate_path(file, '.pt')
         self.max_patience = patience
