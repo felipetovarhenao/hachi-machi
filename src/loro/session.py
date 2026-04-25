@@ -21,8 +21,8 @@ class Session:
         self.host = host
         self.name = os.path.basename(model)
         self.model: MultiplayerAgent = torch.load(f=model,
-                                            map_location=device,
-                                            weights_only=False)
+                                                  map_location=device,
+                                                  weights_only=False)
         self.input_size = self.model.input_size - 2
         self.model.eval()
         self.client = SimpleUDPClient(host, out_port)
@@ -76,11 +76,13 @@ class Session:
         self._schedule_emission(event, delay_ms)
 
     def get_handlers(self):
+        input_size = self.model.x_scaler.mean.size(-1) - 2
+
         @safe_handler
         def handle_input(_, *args):
-            if len(args) != self.input_size:
+            if len(args) != input_size:
                 raise ValueError(
-                    f"Invalid input length: {len(args)}. Expected: {self.input_size}")
+                    f"Invalid input length: {len(args)}. Expected: {input_size}")
 
             now = time.perf_counter()
             voice = int(args[0])
