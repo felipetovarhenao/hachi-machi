@@ -8,12 +8,11 @@ class FeatureScaler(nn.Module):
     def __init__(self, data: torch.Tensor, time_dims: list[int] = [0, 1], voice_dim: int = 2, num_voices: int = 2, *args, **kwargs):
         super().__init__(*args, **kwargs)
         data = data.clone()
-        self.register_buffer('e', torch.tensor(1))
         self.register_buffer('time_dims', torch.tensor(time_dims))
 
         with torch.no_grad():
             self.oh = OneHot(data=data, dim=voice_dim, size=num_voices)
-            # data = self.log_time(data)
+            data = self.log_time(data)
             mean = data.mean(0)
             std = data.std(0)
             mean[voice_dim] = 0
@@ -25,11 +24,11 @@ class FeatureScaler(nn.Module):
 
     def log_time(self, x: torch.Tensor, inverse: bool = False):
         if inverse:
-            x[..., self.time_dims] = torch.exp2(
-                x[..., self.time_dims]) * 1000 - self.e
+            x[..., self.time_dims] = torch.expm1(
+                x[..., self.time_dims]) * 1000
         else:
-            x[..., self.time_dims] = torch.log2(
-                (x[..., self.time_dims] + self.e) / 1000)
+            x[..., self.time_dims] = torch.log1p(
+                (x[..., self.time_dims]) / 1000)
         return x
 
     def forward(self, x: torch.Tensor, inverse: bool = False):
@@ -37,10 +36,10 @@ class FeatureScaler(nn.Module):
         if inverse:
             y = self.oh(x, inverse=True)
             y = y * self.std + self.mean
-            # y = self.log_time(y, inverse)
+            y = self.log_time(y, inverse)
         else:
             y = x
-            # y = self.log_time(x, inverse)
+            y = self.log_time(x, inverse)
             y = (y - self.mean) / self.std
             y = self.oh(y)
         return y
