@@ -3,10 +3,9 @@ import torch
 from ..midi import MidiParser
 from ..nn import MultiplayerAgent
 from ..console import Console
-from ..utils import (device_option,
-                     tensor_to_txt,
-                     progress,
-                     clean_params)
+from ..utils import (tensor_to_txt,
+                     progress,)
+from .config import Config
 
 
 @click.command()
@@ -18,26 +17,24 @@ from ..utils import (device_option,
               default=1,
               type=click.FloatRange(0.001, max_open=True),
               help='Temperature')
-@device_option()
-def generate(**kwargs):
+@Config([
+    ('model', '.pt'),
+    ('output', '.mid', '.midi', '.txt')
+]).parse
+def generate(**params):
     """MODEL: Path to PyTorch model
 
     OUTPUT: Path to output file, in either MIDI or TXT format
     """
-    params = clean_params(
-        params=kwargs, file_keys=[
-            ('model', '.pt'),
-            ('output', ('.mid', '.midi', '.txt'))
-        ])
     device = params['device']
     model_path = params['model']
     output = params['output']
     is_txt = output.endswith('.txt')
     if not is_txt:
         return
-    seed = kwargs['seed']
+    seed = params['seed']
     if seed != 0:
-        torch.manual_seed(kwargs['seed'])
+        torch.manual_seed(params['seed'])
 
     agent: MultiplayerAgent = torch.load(f=model_path,
                                          weights_only=False,
@@ -48,7 +45,7 @@ def generate(**kwargs):
     hidden = None
 
     events = []
-    num_tokens = kwargs['tokens']
+    num_tokens = params['tokens']
     display = Console.get_display(n_rows=1)
     with torch.no_grad():
         x = torch.randn(1, 1, model.input_size, device=device)
@@ -57,7 +54,7 @@ def generate(**kwargs):
             display.update(progress=progress(i, num_tokens - 1))
             y, hidden = model.step(x=x_scaler(x),
                                    hidden=hidden,
-                                   temp=kwargs['temp'])
+                                   temp=params['temp'])
             x: torch.Tensor = y_scaler(y.clone(), inverse=True)
             x = x.clip(0).round()
             events.append(x.squeeze())

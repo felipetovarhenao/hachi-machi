@@ -6,9 +6,7 @@ from ..data import EventDataset
 from ..nn import FeatureScaler, RecurrentMDN
 from ..pipeline import Pipeline
 from ..console import Console
-from ..utils import (load_config,
-                     device_option,
-                     clean_params)
+from .config import Config
 
 
 @click.command()
@@ -71,27 +69,18 @@ from ..utils import (load_config,
               type=click.Choice(MidiAugmentator.options()),
               help='Data augmentation transform to randomly apply during training.',
               multiple=True)
-@device_option()
-def train(input, **kwargs):
+@Config([
+    ('input', '.mid', '.midi'),
+    ('output', '.pt')
+]).parse
+def train(**params):
     """INPUT: Path to MIDI file to use as training data
 
     OUTPUT: Output path for trained Pytorch model (.pt)
     """
-    if input.endswith('.json'):
-        config = load_config(input)
-        midi_file = config['input']
-    else:
-        midi_file = input
-        config = {}
-    params = clean_params(
-        params={**kwargs, **config},
-        file_keys=[
-            ('input', ['.json', '.mid', '.midi']),
-            ('output', '.pt')
-        ]
-    )
     device = params['device']
     seed = params['seed']
+    midi_file = params['input']
     if seed != 0:
         torch.manual_seed(params['seed'])
 

@@ -1,9 +1,10 @@
 import torch
 import click
-from ..utils import tensor_to_txt, device_option, clean_params
+from ..utils import tensor_to_txt
 from ..midi import MidiParser
 from ..augment import MidiAugmentator
 from ..console import Console
+from .config import Config
 
 
 @click.command()
@@ -22,27 +23,24 @@ from ..console import Console
               type=click.Choice(MidiAugmentator.options()),
               multiple=True)
 @click.option('--seed', '-s', default=0)
-@device_option()
-def render(**kwargs):
+@Config([
+    ('input', '.mid', '.midi'),
+    ('output', '.mid', '.midi', '.txt'),
+]).parse
+def render(**params):
     """INPUT: Path to MIDI file
 
     OUTPUT: Path to output MIDI file
     """
-    params = clean_params(
-        params=kwargs,
-        file_keys=[
-            ('input', ['.mid', '.midi']),
-            ('output', ['.mid', '.midi', '.txt']),
-        ])
 
     if len(params['transform']) == 0:
         params['transform'] = None
 
     device = params['device']
-    input = kwargs['input']
-    output = kwargs['output']
-    seed = kwargs['seed']
-    transforms = kwargs['transform']
+    input = params['input']
+    output = params['output']
+    seed = params['seed']
+    transforms = params['transform']
 
     if seed != 0:
         torch.manual_seed(seed)

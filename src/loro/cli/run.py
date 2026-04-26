@@ -2,8 +2,7 @@
 import click
 from ..session import Session
 from ..console import Console
-from ..utils import (device_option,
-                     clean_params)
+from .config import Config
 
 
 @click.command()
@@ -16,15 +15,13 @@ from ..utils import (device_option,
 @click.option('--in-port', default=8000, help='Input OSC port.')
 @click.option('--out-port', default=9000, help='Output OSC port.')
 @click.option('--address', default='127.0.0.1', help='OSC IP address')
-@device_option()
-def run(**kwargs):
+@Config([
+    ('model', '.pt'),
+]).parse
+def run(**config):
     """MODEL: Path to pre-trained PyTorch model (.pt)"""
-    config = clean_params(kwargs,
-                          file_keys=[
-                              ('model', ['.pt'])
-                          ])
-    device = config['device']
     model = config['model']
+    device = config['device']
     session = Session(model=model,
                       in_port=config['in_port'],
                       out_port=config['out_port'],
