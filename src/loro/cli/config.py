@@ -30,6 +30,8 @@ class Config:
                 if key not in params:
                     continue
                 param = params[key]
+                if param is None and None in ext:
+                    continue
                 if isinstance(param, str) and param.endswith('.json'):
                     config = {**params, **self.from_file(param)}
                     return self._parse(**config)
