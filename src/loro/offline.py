@@ -8,7 +8,6 @@ from .utils import progress
 
 @dataclass(order=True)
 class Event:
-    time: float
     event_tensor: torch.Tensor = field(compare=False)
     is_user: bool = field(compare=False)
 
@@ -36,7 +35,6 @@ class OfflineSession:
         for i, abs_time in enumerate(user_abs_times):
             push(abs_time=abs_time,
                  event=Event(
-                     time=abs_time,
                      event_tensor=user_events[i].clone(),
                      is_user=True
                  ))
@@ -84,7 +82,6 @@ class OfflineSession:
                 pred_dt = pred_feat[cls.ABS_DELTA].item()
                 scheduled_time = abs_time + pred_dt
                 push(scheduled_time, Event(
-                    time=scheduled_time,
                     event_tensor=pred_feat.clone(),
                     is_user=False
                 ))
