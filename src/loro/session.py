@@ -32,7 +32,7 @@ class Session:
         self._lock = threading.Lock()
 
         self._last_voice_time: dict[int, float] = {}
-        self._last_global_time: float | None = None
+        self._last_time: float | None = None
 
         for handler in self.get_handlers():
             self.dispatcher.map(**handler)
@@ -41,10 +41,10 @@ class Session:
         return (now - self._last_voice_time[voice]) * 1000 if voice in self._last_voice_time else 0
 
     def _get_ioi(self, now: float) -> float:
-        return (now - self._last_global_time) * 1000 if self._last_global_time is not None else 0
+        return (now - self._last_time) * 1000 if self._last_time is not None else 0
 
     def _update_timestamps(self, voice: int, now: float) -> None:
-        self._last_global_time = now
+        self._last_time = now
         self._last_voice_time[voice] = now
 
     def _schedule_emission(self, event: torch.Tensor, delay_ms: float) -> None:
@@ -113,7 +113,7 @@ class Session:
             with self._lock:
                 self.model.clear_hidden()
                 self._last_voice_time.clear()
-                self._last_global_time = None
+                self._last_time = None
             Console.action("Hidden state reset.", italic=True)
 
         @safe_handler
