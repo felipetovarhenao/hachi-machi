@@ -13,8 +13,10 @@ from ..offline import OfflineSession
 @click.argument('model', type=click.Path(exists=True, file_okay=True, dir_okay=False, resolve_path=True))
 @click.argument('output', default='out.txt', type=click.Path(file_okay=True, dir_okay=False))
 @click.option('--player', type=str, help='Optional MIDI input file to be used as player for conditional generation.')
+@click.option('--interrupt', type=bool, default=False, help='If a MIDI player is provided, whether to skip interrupted events by player.')
 @click.option('--tokens', default=100, help='Number of tokens to generate.')
 @click.option('--seed', default=0, help='Random seed.')
+@click.option('--alpha', default=1.0, help='Alpha.')
 @click.option('--temp',
               default=1,
               type=click.FloatRange(0.001, max_open=True),
@@ -42,6 +44,7 @@ def generate(**params):
     agent: MultiplayerAgent = torch.load(f=model_path,
                                          weights_only=False,
                                          map_location=device)
+    agent.set_alpha(params['alpha'])
     model = agent.model
     x_scaler, y_scaler = agent.x_scaler, agent.y_scaler
     model.eval()
@@ -66,7 +69,8 @@ def generate(**params):
             events = torch.stack(events).float()
         else:
             input_events = MidiParser(file=player).events().float().to(device)
-            events = OfflineSession.run(model=agent, user_events=input_events)
+            events = OfflineSession.run(
+                model=agent, user_events=input_events, interrupt=params['interrupt'])
 
     if is_txt:
         tensor_to_txt(events, output)
