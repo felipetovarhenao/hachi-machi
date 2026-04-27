@@ -37,44 +37,6 @@ class Session:
         for handler in self.get_handlers():
             self.dispatcher.map(**handler)
 
-    def _get_voice_ioi(self, now: float, voice: int | None = None) -> float:
-        return (now - self._last_voice_time[voice]) * 1000 if voice in self._last_voice_time else 0
-
-    def _get_ioi(self, now: float) -> float:
-        return (now - self._last_time) * 1000 if self._last_time is not None else 0
-
-    def _update_timestamps(self, voice: int, now: float) -> None:
-        self._last_time = now
-        self._last_voice_time[voice] = now
-
-    def _schedule_emission(self, event: torch.Tensor, delay_ms: float) -> None:
-        def emit():
-            out = event.tolist()
-            msg = out[2:]
-            self.client.send_message("/output", msg)
-            voice = msg[0]
-            if voice not in self.model.player_voices:
-                self._predict_and_schedule(event[..., :-1])
-
-        if delay_ms < 33:
-            emit()
-        else:
-            t = threading.Timer(delay_ms / 1000.0, emit)
-            t.daemon = True
-            t.start()
-
-    def _predict_and_schedule(self, x: torch.Tensor) -> None:
-        with self._lock:
-            x = x.unsqueeze(0).unsqueeze(0).float().to(self.device)
-            with torch.no_grad():
-                y: torch.Tensor | None = self.model(x)
-            if y is None:
-                return
-            event = y.squeeze()
-
-        delay_ms = event[0].item()
-        self._schedule_emission(event, delay_ms)
-
     def get_handlers(self):
         input_size = self.model.x_scaler.mean.size(-1) - 2
 
@@ -84,19 +46,11 @@ class Session:
                 raise ValueError(
                     f"Invalid input length: {len(args)}. Expected: {input_size}")
 
-            now = time.perf_counter()
-            voice = int(args[0])
-
-            with self._lock:
-                ioi = self._get_ioi(now)
-                voice_ioi = self._get_voice_ioi(now, voice)
-                self._update_timestamps(voice, now)
-
-            full_event = torch.tensor(
-                [ioi, voice_ioi, *args],
+            x = torch.tensor(
+                [0.0, 0.0, *args],
                 dtype=torch.float32
             )
-            self._predict_and_schedule(full_event)
+            self.predict(x)
 
         @safe_handler
         def handle_temp(_, *args):
@@ -134,6 +88,54 @@ class Session:
                            handle_alpha,
                            handle_reset,
                            handle_weights]]
+
+    def _get_voice_ioi(self, now: float, voice: int | None = None) -> float:
+        return (now - self._last_voice_time[voice]) * 1000 if voice in self._last_voice_time else 0
+
+    def _get_ioi(self, now: float) -> float:
+        return (now - self._last_time) * 1000 if self._last_time is not None else 0
+
+    def _update_time(self, voice: int, now: float) -> None:
+        self._last_time = now
+        self._last_voice_time[voice] = now
+
+    def schedule(self, event: torch.Tensor, delay: float) -> None:
+        def emit():
+            out = event.tolist()
+            msg = out[2:]
+            self.client.send_message("/output", msg)
+            voice = msg[0]
+            if voice not in self.model.player_voices:
+                self.predict(event[..., :-1])
+
+        if delay < 33:
+            emit()
+        else:
+            t = threading.Timer(delay / 1000.0, emit)
+            t.daemon = True
+            t.start()
+
+    def predict(self, x: torch.Tensor) -> None:
+        with self._lock:
+            now = time.perf_counter()
+            voice = int(x[..., 2].item())
+            ioi = self._get_ioi(now)
+            voice_ioi = self._get_voice_ioi(now, voice)
+            self._update_time(voice, now)
+
+            x = x.clone()
+            x[..., 0] = ioi
+            x[..., 1] = voice_ioi
+
+            x = x.unsqueeze(0).unsqueeze(0).float().to(self.device)
+            with torch.no_grad():
+                y: torch.Tensor | None = self.model.forward(x)
+            if y is None:
+                return
+            event = y.squeeze()
+
+        delay = event[0].item()
+        self.schedule(event, delay)
 
     def start(self):
         server = BlockingOSCUDPServer(
