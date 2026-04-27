@@ -10,6 +10,7 @@ from .utils import progress
 class Event:
     event_tensor: torch.Tensor = field(compare=False)
     is_user: bool = field(compare=False)
+    generation: int = field(compare=False, default=0)
 
 
 class OfflineSession:
@@ -18,7 +19,7 @@ class OfflineSession:
     USER_VOICE = 0
 
     @classmethod
-    def run(cls, model, user_events: torch.Tensor) -> torch.Tensor:
+    def run(cls, model, user_events: torch.Tensor, interrupt: bool = True) -> torch.Tensor:
         model.eval()
         display = Console.get_display()
         device = user_events.device
@@ -26,6 +27,7 @@ class OfflineSession:
         max_time = int(user_abs_times[-1].item())
         queue: list[tuple[float, int, Event]] = []
         counter = 0
+        current_generation = 0
 
         def push(abs_time: float, event: Event):
             nonlocal counter
@@ -63,6 +65,13 @@ class OfflineSession:
         while queue:
 
             abs_time, _, event = heapq.heappop(queue)
+
+            if interrupt and not event.is_user and event.generation != current_generation:
+                continue
+
+            if interrupt and event.is_user:
+                current_generation += 1
+
             feat = event.event_tensor
             voice_id = int(feat[cls.VOICE_ID].item())
 
@@ -83,7 +92,8 @@ class OfflineSession:
                 scheduled_time = abs_time + pred_dt
                 push(scheduled_time, Event(
                     event_tensor=pred_feat.clone(),
-                    is_user=False
+                    is_user=False,
+                    generation=current_generation
                 ))
 
         return torch.stack([f for _, f in emitted])
