@@ -15,6 +15,8 @@ from .config import Config
 @click.option('--in-port', default=8000, help='Input OSC port.')
 @click.option('--out-port', default=9000, help='Output OSC port.')
 @click.option('--address', default='127.0.0.1', help='OSC IP address')
+@click.option('--temp', default=1.0, type=float, help='Temperature')
+@click.option('--alpha', default=1.0, type=float, help='Alpha')
 @Config([
     ('model', '.pt'),
 ]).parse
@@ -27,6 +29,8 @@ def run(**config):
                       out_port=config['out_port'],
                       host=config['address'],
                       device=device)
+    session.model.set_temp(config['temp'])
+    session.model.set_alpha(config['alpha'])
     try:
         session.start()
     except KeyboardInterrupt:
