@@ -15,7 +15,7 @@ from .config import Config
 @click.option('--seed', default=0, help='Random seed.')
 @click.option('--temp',
               default=1,
-              type=click.FloatRange(0.01, max_open=True),
+              type=click.FloatRange(0.02, max_open=True),
               help='Temperature')
 @Config([
     ('model', '.pt'),
