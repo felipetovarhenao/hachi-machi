@@ -1,9 +1,9 @@
 [project]
-name = "loro"
+name = "hachimachi"
 authors = [
 	{ name = 'Felipe Tovar-Henao', email = 'felipe.tovar.henao@gmail.com' },
 ]
-description = "A command-line interface tool to easily train and run event-based, multiplayer improvisation agents"
+description = "High-level and Controllable Human Interface for Machine Improvisation."
 readme = "README.md"
 version = "0.1.0"
 keywords = [
@@ -12,6 +12,12 @@ keywords = [
 	'artificial intelligence',
 	'symbolic music',
 ]
+requires-python = ">=3.10"
+dependencies = ["torch", "click", "python-osc", "mido"]
 
 [project.scripts]
-loro = "loro.cli:main"
+machi = "hachimachi.cli:main"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
