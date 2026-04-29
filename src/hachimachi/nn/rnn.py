@@ -38,12 +38,11 @@ class RecurrentMDN(nn.Module):
 
     def step(self,
              x: torch.Tensor,
-             hidden: torch.Tensor | None,
-             temp: float = 1.0) -> tuple[torch.Tensor, torch.Tensor]:
+             hidden: torch.Tensor | None) -> tuple[torch.Tensor, torch.Tensor]:
         pi, mu, sigma, hidden = self.forward(x, hidden)
         log = torch.log(pi.squeeze())
-        k = torch.multinomial(
-            torch.exp((log / temp)), num_samples=1).item()
+        k = torch.multinomial(input=torch.exp(log),
+                              num_samples=1).item()
         y = torch.normal(mean=mu[0, 0, :, k],
                          std=sigma[0, 0, :, k]).unsqueeze(0).unsqueeze(0)
         return y, hidden

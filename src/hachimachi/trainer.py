@@ -4,8 +4,7 @@ import torch
 from torch.optim import AdamW
 from .timer import Timer
 from .console import Console
-from .nn import MultiplayerAgent, RecurrentMDN
-from .nn import transforms as T
+from .nn import MultiplayerAgent
 from .loss import NLLLoss
 from .data import EventDataset, EventLoader
 from .utils import validate_path, progress
@@ -14,16 +13,12 @@ from .utils import validate_path, progress
 class Trainer:
 
     def __init__(self,
-                 model: RecurrentMDN,
-                 input_layer: T.Transform,
-                 output_layer: T.Transform,
+                 model: MultiplayerAgent,
                  dataset: EventDataset,
                  batch_size: int = 32,
                  lr: float = 0.001,
                  betas: tuple[float, float] = (0.9, 0.99)):
         self.model = model
-        self.input_layer = input_layer
-        self.output_layer = output_layer
         self.dataset = dataset
         self.file = None
         batch_size = min(batch_size, self.dataset.size // 2)
@@ -54,10 +49,7 @@ class Trainer:
         stop = self.patience > self.max_patience
 
         if self.patience == 0:
-            agent = MultiplayerAgent(model=self.model,
-                                     input_layer=self.input_layer,
-                                     output_layer=self.output_layer)
-            torch.save(obj=agent,
+            torch.save(obj=self.model,
                        f=self.file)
 
         self.display.update(
@@ -106,7 +98,7 @@ class Trainer:
         }, header=f"Latency ({self.model.device})")
 
     def run(self, file: str, epochs: int = 1000, patience: int = 15) -> None:
-        self.benchmark()
+        # self.benchmark()
         self.file = validate_path(file, '.pt')
         self.max_patience = patience
         self.patience = 0
@@ -117,14 +109,11 @@ class Trainer:
         Console.print("\nTraining", bold=True)
         for epoch in range(epochs):
             self.model.train()
-            self.input_layer.train()
-            self.output_layer.train()
             self.dataset.train()
             train_loss = 0
             train_batches = 0
             for (x, y) in self.loader:
-                x = self.input_layer(x)
-                y = self.output_layer(y)
+                y = self.model.output_layer(y)
                 pi, mu, sigma, _ = self.model(x)
                 loss: torch.Tensor = self.loss(pi, mu, sigma, y)
                 self.optim.zero_grad()
@@ -135,14 +124,11 @@ class Trainer:
             train_loss /= train_batches
             self.model.eval()
             self.dataset.eval()
-            self.input_layer.eval()
-            self.output_layer.eval()
             with torch.no_grad():
                 eval_loss = 0
                 eval_batches = 0
                 for (x, y) in self.loader:
-                    x = self.input_layer(x)
-                    y = self.output_layer(y)
+                    y = self.model.output_layer(y)
                     pi, mu, sigma, _ = self.model(x)
                     loss: torch.Tensor = self.loss(pi, mu, sigma, y)
                     eval_loss += loss.item()

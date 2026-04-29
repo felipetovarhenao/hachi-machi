@@ -13,10 +13,6 @@ from .config import Config
 @click.argument('output', default='out.txt', type=click.Path(file_okay=True, dir_okay=False))
 @click.option('--tokens',  default=100, help='Number of tokens to generate.')
 @click.option('--seed', default=0, help='Random seed.')
-@click.option('--temp',
-              default=1,
-              type=click.FloatRange(0.02, max_open=True),
-              help='Temperature')
 @Config([
     ('model', '.pt'),
     ('output', '.mid', '.midi', '.txt')
@@ -36,31 +32,25 @@ def generate(**params):
     if seed != 0:
         torch.manual_seed(params['seed'])
 
-    agent: MultiplayerAgent = torch.load(f=model_path,
+    model: MultiplayerAgent = torch.load(f=model_path,
                                          weights_only=False,
                                          map_location=device)
-    model = agent.model
-    input_layer, output_layer = agent.input_layer, agent.output_layer
+    model.reset()
     model.eval()
-    hidden = None
-
+    model.player_voices = []
     events = []
     num_tokens = params['tokens']
     display = Console.get_display(n_rows=1)
     with torch.no_grad():
-        x = torch.randn(1, 1, model.input_size, device=device)
-        x = input_layer(x, inverse=True)
+        x = torch.randn(1, 1, model.input_layer.output_size, device=device)
+        x = model.input_layer(x, inverse=True)
         for i in range(num_tokens):
             display.update(progress=progress(i, num_tokens - 1))
-            y, hidden = model.step(x=input_layer(x),
-                                   hidden=hidden,
-                                   temp=params['temp'])
-            x: torch.Tensor = output_layer(y.clone(), inverse=True)
-            x = x.clip(0).round()
-            events.append(x.squeeze())
-            x = x[..., :-1]
+            y = model.step(x)
+            events.append(y.clone())
+            x = y[..., :-1]
 
-    events = torch.stack(events).float()
+    events = torch.cat(events, dim=1).squeeze(0).float().round().int()
 
     if is_txt:
         tensor_to_txt(events, output)
