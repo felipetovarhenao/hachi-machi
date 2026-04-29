@@ -101,12 +101,12 @@ def train(**params):
     input_layer = T.Transform([
         T.TimePhase(dim=0),
         # T.LogSpace(dims=[0, 1]),
-        T.Categorical(dim=2, size=num_voices),
+        T.Categorical(dim=1, size=num_voices),
         T.Normalize(size=input_data.size(-1) + 2 + (num_voices - 1))
     ]).to(device)
     output_layer = T.Transform([
         # T.LogSpace(dims=[0, 1, -1]),
-        T.Categorical(dim=2, size=num_voices),
+        T.Categorical(dim=1, size=num_voices),
         T.Normalize(size=output_data.size(-1) + (num_voices - 1))
     ]).to(device)
 

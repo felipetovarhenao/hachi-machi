@@ -20,7 +20,7 @@ class MultiplayerAgent(nn.Module):
         self.device = device
         self.input_layer = input_layer
         self.output_layer = output_layer
-        self.input_size = self.model.input_size
+        self.input_size = self.input_layer.input_size
         self.player_voices = player_voices
         self.temp = 1.0
         self.next_event: torch.Tensor | None = None

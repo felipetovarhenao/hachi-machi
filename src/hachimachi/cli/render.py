@@ -14,7 +14,7 @@ from .config import Config
                                          resolve_path=True,)
                 )
 @click.argument('output',
-                default='output.txt',
+                default='output.mid',
                 type=click.Path(file_okay=True,
                                 dir_okay=False,
                                 resolve_path=True,))
@@ -46,10 +46,10 @@ def render(**params):
         torch.manual_seed(seed)
     midi = MidiParser(file=input)
     events = midi.events().to(device)
-    aug = MidiAugmentator(num_voices=midi.numvoices(),
-                          transforms=transforms)
 
     if transforms is not None:
+        aug = MidiAugmentator(num_voices=midi.numvoices(),
+                              transforms=transforms)
         for name in transforms:
             name = f"use_{name.replace('-', '_')}"
             cb = getattr(aug, name)

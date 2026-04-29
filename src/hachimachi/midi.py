@@ -45,15 +45,11 @@ class MidiParser:
         events.sort(key=lambda x: x[0])
 
         prev_onset = 0
-        prev_onset_per_voice = {}
         rows = []
         for onset, voice, pitch, velocity, duration in events:
             ioi = onset - prev_onset
-            voice_ioi = onset - prev_onset_per_voice.get(voice, 0)
             prev_onset = onset
-            prev_onset_per_voice[voice] = onset
             rows.append([ioi,
-                         voice_ioi,
                          voice,
                          pitch,
                          velocity,
@@ -81,7 +77,7 @@ class MidiParser:
         messages = []
         current_onset_ms = 0.0
         for row in events:
-            ioi, _, voice, pitch, velocity, duration = row.tolist()
+            ioi, voice, pitch, velocity, duration = row.tolist()
             current_onset_ms += ioi
             duration = 1000
             note = int(round(pitch / 100))

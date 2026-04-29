@@ -23,22 +23,20 @@ class Session:
         self.model: MultiplayerAgent = torch.load(f=model,
                                                   map_location=device,
                                                   weights_only=False)
-        self.input_size = self.model.input_size - 2
+        self.input_size = self.model.input_size - 1
         self.model.eval()
         self.client = SimpleUDPClient(host, out_port)
         self.dispatcher = Dispatcher()
         self.in_port = in_port
         self.out_port = out_port
         self._lock = threading.Lock()
-
-        self._last_voice_time: dict[int, float] = {}
         self._last_time: float | None = None
 
         for handler in self.get_handlers():
             self.dispatcher.map(**handler)
 
     def get_handlers(self):
-        input_size = self.model.input_layer.mean.size(-1) - 2
+        input_size = self.model.input_size - 1
 
         @safe_handler
         def handle_input(_, *args):
@@ -47,7 +45,7 @@ class Session:
                     f"Invalid input length: {len(args)}. Expected: {input_size}")
 
             x = torch.tensor(
-                [0.0, 0.0, *args],
+                [0.0, *args],
                 dtype=torch.float32
             )
             self.predict(x)
@@ -66,7 +64,6 @@ class Session:
         def handle_reset(_):
             with self._lock:
                 self.model.clear_hidden()
-                self._last_voice_time.clear()
                 self._last_time = None
             Console.action("Hidden state reset.", italic=True)
 
@@ -89,43 +86,29 @@ class Session:
                            handle_reset,
                            handle_weights]]
 
-    def _get_voice_ioi(self, now: float, voice: int | None = None) -> float:
-        return (now - self._last_voice_time[voice]) * 1000 if voice in self._last_voice_time else 0
-
-    def _get_ioi(self, now: float) -> float:
-        return (now - self._last_time) * 1000 if self._last_time is not None else 0
-
-    def _update_time(self, voice: int, now: float) -> None:
+    def get_delta(self) -> None:
+        now = time.perf_counter()
+        ioi = 0 if self._last_time is None else (now - self._last_time) * 1000
         self._last_time = now
-        self._last_voice_time[voice] = now
+        return ioi
 
     def schedule(self, event: torch.Tensor, delay: float) -> None:
         def emit():
             out = event.tolist()
-            msg = out[2:]
+            msg = out[1:]
             self.client.send_message("/output", msg)
             voice = msg[0]
             if voice not in self.model.player_voices:
                 self.predict(event[..., :-1])
 
-        if delay < 33:
-            emit()
-        else:
-            t = threading.Timer(delay / 1000.0, emit)
-            t.daemon = True
-            t.start()
+        t = threading.Timer(delay / 1000.0, emit)
+        t.daemon = True
+        t.start()
 
     def predict(self, x: torch.Tensor) -> None:
         with self._lock:
-            now = time.perf_counter()
-            voice = int(x[..., 2].item())
-            ioi = self._get_ioi(now)
-            voice_ioi = self._get_voice_ioi(now, voice)
-            self._update_time(voice, now)
-
             x = x.clone()
-            x[..., 0] = ioi
-            x[..., 1] = voice_ioi
+            x[..., 0] = self.get_delta()
 
             x = x.unsqueeze(0).unsqueeze(0).float().to(self.device)
             with torch.no_grad():

@@ -50,7 +50,6 @@ class MidiAugmentator(Augmentator):
             k: i for i, k in enumerate(
                 [
                     'ioi',
-                    'ioi_voice',
                     'voice',
                     'pitch',
                     'velocity',
@@ -63,7 +62,7 @@ class MidiAugmentator(Augmentator):
         return [self._feature_to_dim_map[key] for key in labels if key in self._feature_to_dim_map]
 
     def use_time_stretch(self, x: torch.Tensor) -> torch.Tensor:
-        dims = self.get('ioi', 'ioi_voice', 'duration')
+        dims = self.get('ioi', 'duration')
         s = (torch.rand(1).item() * 2 - 1) * 0.66
         x[..., dims] *= 2 ** s
         return x
@@ -104,34 +103,26 @@ class MidiAugmentator(Augmentator):
             result[..., dim] = torch.where(mask, s, result[..., dim])
         return result
 
-    def __handle_onsets(self, x: torch.Tensor, func: Callable[[torch.Tensor], torch.Tensor]) -> torch.Tensor:
+    def __handle_time(self, x: torch.Tensor, func: Callable[[torch.Tensor], torch.Tensor]) -> torch.Tensor:
         y = x.clone()
-        voice_dim = self.get('voice')
-        voice_ioi_dim = self.get('ioi_voice')
         ioi_dim = self.get('ioi')
         y[:, ioi_dim] = torch.cumsum(y[:, ioi_dim], dim=0)
         y = func(y)
         order = torch.sort(y[:, ioi_dim], dim=0, stable=True).indices.flatten()
         y = y[order]
-
-        for v in range(self.num_voices):
-            voice_mask = (y[:, voice_dim] == v).flatten()
-            voice_onsets = y[voice_mask, ioi_dim]
-            voice_iois = torch.diff(voice_onsets, dim=0)
-            y[voice_mask][1:, voice_ioi_dim] = voice_iois.unsqueeze(-1)
         y[1:, ..., ioi_dim] = torch.diff(y[..., ioi_dim], dim=-2)
         return y
 
     def use_chord_shuffle(self, x: torch.Tensor) -> torch.Tensor:
-        return self.__handle_onsets(x, lambda y: y[torch.randperm(n=len(y))])
+        return self.__handle_time(x, lambda y: y[torch.randperm(n=len(y))])
 
     def use_time_noise(self, x: torch.Tensor) -> torch.Tensor:
         dim = self.get('ioi')
 
         def func(y: torch.Tensor) -> torch.Tensor:
-            y[..., dim] += torch.randn_like(y[..., dim]) * 5
+            y[..., dim] += torch.randn_like(y[..., dim]) * 7.5
             return y.clip(0)
-        return self.__handle_onsets(x, func)
+        return self.__handle_time(x, func)
 
     def use_time_rubato(self, x: torch.Tensor) -> torch.Tensor:
         dim = self.get('ioi')
@@ -141,4 +132,4 @@ class MidiAugmentator(Augmentator):
                               steps=len(x)).unsqueeze(-1).to(x.device)
 
         x[..., dim] *= warp
-        return self.__handle_onsets(x, lambda y: y)
+        return self.__handle_time(x, lambda y: y)

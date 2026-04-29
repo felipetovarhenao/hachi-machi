@@ -1,9 +1,17 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+from abc import ABC
 
 
-class Normalize(nn.Module):
+class TransformLayer(nn.Module, ABC):
+
+    def fit(self, *args, **kwargs): ...
+
+    def forward(self, x: torch.Tensor, inverse: bool = False): ...
+
+
+class Normalize(TransformLayer):
     def __init__(self, size: int = 2):
         super().__init__()
         self.register_buffer('mean', torch.zeros(size))
@@ -17,7 +25,7 @@ class Normalize(nn.Module):
         return x * self.std + self.mean if inverse else (x - self.mean) / self.std
 
 
-class Categorical(nn.Module):
+class Categorical(TransformLayer):
 
     def __init__(self, dim: int = 0, size: int = 2):
         super().__init__()
@@ -36,7 +44,7 @@ class Categorical(nn.Module):
         return torch.cat([l, m, r], dim=-1)
 
 
-class TimePhase(nn.Module):
+class TimePhase(TransformLayer):
     def __init__(self, dim: int = 1):
         super().__init__()
         self.register_buffer('dim', torch.tensor(dim, dtype=torch.int))
@@ -52,7 +60,7 @@ class TimePhase(nn.Module):
         return torch.cat([l, c, r, torch.cos(t), torch.sin(t)], dim=-1)
 
 
-class LogSpace(nn.Module):
+class LogSpace(TransformLayer):
 
     def __init__(self, dims: list[int] = [0]):
         super().__init__()
@@ -64,31 +72,7 @@ class LogSpace(nn.Module):
         return x
 
 
-class Transform(nn.Module):
-
-    def __init__(self, layers: list[nn.Module], *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.layers = nn.ModuleList(layers)
-        self.output_size = 0
-
-    def forward(self, x: torch.Tensor, inverse: bool = False):
-        layers = reversed(self.layers) if inverse else self.layers
-        for layer in layers:
-            x = layer(x, inverse)
-        return x
-
-    @torch.no_grad()
-    def fit(self, data: torch.Tensor):
-        x = data.clone()
-        for layer in self.layers:
-            if hasattr(layer, 'fit'):
-                layer.fit(x)
-            else:
-                x = layer(x)
-        self.output_size = x.size(-1)
-
-
-class CategorySum(nn.Module):
+class CategorySum(TransformLayer):
 
     def __init__(self, key_dim: int = 0, value_dim: int = 0, num_voices: int = 3):
         super().__init__()
@@ -108,6 +92,30 @@ class CategorySum(nn.Module):
         cumsum = (mask * values.unsqueeze(1)).sum(dim=2)
         y = torch.cat([x, cumsum.unsqueeze(-1)], dim=-1)
         return y
+
+
+class Transform(TransformLayer):
+
+    def __init__(self, layers: list[nn.Module], *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.layers = nn.ModuleList(layers)
+        self.input_size = 0
+        self.output_size = 0
+
+    def forward(self, x: torch.Tensor, inverse: bool = False):
+        layers = reversed(self.layers) if inverse else self.layers
+        for layer in layers:
+            x = layer(x, inverse)
+        return x
+
+    @torch.no_grad()
+    def fit(self, data: torch.Tensor):
+        x = data.clone()
+        self.input_size = data.size(-1)
+        for layer in self.layers:
+            layer.fit(x)
+            x = layer(x)
+        self.output_size = x.size(-1)
 
 
 if __name__ == '__main__':
