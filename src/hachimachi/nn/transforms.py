@@ -18,8 +18,10 @@ class Normalize(TransformLayer):
         self.register_buffer('std', torch.ones(size))
 
     def fit(self, x: torch.Tensor) -> None:
+        std = x.std(0)
+        std[std == 0] = 1
         self.mean.copy_(x.mean(0))
-        self.std.copy_(x.std(0))
+        self.std.copy_(std)
 
     def forward(self, x: torch.Tensor, inverse: bool = False):
         return x * self.std + self.mean if inverse else (x - self.mean) / self.std
