@@ -11,7 +11,7 @@ from .data import EventDataset, EventLoader
 from .utils import validate_path, progress
 
 
-class Pipeline:
+class Trainer:
 
     def __init__(self,
                  model: RecurrentMDN,

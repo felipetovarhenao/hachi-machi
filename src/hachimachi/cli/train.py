@@ -5,7 +5,7 @@ from ..midi import MidiParser
 from ..data import EventDataset
 from ..nn import RecurrentMDN
 from ..nn import transforms as T
-from ..pipeline import Pipeline
+from ..trainer import Trainer
 from ..console import Console
 from .config import Config
 
@@ -127,7 +127,7 @@ def train(**params):
                          dropout=params['dropout'],
                          slope=params['slope'],
                          device=device)
-    pipeline = Pipeline(model=model,
+    trainer = Trainer(model=model,
                         input_layer=input_layer,
                         output_layer=output_layer,
                         dataset=dataset,
@@ -136,6 +136,6 @@ def train(**params):
                         betas=tuple(params['betas']),)
     Console.action(
         f"{parser.numvoices()} players found", italic=True)
-    pipeline.run(file=params['output'],
+    trainer.run(file=params['output'],
                  epochs=params['epochs'],
                  patience=params['patience'])
