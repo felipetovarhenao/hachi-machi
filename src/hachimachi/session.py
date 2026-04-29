@@ -29,7 +29,7 @@ class Session:
         self.dispatcher = Dispatcher()
         self.in_port = in_port
         self.out_port = out_port
-        self._lock = threading.Lock()
+        self._lock = threading.RLock()
         self._last_time: float | None = None
 
         for handler in self.get_handlers():
@@ -86,12 +86,6 @@ class Session:
                            handle_reset,
                            handle_weights]]
 
-    def get_delta(self) -> None:
-        now = time.perf_counter()
-        ioi = 0 if self._last_time is None else (now - self._last_time) * 1000
-        self._last_time = now
-        return ioi
-
     def schedule(self, event: torch.Tensor, delay: float) -> None:
         def emit():
             out = event.tolist()
@@ -106,9 +100,12 @@ class Session:
         t.start()
 
     def predict(self, x: torch.Tensor) -> None:
+        now = time.perf_counter()
         with self._lock:
             x = x.clone()
-            x[..., 0] = self.get_delta()
+            x[..., 0] = 0 if self._last_time is None else (
+                now - self._last_time) * 1000
+            self._last_time = now
 
             x = x.unsqueeze(0).unsqueeze(0).float().to(self.device)
             with torch.no_grad():
