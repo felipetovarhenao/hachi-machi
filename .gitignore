@@ -10,7 +10,6 @@
 *.midi
 *.txt
 *.bell
-src/_loro/*
 *.pt
 *.json
 **/_*.*
