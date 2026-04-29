@@ -84,12 +84,27 @@ class CategorySum(TransformLayer):
     def forward(self, x: torch.Tensor, inverse: bool = False):
         if inverse:
             return x[..., :-1]
+        if x.size(0) > 1:
+            return self._batch_forward(x)
+        return self._step_forward(x)
+
+    def _step_forward(self, x: torch.Tensor):
+        k = x[..., self.key_dim].to(torch.long)
+        v = x[..., self.value_dim].item()
+        r = self.cache[k:k+1].clone().unsqueeze(0).unsqueeze(0)
+        mask = F.one_hot(k, self.cache.size(0)).flatten().bool()
+        self.cache[~mask] += v
+        self.cache[mask] = v
+        return torch.cat([x, r], dim=-1)
+
+    def _batch_forward(self, x: torch.Tensor) -> torch.Tensor:
         keys = x[..., self.key_dim]
         values = x[..., self.value_dim]
-        same_key = keys.unsqueeze(2) == keys.unsqueeze(1)
-        causal = torch.ones(x.shape[1], x.shape[1]).tril().bool()
+        same_key = keys.unsqueeze(-1) == keys.unsqueeze(-2)
+        causal = torch.ones(x.shape[-2], x.shape[-2]
+                            ).to(x.device).tril().bool()
         mask = same_key & causal
-        cumsum = (mask * values.unsqueeze(1)).sum(dim=2)
+        cumsum = (mask * values.unsqueeze(-1)).sum(dim=-2)
         y = torch.cat([x, cumsum.unsqueeze(-1)], dim=-1)
         return y
 
@@ -116,13 +131,3 @@ class Transform(TransformLayer):
             layer.fit(x)
             x = layer(x)
         self.output_size = x.size(-1)
-
-
-if __name__ == '__main__':
-    vd = CategorySum()
-    t = torch.randint(0, 5, size=(3, 4, 1)) * 150
-    c = torch.randint_like(t, 2)
-    x = torch.cat([t, c], dim=-1).to(torch.float32)
-    y = vd(x)
-    x_hat = vd(y, True)
-    print(x == x_hat)
