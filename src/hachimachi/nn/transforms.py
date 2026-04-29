@@ -86,3 +86,35 @@ class Transform(nn.Module):
             else:
                 x = layer(x)
         self.output_size = x.size(-1)
+
+
+class CategorySum(nn.Module):
+
+    def __init__(self, key_dim: int = 0, value_dim: int = 0, num_voices: int = 3):
+        super().__init__()
+        self.register_buffer('cache', torch.zeros(num_voices))
+        self.register_buffer('key_dim', torch.tensor(key_dim, dtype=torch.int))
+        self.register_buffer('value_dim', torch.tensor(
+            value_dim, dtype=torch.int))
+
+    def forward(self, x: torch.Tensor, inverse: bool = False):
+        if inverse:
+            return x[..., :-1]
+        keys = x[..., self.key_dim]
+        values = x[..., self.value_dim]
+        same_key = keys.unsqueeze(2) == keys.unsqueeze(1)
+        causal = torch.ones(x.shape[1], x.shape[1]).tril().bool()
+        mask = same_key & causal
+        cumsum = (mask * values.unsqueeze(1)).sum(dim=2)
+        y = torch.cat([x, cumsum.unsqueeze(-1)], dim=-1)
+        return y
+
+
+if __name__ == '__main__':
+    vd = CategorySum()
+    t = torch.randint(0, 5, size=(3, 4, 1)) * 150
+    c = torch.randint_like(t, 2)
+    x = torch.cat([t, c], dim=-1).to(torch.float32)
+    y = vd(x)
+    x_hat = vd(y, True)
+    print(x == x_hat)
