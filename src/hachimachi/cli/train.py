@@ -132,6 +132,7 @@ def train(**params):
     model = MultiplayerAgent(model=rnn,
                              input_layer=input_layer,
                              output_layer=output_layer,
+                             num_voices=num_voices,
                              voice_dim=VOICE_DIM,
                              device=device,)
     trainer = Trainer(model=model,

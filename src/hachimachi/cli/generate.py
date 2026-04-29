@@ -37,7 +37,6 @@ def generate(**params):
                                          map_location=device)
     model.reset()
     model.eval()
-    model.player_voices = []
     events = []
     num_tokens = params['tokens']
     display = Console.get_display(n_rows=1)
