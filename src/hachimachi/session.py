@@ -38,7 +38,7 @@ class Session:
             self.dispatcher.map(**handler)
 
     def get_handlers(self):
-        input_size = self.model.x_scaler.mean.size(-1) - 2
+        input_size = self.model.input_layer.mean.size(-1) - 2
 
         @safe_handler
         def handle_input(_, *args):

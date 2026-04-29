@@ -40,7 +40,7 @@ def generate(**params):
                                          weights_only=False,
                                          map_location=device)
     model = agent.model
-    x_scaler, y_scaler = agent.x_scaler, agent.y_scaler
+    input_layer, output_layer = agent.input_layer, agent.output_layer
     model.eval()
     hidden = None
 
@@ -49,13 +49,13 @@ def generate(**params):
     display = Console.get_display(n_rows=1)
     with torch.no_grad():
         x = torch.randn(1, 1, model.input_size, device=device)
-        x = x_scaler(x, inverse=True)
+        x = input_layer(x, inverse=True)
         for i in range(num_tokens):
             display.update(progress=progress(i, num_tokens - 1))
-            y, hidden = model.step(x=x_scaler(x),
+            y, hidden = model.step(x=input_layer(x),
                                    hidden=hidden,
                                    temp=params['temp'])
-            x: torch.Tensor = y_scaler(y.clone(), inverse=True)
+            x: torch.Tensor = output_layer(y.clone(), inverse=True)
             x = x.clip(0).round()
             events.append(x.squeeze())
             x = x[..., :-1]

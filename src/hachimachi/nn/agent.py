@@ -1,7 +1,7 @@
 
 import torch
 import torch.nn as nn
-from .scaler import FeatureScaler
+from . import transforms as T
 from .rnn import RecurrentMDN
 
 
@@ -9,8 +9,8 @@ class MultiplayerAgent(nn.Module):
 
     def __init__(self,
                  model: RecurrentMDN,
-                 x_scaler:  FeatureScaler,
-                 y_scaler:  FeatureScaler,
+                 input_layer: T.Transform,
+                 output_layer: T.Transform,
                  player_voices: list[int] = [0],
                  device: str = 'mps',
                  *args,
@@ -18,8 +18,8 @@ class MultiplayerAgent(nn.Module):
         super().__init__(*args, **kwargs)
         self.model = model
         self.device = device
-        self.x_scaler = x_scaler
-        self.y_scaler = y_scaler
+        self.input_layer = input_layer
+        self.output_layer = output_layer
         self.input_size = self.model.input_size
         self.player_voices = player_voices
         self.temp = 1.0
@@ -48,19 +48,19 @@ class MultiplayerAgent(nn.Module):
         return torch.exp(-self.alpha * y).item()
 
     def forward(self, x: torch.Tensor) -> None | torch.Tensor:
-        x: torch.Tensor = self.x_scaler(x)
-        if self.hidden_state is not None:
-            conf = self.get_confidence(x)
-            (hn, cn) = self.hidden_state
-            hn = hn.clone()
-            cn = cn.clone()
-            hn[-1] *= conf
-            cn[-1] *= conf
-            self.hidden_state = (hn, cn)
+        x: torch.Tensor = self.input_layer(x)
+        # if self.hidden_state is not None:
+        #     conf = self.get_confidence(x)
+        #     (hn, cn) = self.hidden_state
+        #     hn = hn.clone()
+        #     cn = cn.clone()
+        #     hn[-1] *= conf
+        #     cn[-1] *= conf
+        #     self.hidden_state = (hn, cn)
         self.next_event, self.hidden_state = self.model.step(x=x,
                                                              hidden=self.hidden_state,
                                                              temp=self.temp)
-        y: torch.Tensor = self.y_scaler(
+        y: torch.Tensor = self.output_layer(
             self.next_event.clone(), inverse=True)
         y = y.clip(0).squeeze().round().int()
         if y[2] in self.player_voices:

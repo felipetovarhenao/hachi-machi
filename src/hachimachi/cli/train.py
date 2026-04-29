@@ -3,7 +3,8 @@ import torch
 from ..augment import MidiAugmentator
 from ..midi import MidiParser
 from ..data import EventDataset
-from ..nn import FeatureScaler, RecurrentMDN
+from ..nn import RecurrentMDN
+from ..nn import transforms as T
 from ..pipeline import Pipeline
 from ..console import Console
 from .config import Config
@@ -92,12 +93,27 @@ def train(**params):
         raise RuntimeError(
             "MIDI file must contain of two or more channels, one for each player.")
     data = parser.events().to(device)
-    x_scaler = FeatureScaler(data=data[..., :-1],
-                             time_dims=[0, 1],
-                             num_voices=num_voices)
-    y_scaler = FeatureScaler(data=data,
-                             time_dims=[0, 1, -1],
-                             num_voices=num_voices)
+
+    input_data = data[..., :-1]
+    output_data = data[...]
+
+    # pre/post-processing layers
+    input_layer = T.Transform([
+        T.TimePhase(dim=0),
+        # T.LogSpace(dims=[0, 1]),
+        T.Categorical(dim=2, size=num_voices),
+        T.Normalize(size=input_data.size(-1) + 2 + (num_voices - 1))
+    ]).to(device)
+    output_layer = T.Transform([
+        # T.LogSpace(dims=[0, 1, -1]),
+        T.Categorical(dim=2, size=num_voices),
+        T.Normalize(size=output_data.size(-1) + (num_voices - 1))
+    ]).to(device)
+
+    # fit to data
+    input_layer.fit(input_data)
+    output_layer.fit(output_data)
+
     augmentator = MidiAugmentator(num_voices=parser.numvoices(),
                                   transforms=params['transform'])
     dataset = EventDataset(data=data,
@@ -105,15 +121,15 @@ def train(**params):
                            split=params['split'],
                            augmentator=augmentator)
     model = RecurrentMDN(k=params['mixtures'],
-                         input_size=dataset.input_size + num_voices - 1,
-                         output_size=dataset.output_size + num_voices - 1,
+                         input_size=input_layer.output_size,
+                         output_size=output_layer.output_size,
                          num_layers=params['layers'],
                          dropout=params['dropout'],
                          slope=params['slope'],
                          device=device)
     pipeline = Pipeline(model=model,
-                        x_scaler=x_scaler,
-                        y_scaler=y_scaler,
+                        input_layer=input_layer,
+                        output_layer=output_layer,
                         dataset=dataset,
                         batch_size=params['batch_size'],
                         lr=params['lr'],
