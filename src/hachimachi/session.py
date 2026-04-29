@@ -63,7 +63,7 @@ class Session:
         @safe_handler
         def handle_reset(_):
             with self._lock:
-                self.model.clear_hidden()
+                self.model.reset()
                 self._last_time = None
             Console.action("Hidden state reset.", italic=True)
 
@@ -98,7 +98,7 @@ class Session:
             msg = out[1:]
             self.client.send_message("/output", msg)
             voice = msg[0]
-            if voice not in self.model.player_voices:
+            if voice not in self.model.players:
                 self.predict(event[..., :-1])
 
         t = threading.Timer(delay / 1000.0, emit)
@@ -112,7 +112,7 @@ class Session:
 
             x = x.unsqueeze(0).unsqueeze(0).float().to(self.device)
             with torch.no_grad():
-                y: torch.Tensor | None = self.model.forward(x)
+                y: torch.Tensor | None = self.model.step(x)
             if y is None:
                 return
             event = y.squeeze()
