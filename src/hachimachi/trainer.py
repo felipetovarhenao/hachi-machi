@@ -54,7 +54,7 @@ class Trainer:
 
         self.display.update(
             time=str(self.timer),
-            progress=progress(self.progress, self.max_patience),
+            progress=progress(self.progress, self.max_patience + 1),
             epoch=epoch,
             train_loss=f"{self._loss(train_loss):1.4f}",
             validation_loss=f"{self._loss(self.min_loss):.4f}"
