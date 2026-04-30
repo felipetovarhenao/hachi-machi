@@ -43,9 +43,10 @@ def tensor_to_txt(x: torch.Tensor, output: str) -> None:
 
 
 def progress(n: int, N: int = 10, size: int = 12):
-    t = min(1, n / N)
-    p = round(t * 100)
-    i = int(round(size * t))
-    l = "⣿" * i
-    r = "⣀" * (size - i)
-    return f'{l}{r} {p:.1f}%'
+    nt = min(1, n / N)
+    f_size = size * nt
+    i_size = int(f_size)
+    end_id = int((f_size - i_size) * 7)
+    end = ' ⣄⣤⣦⣶⣷⣿'[end_id]
+    bar = "⣿" * i_size + end * (end_id > 0)
+    return f'{bar}{"⣀" * (size - i_size - (end_id > 0))} {round(nt * 100):.1f}%'
