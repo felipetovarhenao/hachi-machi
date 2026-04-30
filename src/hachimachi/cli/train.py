@@ -70,6 +70,11 @@ from .config import Config
               type=click.Choice(MidiAugmentator.options()),
               help='Data augmentation transform to randomly apply during training.',
               multiple=True)
+@click.option('--features', '-f',
+              default=['categorical', 'normalize'],
+              type=click.Choice(T.TransformFactory.options()),
+              help='Feature transform layers.',
+              multiple=True)
 @Config([
     ('input', '.mid', '.midi'),
     ('output', '.pt')
@@ -99,25 +104,13 @@ def train(**params):
 
     IOI_DIM, VOICE_DIM, DURATION_DIM = 0, 1, -1
 
-    # pre/post-processing layers
-    input_layer = T.Transform([
-        T.CategorySum(key_dim=VOICE_DIM,
-                      value_dim=IOI_DIM,
-                      num_voices=num_voices),
-        T.TimePhase(dim=IOI_DIM),
-        T.LogSpace(dims=[IOI_DIM]),
-        T.Categorical(dim=VOICE_DIM, size=num_voices),
-        T.Normalize(size=input_data.size(-1) + 1 + 2 + (num_voices - 1))
-    ]).to(device)
-    output_layer = T.Transform([
-        T.LogSpace(dims=[IOI_DIM, DURATION_DIM]),
-        T.Categorical(dim=VOICE_DIM, size=num_voices),
-        T.Normalize(size=output_data.size(-1) + (num_voices - 1))
-    ]).to(device)
-
-    # fit to data
-    input_layer.fit(input_data)
-    output_layer.fit(output_data)
+    factory = T.TransformFactory(voice_dim=VOICE_DIM,
+                                 time_dim=IOI_DIM,
+                                 num_voices=num_voices)
+    transforms = params['features']
+    input_layer, output_layer = factory.make(input_data=input_data,
+                                             output_data=output_data,
+                                             transforms=transforms)
 
     augmentator = MidiAugmentator(num_voices=parser.numvoices(),
                                   transforms=params['transform'])

@@ -6,6 +6,12 @@ from abc import ABC
 
 class TransformLayer(nn.Module, ABC):
 
+    BIJECTIVE = True
+
+    @classmethod
+    def bijective(cls):
+        return cls.BIJECTIVE
+
     def fit(self, *args, **kwargs): ...
 
     def forward(self, x: torch.Tensor, inverse: bool = False): ...
@@ -47,6 +53,9 @@ class Categorical(TransformLayer):
 
 
 class TimePhase(TransformLayer):
+
+    BIJECTIVE = False
+
     def __init__(self, dim: int = 1):
         super().__init__()
         self.register_buffer('dim', torch.tensor(dim, dtype=torch.int))
@@ -75,6 +84,8 @@ class LogSpace(TransformLayer):
 
 
 class CategorySum(TransformLayer):
+
+    BIJECTIVE = False
 
     def __init__(self, key_dim: int = 0, value_dim: int = 0, num_voices: int = 3):
         super().__init__()
@@ -133,3 +144,69 @@ class Transform(TransformLayer):
             layer.fit(x)
             x = layer(x)
         self.output_size = x.size(-1)
+
+
+class TransformFactory:
+
+    @classmethod
+    def options(cls):
+        return list(cls(0, 0, 0)._options.keys())
+
+    def __init__(self, voice_dim: int, time_dim: int, num_voices: int):
+        self._size = 0
+        self._options = {
+            "category-sum": {
+                "cls": CategorySum,
+                "kwargs": {"key_dim": voice_dim, "value_dim": time_dim, "num_voices": num_voices},
+                "output_size": lambda: self._size + 1
+            },
+            "time-phase": {
+                "cls": TimePhase,
+                "kwargs": {"dim": time_dim},
+                "output_size": lambda: self._size + 2
+            },
+            "log-space": {
+                "cls": LogSpace,
+                "kwargs": {"dims": [time_dim]},
+            },
+            'categorical': {
+                "cls": Categorical,
+                "kwargs": {
+                    "dim": voice_dim,
+                    "size": num_voices
+                },
+                "output_size": lambda: self._size + (num_voices - 1)
+            },
+            "normalize": {
+                "cls": Normalize,
+                "kwargs": lambda: {"size": self._size},
+            }
+        }
+
+    @torch.no_grad()
+    def make(self,
+             input_data: torch.Tensor,
+             output_data: torch.Tensor,
+             transforms: list[str]) -> Transform:
+        transform_layers = []
+        for i, data in enumerate([input_data, output_data]):
+            self._size = data.size(-1)
+            layers = []
+            for k in self._options.keys():
+                if k not in transforms:
+                    continue
+                opt = self._options[k]
+                cls: TransformLayer = opt['cls']
+                if i == 1 and not cls.bijective():
+                    continue
+                kwargs = opt['kwargs']
+                if 'output_size' in opt:
+                    self._size = opt['output_size']()
+                if callable(kwargs):
+                    kwargs = kwargs()
+                layer = cls(**kwargs)
+                layers.append(layer)
+            t = Transform(layers).to(data.device)
+            t.fit(data)
+            transform_layers.append(t)
+        return tuple(transform_layers)
