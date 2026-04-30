@@ -13,7 +13,7 @@ keywords = [
 	'symbolic music',
 ]
 requires-python = ">=3.10"
-dependencies = ["torch", "click", "python-osc", "mido"]
+dependencies = ["torch", "click", "python-osc", "mido", "toml"]
 
 [project.scripts]
 machi = "hachimachi.cli:main"

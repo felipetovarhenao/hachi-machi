@@ -1,4 +1,4 @@
-import json
+import tomllib
 import os
 import torch
 from ..utils import validate_path
@@ -32,7 +32,7 @@ class Config:
                 param = params[key]
                 if param is None and None in ext:
                     continue
-                if isinstance(param, str) and param.endswith('.json'):
+                if isinstance(param, str) and param.endswith('.toml'):
                     config = {**params, **self.from_file(param)}
                     return self._parse(**config)
                 params[key] = validate_path(file=params[key],
@@ -53,10 +53,10 @@ class Config:
 
     @staticmethod
     def from_file(file: str):
-        file = validate_path(file, '.json')
+        file = validate_path(file, '.toml')
         os.chdir(os.path.dirname(file))
-        with open(file, 'r') as f:
-            config: dict = json.load(f)
+        with open(file, 'rb') as f:
+            config: dict = tomllib.load(f)
         return config
 
     @staticmethod

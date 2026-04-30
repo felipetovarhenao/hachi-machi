@@ -13,7 +13,7 @@
 conda create -n machi python=3.10
 conda activate machi
 conda install pytorch click
-python -m pip install python-osc mido
+python -m pip install python-osc mido toml
 pip install -e .
 ```
 
