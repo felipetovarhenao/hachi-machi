@@ -1,5 +1,5 @@
 [project]
-name = "hachimachi"
+name = "hachi-machi"
 authors = [
 	{ name = 'Felipe Tovar-Henao', email = 'felipe.tovar.henao@gmail.com' },
 ]
@@ -16,7 +16,7 @@ requires-python = ">=3.10"
 dependencies = ["torch", "click", "python-osc", "mido", "toml"]
 
 [project.scripts]
-machi = "hachimachi.cli:main"
+machi = "hachi_machi.cli:main"
 
 [build-system]
 requires = ["poetry-core"]
