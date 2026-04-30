@@ -70,7 +70,6 @@ class Trainer:
         model.eval()
 
         sample = self.dataset[0][0]
-        sample = self.input_layer(sample)
 
         with torch.no_grad():
             for _ in range(n_warmup):
@@ -98,7 +97,7 @@ class Trainer:
         }, header=f"Latency ({self.model.device})")
 
     def run(self, file: str, epochs: int = 1000, patience: int = 15) -> None:
-        # self.benchmark()
+        self.benchmark()
         self.file = validate_path(file, '.pt')
         self.max_patience = patience
         self.patience = 0
