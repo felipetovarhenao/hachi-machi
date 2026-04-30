@@ -1,4 +1,4 @@
-import tomllib
+import toml
 import os
 import torch
 from ..utils import validate_path
@@ -55,8 +55,8 @@ class Config:
     def from_file(file: str):
         file = validate_path(file, '.toml')
         os.chdir(os.path.dirname(file))
-        with open(file, 'rb') as f:
-            config: dict = tomllib.load(f)
+        with open(file, 'r') as f:
+            config: dict = toml.load(f)
         return config
 
     @staticmethod
