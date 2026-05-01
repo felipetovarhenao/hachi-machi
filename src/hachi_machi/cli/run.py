@@ -20,9 +20,8 @@ from .middleware import ClickMiddleware as M
               type=int,
               help='Player indices.',
               multiple=True)
-@M([
-    ('model', '.pt'),
-]).wrapper
+@M(path_args=[('model', '.pt'),],
+   device='cpu').wrapper
 def run(**config):
     """Runs a pre-trained (`.pt`) model for real-time inference, via OSC.
 Note that, in some cases, running the model on CPU results in lower latency.

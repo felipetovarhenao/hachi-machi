@@ -11,15 +11,17 @@ import functools
 class ClickMiddleware:
 
     def __init__(self,
-                 path_args: list | None = None):
+                 path_args: list | None = None,
+                 device: int = 'auto'):
         self.path_args = path_args
+        self.device = device
 
     def wrapper(self, func):
         func.__doc__ = Console.info(func.__doc__, defer=True)
 
         @click.option('--device', '-d',
                       type=click.Choice(self.get_available_devices()),
-                      default='auto',
+                      default=self.device,
                       help='Compute device')
         @functools.wraps(func)
         def _wrapper(**kwargs):
