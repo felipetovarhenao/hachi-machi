@@ -16,16 +16,6 @@ def validate_path(file, ext: str | list) -> str:
     return file
 
 
-def safe_handler(func: Callable[[str, Any], None]) -> Callable:
-    def wrapper(*args, **kwargs):
-        try:
-            func(*args, **kwargs)
-        except Exception as e:
-            Console.error(traceback.format_exc())
-    wrapper.__name__ = func.__name__.replace("handle_", "")
-    return wrapper
-
-
 def tensor_to_txt(x: torch.Tensor, output: str) -> None:
     output = validate_path(output, '.txt')
     out = ""

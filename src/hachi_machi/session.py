@@ -6,8 +6,10 @@ import time
 import threading
 import torch
 from .nn import MultiplayerAgent
-from .utils import safe_handler
 from .console import Console
+import traceback
+from typing import Callable, Any
+import functools
 
 
 class Session:
@@ -31,60 +33,26 @@ class Session:
         self.out_port = out_port
         self._lock = threading.RLock()
         self._last_time: float | None = None
+        self._set_handlers()
 
-        for handler in self.get_handlers():
-            self.dispatcher.map(**handler)
+    def safe_handler(self, func: Callable[[str, Any], None]) -> Callable:
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            try:
+                func(*args, **kwargs)
+            except Exception:
+                Console.error(traceback.format_exc())
+        return wrapper
 
-    def get_handlers(self):
-        input_size = self.model.input_size - 1
-
-        @safe_handler
-        def handle_input(_, *args):
-            if len(args) != input_size:
-                raise ValueError(
-                    f"Invalid input length: {len(args)}. Expected: {input_size}")
-
-            x = torch.tensor(
-                [0.0, *args],
-                dtype=torch.float32
-            )
-            self.predict(x)
-
-        @safe_handler
-        def handle_temp(_, *args):
-            self.model.set_temp(args[0])
-            Console.action(f"Temperature: {args[0]:.3f}", italic=True)
-
-        @safe_handler
-        def handle_alpha(_, *args):
-            self.model.set_alpha(args[0])
-            Console.action(f"Alpha: {args[0]:.3f}", italic=True)
-
-        @safe_handler
-        def handle_reset(_):
-            with self._lock:
-                self.model.reset()
-                self._last_time = None
-            Console.action("Hidden state reset.", italic=True)
-
-        @safe_handler
-        def handle_weights(_, *args):
-            if len(args) != self.model.input_size:
-                raise ValueError(
-                    f"Invalid weight size. Expected: {self.model.input_size}")
-            with self._lock:
-                Console.action("Setting weights", italic=True)
-                self.model.set_weights(torch.tensor(args).clip(0, 1))
-
-        return [
-            {
-                'address': f'/{func.__name__}',
-                'handler': func
-            } for func in [handle_input,
-                           handle_temp,
-                           handle_alpha,
-                           handle_reset,
-                           handle_weights]]
+    def _set_handlers(self) -> None:
+        for attr in dir(self):
+            if not attr.startswith('handle_'):
+                continue
+            func: Callable = getattr(self, attr)
+            address = func.__name__.replace('handle_', '')
+            handler = lambda *args, f=func: self.safe_handler(f)(*args)
+            self.dispatcher.map(address=f"/{address}",
+                                handler=handler)
 
     def schedule(self, event: torch.Tensor, delay: float) -> None:
         def emit():
@@ -123,3 +91,21 @@ class Session:
             dispatcher=self.dispatcher
         )
         server.serve_forever()
+
+    def handle_input(self, *args):
+        _, *args = args
+        if len(args) != self.input_size:
+            raise ValueError(
+                f"Invalid input length: {len(args)}. Expected: {self.input_size}")
+
+        x = torch.tensor(
+            [0.0, *args],
+            dtype=torch.float32
+        )
+        self.predict(x)
+
+    def handle_reset(self, *_):
+        with self._lock:
+            self.model.reset()
+            self._last_time = None
+        Console.action("Hidden state reset.", italic=True)
