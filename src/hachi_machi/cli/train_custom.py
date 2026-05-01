@@ -24,7 +24,7 @@ def train_custom(**params):
     except:
         raise ValueError(
             "data must be structured as a 2D matrix, each row with the same number of elements")
-    VOICE_DIM, TIME_DIM = 1, 0
+    TIME_DIM, VOICE_DIM = 0, 1
     data[1:, TIME_DIM] = data[..., TIME_DIM].diff(dim=-1)
     voices = data[..., VOICE_DIM].unique()
     num_voices = len(voices)
