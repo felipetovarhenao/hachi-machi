@@ -16,7 +16,7 @@ requires-python = ">=3.10"
 dependencies = ["torch", "click", "python-osc", "mido", "toml"]
 
 [project.scripts]
-machi = "hachi_machi.cli:main"
+machi = "hachi_machi.__main__:main"
 
 [build-system]
 requires = ["poetry-core"]
