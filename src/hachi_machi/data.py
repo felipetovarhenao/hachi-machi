@@ -59,7 +59,7 @@ class EventDataset(Dataset):
     def __getitem__(self, index) -> torch.Tensor:
         data = self.get_split()
         item = data[index]
-        if self.training:
+        if self.augmentator is not None and self.training:
             item = self.augmentator(item)
         x, y = item[..., :-1, self._in_dims], item[...,
                                                    1:, self._out_dims]

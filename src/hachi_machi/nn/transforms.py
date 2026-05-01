@@ -187,7 +187,7 @@ class TransformFactory:
     def make(self,
              input_data: torch.Tensor,
              output_data: torch.Tensor,
-             transforms: list[str]) -> Transform:
+             transforms: list[str]) -> tuple[Transform, Transform]:
         transform_layers = []
         for i, data in enumerate([input_data, output_data]):
             self._size = data.size(-1)

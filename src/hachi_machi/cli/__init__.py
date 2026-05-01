@@ -4,7 +4,7 @@ from ..console import Console
 from . import (generate,
                train,
                run,
-               render)
+               render, train_custom)
 
 __banner__ = f"""
                v%(version)s 
@@ -27,6 +27,7 @@ def main():
 
 
 main.add_command(train.train)
+main.add_command(train_custom.train_custom)
 main.add_command(run.run)
 main.add_command(generate.generate)
 main.add_command(render.render)
