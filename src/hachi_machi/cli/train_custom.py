@@ -42,10 +42,10 @@ def train_custom(**params):
     rnn = nn.RecurrentMDN(k=10,
                           input_size=input_layer.output_size,
                           output_size=output_layer.output_size,
-                          num_layers=1,
-                          hidden_size=100,
-                          dropout=0.2,
-                          slope=0.01,
+                          num_layers=params['layers'],
+                          hidden_size=params['hidden_size'],
+                          dropout=params['dropout'],
+                          slope=params['slope'],
                           device=device)
     model = nn.MultiplayerAgent(model=rnn,
                                 input_layer=input_layer,
@@ -55,9 +55,9 @@ def train_custom(**params):
                                 voice_dim=VOICE_DIM)
     trainer = Trainer(model=model,
                       dataset=dataset,
-                      batch_size=32,
-                      lr=0.001,
-                      betas=(0.9, 0.99))
+                      batch_size=params['batch_size'],
+                      lr=params['lr'],
+                      betas=params['betas'])
     trainer.run(file=params['output'],
-                epochs=1000,
-                patience=15)
+                epochs=params['epochs'],
+                patience=params['patience'])

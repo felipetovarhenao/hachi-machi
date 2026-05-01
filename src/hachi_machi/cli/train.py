@@ -63,6 +63,7 @@ def train(**params):
                        input_size=input_layer.output_size,
                        output_size=output_layer.output_size,
                        num_layers=params['layers'],
+                       hidden_size=params['hidden_size'],
                        dropout=params['dropout'],
                        slope=params['slope'],
                        device=device)

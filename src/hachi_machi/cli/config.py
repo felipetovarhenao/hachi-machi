@@ -97,7 +97,7 @@ class Config:
                       help='Number of recurrent layers.',
                       type=int)
         @click.option('--hidden-size',
-                      default=256,
+                      default=120,
                       type=int,
                       help='Number of dimensions to use for hidden representation.')
         @click.option('--context',
