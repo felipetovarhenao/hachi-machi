@@ -8,7 +8,7 @@ from .. import nn
 from ..nn import transforms as T
 
 
-@click.command(name='train-custom', 
+@click.command(name='train-custom',
                context_settings={'show_default': True})
 @M([
     ('input', '.json'),
@@ -49,7 +49,7 @@ Note that <voice_id> must be an zero-based integer.
                                  num_voices=num_voices)
     input_layer, output_layer = factory.make(input_data=data[..., :-1].clone(),
                                              output_data=data.clone(),
-                                             transforms=['normalize'])
+                                             transforms=params['features'])
 
     rnn = nn.RecurrentMDN(k=params['mixtures'],
                           input_size=input_layer.output_size,
