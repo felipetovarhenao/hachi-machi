@@ -14,6 +14,10 @@ from ..nn import transforms as T
     ('output', '.pt')
 ]).train_options
 def train_custom(**params):
+    """INPUT: Path to JSON file to use as training data
+
+    OUTPUT: Output path for trained Pytorch model (.pt)
+    """
     device = params['device']
     with open(params['input'], 'r') as f:
         data = json.load(f)

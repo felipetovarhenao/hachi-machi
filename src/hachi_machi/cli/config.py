@@ -5,6 +5,7 @@ from ..utils import validate_path
 from ..console import Console
 from ..nn import transforms as T
 import click
+import functools
 
 
 class Config:
@@ -18,11 +19,11 @@ class Config:
                       type=click.Choice(self.get_available_devices()),
                       default='auto',
                       help='Compute device')
+        @functools.wraps(func)
         def wrapper(**kwargs):
             config = self._parse(**kwargs)
             Console.pretty(config, header='Settings')
             func(**config)
-        wrapper.__name__ = func.__name__
         return wrapper
 
     def _parse(self, **params) -> dict:
@@ -140,7 +141,7 @@ class Config:
                       help='Feature transform layers.',
                       multiple=True)
         @self.parse
+        @functools.wraps(func)
         def wrapper(**kwargs):
             func(**kwargs)
-        wrapper.__name__ = func.__name__
         return wrapper
