@@ -8,7 +8,8 @@ from .. import nn
 from ..nn import transforms as T
 
 
-@click.command(name='train-custom')
+@click.command(name='train-custom', 
+               context_settings={'show_default': True})
 @M([
     ('input', '.json'),
     ('output', '.pt')

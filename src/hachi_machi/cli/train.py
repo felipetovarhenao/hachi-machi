@@ -10,7 +10,7 @@ from ..console import Console
 from .middleware import ClickMiddleware as M
 
 
-@click.command()
+@click.command(context_settings={'show_default': True})
 @click.option('--transform', '-t',
               default=MidiAugmentator.options(),
               type=click.Choice(MidiAugmentator.options()),
@@ -22,7 +22,7 @@ from .middleware import ClickMiddleware as M
 ]).train_wrapper
 def train(**params):
     """Trains a model on MIDI data.
-    
+
     INPUT: Path to MIDI file to use as training data
 
     OUTPUT: Output path for trained Pytorch model (.pt)

@@ -5,7 +5,7 @@ from ..console import Console
 from .middleware import ClickMiddleware as M
 
 
-@click.command()
+@click.command(context_settings={'show_default': True})
 @click.argument('model',
                 type=click.Path(exists=True,
                                 file_okay=True,
