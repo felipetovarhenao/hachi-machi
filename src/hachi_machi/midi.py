@@ -19,18 +19,16 @@ class MidiParser:
     def _parse(self) -> torch.Tensor:
         onset = 0
         events = []
-        voice_map = {}
-        numvoices = 0
         active_notes = {}
-
+        channels = sorted(
+            {msg.channel for msg in self._midi if msg.type.startswith('note_')})
+        voice_map = {ch: i for i, ch in enumerate(channels)}
+        numvoices = len(channels)
         for msg in self._midi:
             onset += int(round(msg.time * 1000))
             if not msg.type.startswith('note_'):
                 continue
             channel = msg.channel
-            if channel not in voice_map:
-                voice_map[channel] = numvoices
-                numvoices += 1
             voice = voice_map[channel]
             pitch = msg.note * 100
             key = (voice, pitch)
