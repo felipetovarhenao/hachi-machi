@@ -83,7 +83,8 @@ class Session:
             event = y.squeeze()
 
         delay = event[0].item()
-        self.schedule(event, delay)
+        inference_ms = (time.perf_counter() - now) * 1000
+        self.schedule(event, max(0.0, delay - inference_ms))
 
     def start(self):
         server = BlockingOSCUDPServer(
