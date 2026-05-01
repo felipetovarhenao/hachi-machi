@@ -7,7 +7,7 @@ from ..nn import RecurrentMDN, MultiplayerAgent
 from ..nn import transforms as T
 from ..trainer import Trainer
 from ..console import Console
-from .config import Config
+from .middleware import ClickMiddleware as M
 
 
 @click.command()
@@ -16,10 +16,10 @@ from .config import Config
               type=click.Choice(MidiAugmentator.options()),
               help='Data augmentation transform to randomly apply during training.',
               multiple=True)
-@Config([
+@M([
     ('input', '.mid', '.midi'),
     ('output', '.pt')
-]).train_options
+]).train_wrapper
 def train(**params):
     """INPUT: Path to MIDI file to use as training data
 

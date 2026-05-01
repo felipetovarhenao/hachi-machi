@@ -1,7 +1,7 @@
 import click
 import torch
 import json
-from .config import Config
+from .middleware import ClickMiddleware as M
 from ..data import EventDataset
 from ..trainer import Trainer
 from .. import nn
@@ -9,10 +9,10 @@ from ..nn import transforms as T
 
 
 @click.command(name='train-custom')
-@Config([
+@M([
     ('input', '.json'),
     ('output', '.pt')
-]).train_options
+]).train_wrapper
 def train_custom(**params):
     """INPUT: Path to JSON file to use as training data
 

@@ -8,23 +8,23 @@ import click
 import functools
 
 
-class Config:
+class ClickMiddleware:
 
     def __init__(self,
                  path_args: list | None = None):
         self.path_args = path_args
 
-    def parse(self, func):
+    def wrapper(self, func):
         @click.option('--device', '-d',
                       type=click.Choice(self.get_available_devices()),
                       default='auto',
                       help='Compute device')
         @functools.wraps(func)
-        def wrapper(**kwargs):
+        def _wrapper(**kwargs):
             config = self._parse(**kwargs)
             Console.pretty(config, header='Settings')
             func(**config)
-        return wrapper
+        return _wrapper
 
     def _parse(self, **params) -> dict:
         if self.path_args is not None:
@@ -80,7 +80,7 @@ class Config:
 
         return devices
 
-    def train_options(self, func):
+    def train_wrapper(self, func):
         @click.argument('input',
                         type=click.Path(exists=True,
                                         file_okay=True,
@@ -140,8 +140,8 @@ class Config:
                       type=click.Choice(T.TransformFactory.options()),
                       help='Feature transform layers.',
                       multiple=True)
-        @self.parse
+        @self.wrapper
         @functools.wraps(func)
-        def wrapper(**kwargs):
+        def _wrapper(**kwargs):
             func(**kwargs)
-        return wrapper
+        return _wrapper

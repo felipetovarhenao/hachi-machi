@@ -4,7 +4,7 @@ from ..utils import tensor_to_txt
 from ..midi import MidiParser
 from ..augment import MidiAugmentator
 from ..console import Console
-from .config import Config
+from .middleware import ClickMiddleware as M
 
 
 @click.command()
@@ -23,10 +23,10 @@ from .config import Config
               type=click.Choice(MidiAugmentator.options()),
               multiple=True)
 @click.option('--seed', '-s', default=0)
-@Config([
+@M([
     ('input', '.mid', '.midi'),
     ('output', '.mid', '.midi', '.txt'),
-]).parse
+]).wrapper
 def render(**params):
     """INPUT: Path to MIDI file
 

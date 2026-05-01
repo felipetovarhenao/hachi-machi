@@ -2,7 +2,7 @@
 import click
 from ..session import Session
 from ..console import Console
-from .config import Config
+from .middleware import ClickMiddleware as M
 
 
 @click.command()
@@ -20,9 +20,9 @@ from .config import Config
               type=int,
               help='Player indices.',
               multiple=True)
-@Config([
+@M([
     ('model', '.pt'),
-]).parse
+]).wrapper
 def run(**config):
     """MODEL: Path to pre-trained PyTorch model (.pt)"""
     model = config['model']

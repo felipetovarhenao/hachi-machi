@@ -5,7 +5,7 @@ from ..nn import MultiplayerAgent
 from ..console import Console
 from ..utils import (tensor_to_txt,
                      progress,)
-from .config import Config
+from .middleware import ClickMiddleware as M
 
 
 @click.command()
@@ -13,10 +13,10 @@ from .config import Config
 @click.argument('output', default='out.txt', type=click.Path(file_okay=True, dir_okay=False))
 @click.option('--tokens',  default=100, help='Number of tokens to generate.')
 @click.option('--seed', default=0, help='Random seed.')
-@Config([
+@M([
     ('model', '.pt'),
     ('output', '.mid', '.midi', '.txt')
-]).parse
+]).wrapper
 def generate(**params):
     """MODEL: Path to PyTorch model
 
