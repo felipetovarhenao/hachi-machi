@@ -35,21 +35,41 @@ class Normalize(TransformLayer):
 
 class Categorical(TransformLayer):
 
-    def __init__(self, dim: int = 0, size: int = 2):
+    def __init__(self, dims: list[int] = [0]):
         super().__init__()
-        self.register_buffer('dim', torch.tensor(dim, dtype=torch.int))
-        self.register_buffer('size', torch.tensor(size, dtype=torch.int))
+        self.register_buffer('dims', torch.tensor(dims, dtype=torch.int))
+        self.register_buffer('sizes', torch.zeros(len(dims), dtype=torch.int))
+
+    def fit(self, data: torch.Tensor):
+        for i, dim in enumerate(self.dims):
+            is_class = data[..., dim].frac().eq(0).all()
+            if not is_class:
+                raise ValueError(
+                    f"All values along feature dimension {dim} must be integers to be handled as categorical.")
+            classes = data[..., dim].unique()
+            self.register_buffer(f'classes_{i}', classes)
+            self.get_buffer
+            self.sizes[i] = len(classes)
 
     def forward(self, x: torch.Tensor, inverse: bool = False) -> torch.Tensor:
-        i = self.dim
-        s = self.size
-        if not inverse:
-            l, m, r = x[..., :i], x[..., i:i+1], x[..., i+1:]
-            m = F.one_hot(m.to(torch.long), num_classes=s).squeeze(-2)
-        else:
-            l, m, r = x[..., :i], x[..., i:i+s], x[..., i+s:]
-            m = torch.argmax(m, dim=-1).unsqueeze(-1)
-        return torch.cat([l, m, r], dim=-1)
+        offset = 0
+        for i, (dim, size) in enumerate(zip(self.dims, self.sizes)):
+            dim += offset
+            classes = self.get_buffer(f'classes_{i}')
+            if not inverse:
+                l, m, r = x[..., :dim], x[..., dim:dim+1], x[..., dim+1:]
+                m = m.squeeze(-1).reshape(-1)
+                all_classes = torch.cat([classes, m])
+                m = torch.unique(all_classes, return_inverse=True)[1]
+                m = F.one_hot(m[size:], num_classes=size).to(
+                    x.dtype).reshape(*x.shape[:-1], size)
+                offset += (size - 1)
+            else:
+                l, m, r = x[..., :dim], x[..., dim:dim+size], x[..., dim+size:]
+                m = classes[torch.argmax(m, dim=-1)].unsqueeze(-1)
+                offset -= (size - 1)
+            x = torch.cat([l, m, r], dim=-1)
+        return x
 
 
 class TimePhase(TransformLayer):
@@ -172,8 +192,7 @@ class TransformFactory:
             'categorical': {
                 "cls": Categorical,
                 "kwargs": {
-                    "dim": voice_dim,
-                    "size": num_voices
+                    "dims": [voice_dim,],
                 },
                 "output_size": lambda: self._size + (num_voices - 1)
             },
