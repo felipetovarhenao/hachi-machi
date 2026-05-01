@@ -1,11 +1,12 @@
 import click
+import datetime
 from ..console import Console
 from . import (generate,
                train,
                run,
                render)
 
-__banner__ = """
+__banner__ = f"""
                v%(version)s 
 
   ██╗  ██╗ █████╗  ██████╗██╗  ██╗██╗
@@ -16,7 +17,7 @@ __banner__ = """
   ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚═╝
               m a c h i  
 
-© 2026 https://felipe-tovar-henao.com"""
+© {datetime.datetime.now().year} https://felipe-tovar-henao.com"""
 
 
 @click.version_option(message=Console.style(__banner__, 'success'))
