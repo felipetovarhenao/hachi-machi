@@ -21,7 +21,9 @@ from .middleware import ClickMiddleware as M
     ('output', '.pt')
 ]).train_wrapper
 def train(**params):
-    """INPUT: Path to MIDI file to use as training data
+    """Trains a model on MIDI data.
+    
+    INPUT: Path to MIDI file to use as training data
 
     OUTPUT: Output path for trained Pytorch model (.pt)
     """

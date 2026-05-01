@@ -15,6 +15,8 @@ class ClickMiddleware:
         self.path_args = path_args
 
     def wrapper(self, func):
+        func.__doc__ = Console.info(func.__doc__, defer=True)
+
         @click.option('--device', '-d',
                       type=click.Choice(self.get_available_devices()),
                       default='auto',
@@ -24,6 +26,7 @@ class ClickMiddleware:
             config = self._parse(**kwargs)
             Console.pretty(config, header='Settings')
             func(**config)
+
         return _wrapper
 
     def _parse(self, **params) -> dict:
@@ -131,10 +134,11 @@ class ClickMiddleware:
                       nargs=2)
         @click.option('--slope',
                       default=1e-5,
+                      type=click.FloatRange(0, max_open=True),
                       help='Negative slope for Leaky ReLU activations.')
         @click.option('--seed',
                       default=1,
-                      help='Random seed.')
+                      help='Random seed. Use 0 for non-deterministic training.')
         @click.option('--features', '-f',
                       default=['categorical', 'normalize'],
                       type=click.Choice(T.TransformFactory.options()),

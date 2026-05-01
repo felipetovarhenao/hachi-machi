@@ -14,7 +14,14 @@ from ..nn import transforms as T
     ('output', '.pt')
 ]).train_wrapper
 def train_custom(**params):
-    """INPUT: Path to JSON file to use as training data
+    """Trains a model on custom sequential data. 
+The data must be provided as a JSON file, and each event in the sequence must structured as follows:
+
+[<ms_time> <voice_id> <feature_1> ... <feature_N> ]
+
+Note that <voice_id> must be an zero-based integer.
+
+    INPUT: Path to JSON file to use as training data
 
     OUTPUT: Output path for trained Pytorch model (.pt)
     """
