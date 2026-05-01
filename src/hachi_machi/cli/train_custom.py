@@ -39,7 +39,7 @@ def train_custom(**params):
                                              output_data=data.clone(),
                                              transforms=['normalize'])
 
-    rnn = nn.RecurrentMDN(k=10,
+    rnn = nn.RecurrentMDN(k=params['mixtures'],
                           input_size=input_layer.output_size,
                           output_size=output_layer.output_size,
                           num_layers=params['layers'],
