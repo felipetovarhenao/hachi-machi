@@ -37,7 +37,8 @@ def train(**params):
     Console.action("\nParsing MIDI...", italic=True)
 
     parser = MidiParser(midi_file)
-    if parser.numvoices() < 2:
+    num_channels = len(parser.channels)
+    if num_channels < 2:
         raise RuntimeError(
             "MIDI file must contain of two or more channels.")
     data = parser.events().to(device)
@@ -81,7 +82,7 @@ def train(**params):
                       lr=params['lr'],
                       betas=tuple(params['betas']),)
     Console.action(
-        f"{parser.numvoices()} players found", italic=True)
+        f"MIDI channels: {parser.channels}", italic=True)
     trainer.run(file=params['output'],
                 epochs=params['epochs'],
                 patience=params['patience'])

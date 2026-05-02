@@ -37,7 +37,6 @@ class MidiParser:
                 events.append((*note, duration))
 
         self.channels = list(channels)
-        self._numvoices = len(self.channels)
         events.sort(key=lambda x: x[0])
 
         prev_onset = 0
@@ -103,6 +102,3 @@ class MidiParser:
 
     def events(self):
         return self._events
-
-    def numvoices(self):
-        return self._numvoices

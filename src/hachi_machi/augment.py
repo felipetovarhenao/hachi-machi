@@ -43,9 +43,8 @@ class Augmentator(ABC):
 
 class MidiAugmentator(Augmentator):
 
-    def __init__(self, channels: list[int], num_voices: int = 2, *args, **kwargs):
+    def __init__(self, channels: list[int], *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.num_voices = num_voices
         self.channels = channels
         self._feature_to_dim_map = {
             k: i for i, k in enumerate(
