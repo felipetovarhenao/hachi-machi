@@ -28,7 +28,11 @@ from .middleware import ClickMiddleware as M
     ('output', '.mid', '.midi', '.txt'),
 ]).wrapper
 def render(**params):
-    """INPUT: Path to MIDI file
+    """Renders a MIDI file, with optional data augmentation.
+
+    Arguments:
+
+    INPUT: Path to MIDI file
 
     OUTPUT: Path to output MIDI file
     """

@@ -24,6 +24,8 @@ from .middleware import ClickMiddleware as M
 def train(**params):
     """Trains a model on MIDI data.
 
+    Arguments:
+
     INPUT: Path to MIDI file to use as training data
 
     OUTPUT: Output path for trained Pytorch model (.pt)

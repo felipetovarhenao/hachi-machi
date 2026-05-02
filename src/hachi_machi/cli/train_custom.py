@@ -23,6 +23,8 @@ The data must be provided as a JSON file, and each event in the sequence must st
 
 Note that <voice_id> must be an zero-based integer.
 
+Arguments:
+
     INPUT: Path to JSON file to use as training data
 
     OUTPUT: Output path for trained Pytorch model (.pt)

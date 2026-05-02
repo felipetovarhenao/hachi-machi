@@ -10,7 +10,11 @@ from ..trainer import Trainer
 @click.argument('input')
 @M([('input', '.pt')]).wrapper
 def info(**params):
-    """INPUT: Path to pre-trained (.pt) model"""
+    """Prints information for some pre-trained model.
+
+    Arguments:
+    
+    INPUT: Path to pre-trained (.pt) model"""
     input = params['input']
     device = params['device']
     model: MultiplayerAgent = torch.load(f=input,

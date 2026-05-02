@@ -18,7 +18,11 @@ from .middleware import ClickMiddleware as M
     ('output', '.mid', '.midi', '.txt')
 ]).wrapper
 def generate(**params):
-    """MODEL: Path to PyTorch model
+    """Generates data auto-regressively given some pre-trained model.
+
+    Arguments:
+
+    MODEL: Path to PyTorch model
 
     OUTPUT: Path to output file, in either MIDI or TXT format
     """
