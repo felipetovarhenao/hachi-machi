@@ -76,19 +76,18 @@ class TimePhase(TransformLayer):
 
     BIJECTIVE = False
 
-    def __init__(self, dim: int = 1):
+    def __init__(self, dims: list[int] = [1]):
         super().__init__()
-        self.register_buffer('dim', torch.tensor(dim, dtype=torch.int))
+        self.register_buffer('dims', torch.tensor(dims, dtype=torch.int))
 
     def forward(self, x: torch.Tensor, inverse: bool = False):
         if inverse:
-            return x[..., :-2]
-        i = self.dim
-        l, c, r = x[..., :i], x[..., i:i+1], x[..., i+1:]
+            return x[..., :len(self.dims) * -2]
+        c = x[..., self.dims]
         t = torch.zeros_like(c)
         mask = c > 0
         t[mask] = (torch.log2(c[mask] / 1000.0) % 1) * torch.pi * 2
-        return torch.cat([l, c, r, torch.cos(t), torch.sin(t)], dim=-1)
+        return torch.cat([x, torch.cos(t), torch.sin(t)], dim=-1)
 
 
 class LogSpace(TransformLayer):
@@ -182,7 +181,7 @@ class TransformFactory:
             },
             "time-phase": {
                 "cls": TimePhase,
-                "kwargs": {"dim": time_dim},
+                "kwargs": {"dims": [time_dim]},
                 "output_size": lambda: self._size + 2
             },
             "log-space": {
