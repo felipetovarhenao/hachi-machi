@@ -195,7 +195,7 @@ class TransformFactory:
     }
 
     @classmethod
-    def options(cls):
+    def options(cls) -> list:
         return list(cls.OPTIONS.keys())
 
     def __init__(self, feature_map: FeatureMap):

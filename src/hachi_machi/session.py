@@ -61,7 +61,7 @@ class Session:
             self.client.send_message("/output", msg)
             voice = msg[0]
             if voice not in self.model.players:
-                self.predict(event[..., :-1])
+                self.predict(event[..., self.model.input_mask])
 
         t = threading.Timer(delay / 1000.0, emit)
         t.daemon = True
