@@ -73,7 +73,6 @@ class Categorical(TransformLayer):
             else:
                 l, m, r = x[..., :dim], x[..., dim:dim+size], x[..., dim+size:]
                 m = classes[torch.argmax(m, dim=-1)].unsqueeze(-1)
-                offset -= (size - 1)
             x = torch.cat([l, m, r], dim=-1)
         return x
 
