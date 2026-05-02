@@ -33,9 +33,6 @@ def train(**params):
     midi_file = params['input']
     if seed != 0:
         torch.manual_seed(params['seed'])
-
-    Console.action("\nParsing MIDI...", italic=True)
-
     parser = MidiParser(midi_file)
     num_channels = len(parser.channels)
     if num_channels < 2:
@@ -81,8 +78,6 @@ def train(**params):
                       batch_size=params['batch_size'],
                       lr=params['lr'],
                       betas=tuple(params['betas']),)
-    Console.action(
-        f"MIDI channels: {parser.channels}", italic=True)
     trainer.run(file=params['output'],
                 epochs=params['epochs'],
                 patience=params['patience'])

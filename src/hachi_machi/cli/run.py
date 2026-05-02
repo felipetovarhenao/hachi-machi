@@ -15,11 +15,6 @@ from .middleware import ClickMiddleware as M
 @click.option('--in-port', default=8000, help='Input OSC port.')
 @click.option('--out-port', default=9000, help='Output OSC port.')
 @click.option('--address', default='127.0.0.1', help='OSC IP address')
-@click.option('--players', '-p',
-              default=[0],
-              type=int,
-              help='Player indices.',
-              multiple=True)
 @M(path_args=[('model', '.pt'),],
    device='cpu').wrapper
 def run(**config):
@@ -36,7 +31,9 @@ MODEL: Path to pre-trained PyTorch model (.pt)"""
                       out_port=config['out_port'],
                       host=config['address'],
                       device=device)
-    session.model.set_players(config['players'])
+    Console.pretty({'classes': ' '.join([str(c) for c in session.classes])})
+    Console.pretty({'input classes': ' '.join(
+        [str(c) for c in session.input_classes])})
     try:
         session.start()
     except KeyboardInterrupt:

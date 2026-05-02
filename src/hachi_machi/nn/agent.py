@@ -14,7 +14,6 @@ class MultiplayerAgent(nn.Module):
                  input_layer: T.Transform,
                  output_layer: T.Transform,
                  input_mask: list[int],
-                 players: tuple[int] | None = None,
                  device: str = 'mps',
                  voice_dim: int = 1,
                  *args,
@@ -29,15 +28,10 @@ class MultiplayerAgent(nn.Module):
                              tensor=torch.tensor(input_mask,
                                                  dtype=torch.int).to(device))
         self.input_size = self.input_layer.input_size
-        self.players = players if players is not None else []
         self.hidden_state: tuple[torch.Tensor, torch.Tensor] | None = None
 
     def reset(self) -> None:
         self.hidden_state = None
-
-    def set_players(self, indices: list[int]) -> None:
-        indices = list(set(indices))
-        self.players = indices
 
     def forward(self, x: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         x = self.input_layer(x)
@@ -48,8 +42,5 @@ class MultiplayerAgent(nn.Module):
         y, self.hidden_state = self.model.step(x=x,
                                                hidden=self.hidden_state)
         y: torch.Tensor = self.output_layer(y, inverse=True)
-
-        if y[..., self.voice_dim].item() in self.players:
-            return
         y[..., 0] = y[..., 0].clip(0)
         return y
