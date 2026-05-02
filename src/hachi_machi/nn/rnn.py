@@ -17,7 +17,6 @@ class RecurrentMDN(nn.Module):
                  *args,
                  **kwargs):
         super().__init__(*args, **kwargs)
-        self.device = device
         self.input_size = input_size
         self.output_size = output_size
         self.lstm = nn.LSTM(input_size=self.input_size,

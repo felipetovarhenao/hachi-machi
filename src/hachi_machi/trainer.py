@@ -67,13 +67,14 @@ class Trainer:
 
         return stop
 
-    def benchmark(self, n_warmup: int = 50, n_runs: int = 500) -> None:
-        model = self.model
+    @classmethod
+    def benchmark(cls, model: MultiplayerAgent, n_warmup: int = 100, n_runs: int = 500) -> None:
         model.eval()
-
-        sample = self.dataset[0][0]
-
+        device = next(model.parameters()).device
         with torch.no_grad():
+            sample = torch.randn(
+                (1, 1, model.input_layer.output_size)).to(device)
+            sample = model.input_layer(sample, True)
             for _ in range(n_warmup):
                 model(sample)
             times = []
@@ -84,22 +85,19 @@ class Trainer:
 
         times = torch.tensor(times) * 1000
         total = sum(p.numel() for p in model.parameters())
-        trainable = sum(p.numel()
-                        for p in model.parameters() if p.requires_grad)
 
         Console.pretty({
             'total': f'{total:,}',
-            'trainable': f'{trainable:,}',
         }, header="Parameters")
         Console.pretty({
             'mean': f"{times.mean():.3f}ms",
             'std': f"{times.std():.3f}ms",
             'max': f"{times.quantile(0.99):.3f}ms",
             'rate': f"{1000/times.mean():.1f}Hz",
-        }, header=f"Latency ({self.model.device})")
+        }, header=f"Latency ({device})")
 
     def run(self, file: str, epochs: int = 1000, patience: int = 15) -> None:
-        self.benchmark()
+        self.benchmark(self.model)
         self.file = validate_path(file, '.pt')
         self.max_patience = patience
         self.patience = 0

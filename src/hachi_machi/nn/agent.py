@@ -10,7 +10,7 @@ class MultiplayerAgent(nn.Module):
     input_mask: torch.Tensor
 
     def __init__(self,
-                 model: RecurrentMDN,
+                 rnn: RecurrentMDN,
                  input_layer: T.Transform,
                  output_layer: T.Transform,
                  input_mask: list[int],
@@ -19,9 +19,8 @@ class MultiplayerAgent(nn.Module):
                  *args,
                  **kwargs):
         super().__init__(*args, **kwargs)
-        self.model = model
-        self.device = device
         self.input_layer = input_layer
+        self.rnn = rnn
         self.output_layer = output_layer
         self.voice_dim = voice_dim
         self.register_buffer(name='input_mask',
@@ -35,12 +34,12 @@ class MultiplayerAgent(nn.Module):
 
     def forward(self, x: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         x = self.input_layer(x)
-        return self.model.forward(x=x)
+        return self.rnn.forward(x=x)
 
     def step(self, x: torch.Tensor) -> None | torch.Tensor:
         x: torch.Tensor = self.input_layer(x)
-        y, self.hidden_state = self.model.step(x=x,
-                                               hidden=self.hidden_state)
+        y, self.hidden_state = self.rnn.step(x=x,
+                                             hidden=self.hidden_state)
         y: torch.Tensor = self.output_layer(y, inverse=True)
         y[..., 0] = y[..., 0].clip(0)
         return y

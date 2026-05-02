@@ -65,7 +65,7 @@ Note that <voice_id> must be an zero-based integer.
                           dropout=params['dropout'],
                           slope=params['slope'],
                           device=device)
-    model = nn.MultiplayerAgent(model=rnn,
+    model = nn.MultiplayerAgent(rnn=rnn,
                                 input_layer=input_layer,
                                 output_layer=output_layer,
                                 input_mask=fmap.input_dims(),
