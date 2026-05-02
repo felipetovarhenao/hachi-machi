@@ -1,12 +1,12 @@
 import click
 import torch
+import json
+from .. import nn
 from ..augment import MidiAugmentator
 from ..midi import MidiParser
 from ..data import EventDataset
-from ..nn import RecurrentMDN, MultiplayerAgent
 from ..nn import transforms as T
 from ..trainer import Trainer
-from ..console import Console
 from ..features import FeatureMap
 from .middleware import ClickMiddleware as M
 
@@ -30,51 +30,97 @@ def train(**params):
 
     OUTPUT: Output path for trained Pytorch model (.pt)
     """
+    _train(**params)
+
+
+@click.command(name='train-custom',
+               context_settings={'show_default': True})
+@M([
+    ('input', '.json'),
+    ('output', '.pt')
+]).train_wrapper
+def train_custom(**params):
+    """Trains a model on custom sequential data. 
+The data must be provided as a JSON file, and each event in the sequence must structured as follows:
+
+[<ms_time> <voice_id> <feature_1> ... <feature_N> ]
+
+Note that <voice_id> must be an zero-based integer.
+
+Arguments:
+
+    INPUT: Path to JSON file to use as training data
+
+    OUTPUT: Output path for trained Pytorch model (.pt)
+    """
+    _train(**params)
+
+
+def _train(**params):
     device = params['device']
     seed = params['seed']
-    midi_file = params['input']
+    file_path: str = params['input']
+    TIME_DIM, VOICE_DIM = 0, 1
     if seed != 0:
         torch.manual_seed(params['seed'])
-    parser = MidiParser(midi_file)
-    num_channels = len(parser.channels)
-    if num_channels < 2:
-        raise RuntimeError(
-            "MIDI file must contain of two or more channels.")
-    data = parser.events().to(device)
 
-    feature_map = FeatureMap(data, features={
-        "2": {'masked': True}
-    })
+    if file_path.endswith('.json'):
+        with open(params['input'], 'r') as f:
+            content = json.load(f)
+            if isinstance(content, list):
+                data = content
+                features = {}
+            elif isinstance(content, dict):
+                if 'data' not in content:
+                    raise TypeError(f"Invalid data:\n{data}")
+                data = content['data']
+                features = content.get('features', dict())
+        try:
+            data = torch.tensor(data).to(device)
+        except:
+            raise ValueError(
+                "data must be structured as a 2D matrix, each row with the same number of elements")
 
-    VOICE_DIM = 1
+        data[1:, TIME_DIM] = data[..., TIME_DIM].diff(dim=-1)
+        feature_map = FeatureMap(data, features)
+        augmentator = None
+
+    else:
+        parser = MidiParser(file_path)
+        num_channels = len(parser.channels)
+        if num_channels < 2:
+            raise RuntimeError(
+                "MIDI file must contain of two or more channels.")
+        data = parser.events().to(device)
+        feature_map = FeatureMap(data, features={
+            "2": {'masked': True}
+        })
+        augmentator = MidiAugmentator(channels=parser.channels,
+                                      transforms=params['transform'])
 
     factory = T.TransformFactory(feature_map=feature_map)
-    transforms = params['features']
     input_layer, output_layer = factory.make(data=data,
-                                             transforms=transforms)
-
-    augmentator = MidiAugmentator(channels=parser.channels,
-                                  transforms=params['transform'])
+                                             transforms=params['features'])
     dataset = EventDataset(data=data,
                            input_dims=feature_map.input_dims(),
                            output_dims=feature_map.output_dims(),
                            context_length=params['context'],
                            split=params['split'],
                            augmentator=augmentator)
-    rnn = RecurrentMDN(k=params['mixtures'],
-                       input_size=input_layer.output_size,
-                       output_size=output_layer.output_size,
-                       num_layers=params['layers'],
-                       hidden_size=params['hidden_size'],
-                       dropout=params['dropout'],
-                       slope=params['slope'],
-                       device=device)
-    model = MultiplayerAgent(rnn=rnn,
-                             input_layer=input_layer,
-                             output_layer=output_layer,
-                             input_mask=feature_map.input_dims(),
-                             voice_dim=VOICE_DIM,
-                             device=device,)
+    rnn = nn.RecurrentMDN(k=params['mixtures'],
+                          input_size=input_layer.output_size,
+                          output_size=output_layer.output_size,
+                          num_layers=params['layers'],
+                          hidden_size=params['hidden_size'],
+                          dropout=params['dropout'],
+                          slope=params['slope'],
+                          device=device)
+    model = nn.MultiplayerAgent(rnn=rnn,
+                                input_layer=input_layer,
+                                output_layer=output_layer,
+                                input_mask=feature_map.input_dims(),
+                                voice_dim=VOICE_DIM,
+                                device=device,)
     trainer = Trainer(model=model,
                       dataset=dataset,
                       batch_size=params['batch_size'],
