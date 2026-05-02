@@ -176,6 +176,8 @@ class Transform(TransformLayer):
 
 class TransformFactory:
 
+    REQUIRED = ['categorical', 'normalize']
+
     OPTIONS = {
         "time-phase": {
             "cls": TimePhase,
@@ -196,7 +198,7 @@ class TransformFactory:
 
     @classmethod
     def options(cls) -> list:
-        return list(cls.OPTIONS.keys())
+        return list(set(cls.OPTIONS.keys()).difference(cls.REQUIRED))
 
     def __init__(self, feature_map: FeatureMap):
         self.feature_map = feature_map
@@ -205,6 +207,7 @@ class TransformFactory:
     def make(self,
              data: torch.Tensor,
              transforms: list[str]) -> tuple[Transform, Transform]:
+        transforms = list(set([*transforms, *self.REQUIRED]))
         transform_layers = []
         for i, io in enumerate(['input', 'output']):
             layers = []

@@ -142,7 +142,6 @@ class ClickMiddleware:
                       default=1,
                       help='Random seed. Use 0 for non-deterministic training.')
         @click.option('--features', '-f',
-                      default=['categorical', 'normalize'],
                       type=click.Choice(T.TransformFactory.options()),
                       help='Feature transform layers.',
                       multiple=True)
