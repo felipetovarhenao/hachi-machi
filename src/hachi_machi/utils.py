@@ -16,20 +16,17 @@ def validate_path(file, ext: str | list) -> str:
     return file
 
 
-def tensor_to_txt(x: torch.Tensor, output: str) -> None:
+def tensor_to_txt(tensor: torch.Tensor, output: str) -> None:
     output = validate_path(output, '.txt')
-    out = ""
-    col_len = x.max(0).values.log10().clip(1).ceil().int() + 2
-    col_len = col_len.tolist()
 
-    def col(x, i):
-        x = str(x)
-        x += " " * max(1, col_len[i] - len(x))
-        return x
-    for e in x.int().tolist():
-        out += f'{"".join(col(x, i) for i, x in enumerate(e))}\n'
+    rows = [[repr(x) for x in row] for row in tensor.tolist()]
+    col_len = [max(len(row[c]) for row in rows) +
+               2 for c in range(len(rows[0]))]
+
     with open(output, 'w') as f:
-        f.write(out)
+        for row in rows:
+            f.write("".join(
+                x + " " * max(1, col_len[i] - len(x)) for i, x in enumerate(row)) + "\n")
 
 
 def progress(n: int, N: int = 10, size: int = 12):

@@ -11,6 +11,8 @@ class EventDataset(Dataset):
 
     def __init__(self,
                  data: torch.Tensor,
+                 input_dims: list[int],
+                 output_dims: list[int],
                  context_length: int = 16,
                  split: float = 0.6,
                  augmentator: Augmentator | None = None):
@@ -28,8 +30,8 @@ class EventDataset(Dataset):
             self.train_set, self.eval_set = data[:split], data[split:]
         self.training = True
 
-        self._in_dims = list(range(self.dims))[:-1]
-        self._out_dims = list(range(self.dims))
+        self._in_dims = input_dims
+        self._out_dims = output_dims
 
         self.input_size = len(self._in_dims)
         self.output_size = len(self._out_dims)

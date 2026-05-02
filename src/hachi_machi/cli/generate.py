@@ -47,9 +47,9 @@ def generate(**params):
             display.update(progress=progress(i, num_tokens - 1))
             y = model.step(x)
             events.append(y.clone())
-            x = y[..., :-1]
+            x = y[..., model.input_mask]
 
-    events = torch.cat(events, dim=1).squeeze(0).float().round().int()
+    events = torch.cat(events, dim=1).squeeze(0)
 
     if is_txt:
         tensor_to_txt(events, output)

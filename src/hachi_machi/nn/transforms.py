@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+from ..features import FeatureMap
 from abc import ABC
 
 
@@ -18,16 +19,18 @@ class TransformLayer(nn.Module, ABC):
 
 
 class Normalize(TransformLayer):
-    def __init__(self, size: int = 2):
+
+    mean: torch.Tensor
+    std: torch.Tensor
+
+    def __init__(self, *args, **kwargs):
         super().__init__()
-        self.register_buffer('mean', torch.zeros(size))
-        self.register_buffer('std', torch.ones(size))
 
     def fit(self, x: torch.Tensor) -> None:
         std = x.std(0)
         std[std == 0] = 1
-        self.mean.copy_(x.mean(0))
-        self.std.copy_(std)
+        self.register_buffer('mean', x.mean(0))
+        self.register_buffer('std', std)
 
     def forward(self, x: torch.Tensor, inverse: bool = False):
         return x * self.std + self.mean if inverse else (x - self.mean) / self.std
@@ -35,7 +38,10 @@ class Normalize(TransformLayer):
 
 class Categorical(TransformLayer):
 
-    def __init__(self, dims: list[int] = [0]):
+    dims: torch.Tensor
+    sizes: torch.Tensor
+
+    def __init__(self, dims: list[int]):
         super().__init__()
         self.register_buffer('dims', torch.tensor(dims, dtype=torch.int))
         self.register_buffer('sizes', torch.zeros(len(dims), dtype=torch.int))
@@ -54,7 +60,7 @@ class Categorical(TransformLayer):
     def forward(self, x: torch.Tensor, inverse: bool = False) -> torch.Tensor:
         offset = 0
         for i, (dim, size) in enumerate(zip(self.dims, self.sizes)):
-            dim += offset
+            dim = dim.item() + offset
             classes = self.get_buffer(f'classes_{i}')
             if not inverse:
                 l, m, r = x[..., :dim], x[..., dim:dim+1], x[..., dim+1:]
@@ -74,9 +80,10 @@ class Categorical(TransformLayer):
 
 class TimePhase(TransformLayer):
 
+    dims: torch.Tensor
     BIJECTIVE = False
 
-    def __init__(self, dims: list[int] = [1]):
+    def __init__(self, dims: list[int]):
         super().__init__()
         self.register_buffer('dims', torch.tensor(dims, dtype=torch.int))
 
@@ -92,7 +99,9 @@ class TimePhase(TransformLayer):
 
 class LogSpace(TransformLayer):
 
-    def __init__(self, dims: list[int] = [0]):
+    dims: torch.Tensor
+
+    def __init__(self, dims: list[int]):
         super().__init__()
         self.register_buffer('dims', torch.tensor(dims, dtype=torch.int))
 
@@ -102,43 +111,43 @@ class LogSpace(TransformLayer):
         return x
 
 
-class CategorySum(TransformLayer):
+# class CategorySum(TransformLayer):
 
-    BIJECTIVE = False
+#     BIJECTIVE = False
 
-    def __init__(self, key_dim: int = 0, value_dim: int = 0, num_voices: int = 3):
-        super().__init__()
-        self.register_buffer('cache', torch.zeros(num_voices))
-        self.register_buffer('key_dim', torch.tensor(key_dim, dtype=torch.int))
-        self.register_buffer('value_dim', torch.tensor(
-            value_dim, dtype=torch.int))
+#     def __init__(self, key_dim: int = 0, value_dim: int = 0, num_voices: int = 3):
+#         super().__init__()
+#         self.register_buffer('cache', torch.zeros(num_voices))
+#         self.register_buffer('key_dim', torch.tensor(key_dim, dtype=torch.int))
+#         self.register_buffer('value_dim', torch.tensor(
+#             value_dim, dtype=torch.int))
 
-    def forward(self, x: torch.Tensor, inverse: bool = False):
-        if inverse:
-            return x[..., :-1]
-        if x.size(0) > 1:
-            return self._batch_forward(x)
-        return self._step_forward(x)
+#     def forward(self, x: torch.Tensor, inverse: bool = False):
+#         if inverse:
+#             return x[..., :-1]
+#         if x.size(0) > 1:
+#             return self._batch_forward(x)
+#         return self._step_forward(x)
 
-    def _step_forward(self, x: torch.Tensor):
-        k = x[..., self.key_dim].to(torch.long)
-        v = x[..., self.value_dim].item()
-        r = self.cache[k:k+1].clone().unsqueeze(0).unsqueeze(0)
-        mask = F.one_hot(k, self.cache.size(0)).flatten().bool()
-        self.cache[~mask] += v
-        self.cache[mask] = v
-        return torch.cat([x, r], dim=-1)
+#     def _step_forward(self, x: torch.Tensor):
+#         k = x[..., self.key_dim].to(torch.long)
+#         v = x[..., self.value_dim].item()
+#         r = self.cache[k:k+1].clone().unsqueeze(0).unsqueeze(0)
+#         mask = F.one_hot(k, self.cache.size(0)).flatten().bool()
+#         self.cache[~mask] += v
+#         self.cache[mask] = v
+#         return torch.cat([x, r], dim=-1)
 
-    def _batch_forward(self, x: torch.Tensor) -> torch.Tensor:
-        keys = x[..., self.key_dim]
-        values = x[..., self.value_dim]
-        same_key = keys.unsqueeze(-1) == keys.unsqueeze(-2)
-        causal = torch.ones(x.shape[-2], x.shape[-2]
-                            ).to(x.device).tril().bool()
-        mask = same_key & causal
-        cumsum = (mask * values.unsqueeze(-1)).sum(dim=-2)
-        y = torch.cat([x, cumsum.unsqueeze(-1)], dim=-1)
-        return y
+#     def _batch_forward(self, x: torch.Tensor) -> torch.Tensor:
+#         keys = x[..., self.key_dim]
+#         values = x[..., self.value_dim]
+#         same_key = keys.unsqueeze(-1) == keys.unsqueeze(-2)
+#         causal = torch.ones(x.shape[-2], x.shape[-2]
+#                             ).to(x.device).tril().bool()
+#         mask = same_key & causal
+#         cumsum = (mask * values.unsqueeze(-1)).sum(dim=-2)
+#         y = torch.cat([x, cumsum.unsqueeze(-1)], dim=-1)
+#         return y
 
 
 class Transform(TransformLayer):
@@ -167,64 +176,53 @@ class Transform(TransformLayer):
 
 class TransformFactory:
 
+    OPTIONS = {
+        "time-phase": {
+            "cls": TimePhase,
+            "type": 'temporal',
+        },
+        "log-space": {
+            "cls": LogSpace,
+            "type": "temporal",
+        },
+        'categorical': {
+            "cls": Categorical,
+            "type": "class"
+        },
+        "normalize": {
+            "cls": Normalize,
+        }
+    }
+
     @classmethod
     def options(cls):
-        return list(cls(0, 0, 0)._options.keys())
+        return list(cls.OPTIONS.keys())
 
-    def __init__(self, voice_dim: int, time_dim: int, num_voices: int):
-        self._size = 0
-        self._options = {
-            "category-sum": {
-                "cls": CategorySum,
-                "kwargs": {"key_dim": voice_dim, "value_dim": time_dim, "num_voices": num_voices},
-                "output_size": lambda: self._size + 1
-            },
-            "time-phase": {
-                "cls": TimePhase,
-                "kwargs": {"dims": [time_dim]},
-                "output_size": lambda: self._size + 2
-            },
-            "log-space": {
-                "cls": LogSpace,
-                "kwargs": {"dims": [time_dim]},
-            },
-            'categorical': {
-                "cls": Categorical,
-                "kwargs": {
-                    "dims": [voice_dim,],
-                },
-                "output_size": lambda: self._size + (num_voices - 1)
-            },
-            "normalize": {
-                "cls": Normalize,
-                "kwargs": lambda: {"size": self._size},
-            }
-        }
+    def __init__(self, feature_map: FeatureMap):
+        self.feature_map = feature_map
 
     @torch.no_grad()
     def make(self,
-             input_data: torch.Tensor,
-             output_data: torch.Tensor,
+             data: torch.Tensor,
              transforms: list[str]) -> tuple[Transform, Transform]:
         transform_layers = []
-        for i, data in enumerate([input_data, output_data]):
-            self._size = data.size(-1)
+        for i, io in enumerate(['input', 'output']):
             layers = []
-            for k in self._options.keys():
+            fn = getattr(self.feature_map, f"{io}_dims")
+            dims = fn()
+            data_subset = data[..., dims]
+            for k in self.OPTIONS.keys():
                 if k not in transforms:
                     continue
-                opt = self._options[k]
+                opt: dict = self.OPTIONS[k]
                 cls: TransformLayer = opt['cls']
                 if i == 1 and not cls.bijective():
                     continue
-                kwargs = opt['kwargs']
-                if 'output_size' in opt:
-                    self._size = opt['output_size']()
-                if callable(kwargs):
-                    kwargs = kwargs()
-                layer = cls(**kwargs)
+                type = opt.get('type', None)
+                dims: list = fn(type)
+                layer = cls(dims)
                 layers.append(layer)
             t = Transform(layers).to(data.device)
-            t.fit(data)
+            t.fit(data_subset)
             transform_layers.append(t)
         return tuple(transform_layers)

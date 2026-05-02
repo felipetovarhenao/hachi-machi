@@ -7,6 +7,7 @@ from ..nn import RecurrentMDN, MultiplayerAgent
 from ..nn import transforms as T
 from ..trainer import Trainer
 from ..console import Console
+from ..features import FeatureMap
 from .middleware import ClickMiddleware as M
 
 
@@ -42,22 +43,22 @@ def train(**params):
             "MIDI file must contain of two or more channels, one for each player.")
     data = parser.events().to(device)
 
-    input_data = data[..., :-1]
-    output_data = data[...]
+    feature_map = FeatureMap(data, features={
+        "2": {'masked': True}
+    })
 
-    IOI_DIM, VOICE_DIM, DURATION_DIM = 0, 1, -1
+    VOICE_DIM = 1
 
-    factory = T.TransformFactory(voice_dim=VOICE_DIM,
-                                 time_dim=IOI_DIM,
-                                 num_voices=num_voices)
+    factory = T.TransformFactory(feature_map=feature_map)
     transforms = params['features']
-    input_layer, output_layer = factory.make(input_data=input_data,
-                                             output_data=output_data,
+    input_layer, output_layer = factory.make(data=data,
                                              transforms=transforms)
 
     augmentator = MidiAugmentator(num_voices=parser.numvoices(),
                                   transforms=params['transform'])
     dataset = EventDataset(data=data,
+                           input_dims=feature_map.input_dims(),
+                           output_dims=feature_map.output_dims(),
                            context_length=params['context'],
                            split=params['split'],
                            augmentator=augmentator)
@@ -72,7 +73,7 @@ def train(**params):
     model = MultiplayerAgent(model=rnn,
                              input_layer=input_layer,
                              output_layer=output_layer,
-                             num_voices=num_voices,
+                             input_mask=feature_map.input_dims(),
                              voice_dim=VOICE_DIM,
                              device=device,)
     trainer = Trainer(model=model,

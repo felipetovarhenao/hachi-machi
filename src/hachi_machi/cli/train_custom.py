@@ -6,6 +6,7 @@ from ..data import EventDataset
 from ..trainer import Trainer
 from .. import nn
 from ..nn import transforms as T
+from ..features import FeatureMap
 
 
 @click.command(name='train-custom',
@@ -28,27 +29,32 @@ Note that <voice_id> must be an zero-based integer.
     """
     device = params['device']
     with open(params['input'], 'r') as f:
-        data = json.load(f)
-        if not isinstance(data, list):
-            raise TypeError(f"Invalid data format: {type(data)}")
+        content = json.load(f)
+        if isinstance(content, list):
+            data = content
+            features = {}
+        elif isinstance(content, dict):
+            if 'data' not in content:
+                raise TypeError(f"Invalid data:\n{data}")
+            data = content['data']
+            features = content.get('features', dict())
     try:
         data = torch.tensor(data).to(device)
     except:
         raise ValueError(
             "data must be structured as a 2D matrix, each row with the same number of elements")
+
     TIME_DIM, VOICE_DIM = 0, 1
     data[1:, TIME_DIM] = data[..., TIME_DIM].diff(dim=-1)
-    voices = data[..., VOICE_DIM].unique()
-    num_voices = len(voices)
+
+    fmap = FeatureMap(data, features)
     dataset = EventDataset(data=data,
+                           input_dims=fmap.input_dims(),
+                           output_dims=fmap.output_dims(),
                            context_length=params['context'],
                            split=params['split'],)
-
-    factory = T.TransformFactory(voice_dim=VOICE_DIM,
-                                 time_dim=TIME_DIM,
-                                 num_voices=num_voices)
-    input_layer, output_layer = factory.make(input_data=data[..., :-1].clone(),
-                                             output_data=data.clone(),
+    factory = T.TransformFactory(feature_map=fmap)
+    input_layer, output_layer = factory.make(data=data,
                                              transforms=params['features'])
 
     rnn = nn.RecurrentMDN(k=params['mixtures'],
@@ -62,7 +68,7 @@ Note that <voice_id> must be an zero-based integer.
     model = nn.MultiplayerAgent(model=rnn,
                                 input_layer=input_layer,
                                 output_layer=output_layer,
-                                num_voices=num_voices,
+                                input_mask=fmap.input_dims(),
                                 device=device,
                                 voice_dim=VOICE_DIM)
     trainer = Trainer(model=model,
