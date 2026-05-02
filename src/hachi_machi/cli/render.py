@@ -48,7 +48,7 @@ def render(**params):
     events = midi.events().to(device)
 
     if transforms is not None:
-        aug = MidiAugmentator(num_voices=midi.numvoices(),
+        aug = MidiAugmentator(channels=midi.channels,
                               transforms=transforms)
         for name in transforms:
             name = f"use_{name.replace('-', '_')}"

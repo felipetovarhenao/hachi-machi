@@ -20,35 +20,33 @@ class MidiParser:
         onset = 0
         events = []
         active_notes = {}
-        channels = sorted(
-            {msg.channel for msg in self._midi if msg.type.startswith('note_')})
-        voice_map = {ch: i for i, ch in enumerate(channels)}
-        numvoices = len(channels)
+        channels = set()
         for msg in self._midi:
             onset += int(round(msg.time * 1000))
             if not msg.type.startswith('note_'):
                 continue
             channel = msg.channel
-            voice = voice_map[channel]
+            channels.add(channel)
             pitch = msg.note * 100
-            key = (voice, pitch)
+            key = (channel, pitch)
             if msg.velocity > 0:
-                active_notes[key] = (onset, voice, pitch, msg.velocity)
+                active_notes[key] = (onset, channel, pitch, msg.velocity)
             elif key in active_notes:
                 note = active_notes.pop(key)
                 duration = onset - note[0]
                 events.append((*note, duration))
 
-        self._numvoices = numvoices
+        self.channels = list(channels)
+        self._numvoices = len(self.channels)
         events.sort(key=lambda x: x[0])
 
         prev_onset = 0
         rows = []
-        for onset, voice, pitch, velocity, duration in events:
+        for onset, chan, pitch, velocity, duration in events:
             ioi = onset - prev_onset
             prev_onset = onset
             rows.append([ioi,
-                         voice,
+                         chan,
                          pitch,
                          velocity,
                          duration,
@@ -75,12 +73,12 @@ class MidiParser:
         messages = []
         current_onset_ms = 0.0
         for row in events:
-            ioi, voice, pitch, velocity, duration = row.tolist()
+            ioi, chan, pitch, velocity, duration = row.tolist()
             current_onset_ms += ioi
             duration = 1000
             note = int(round(pitch / 100))
             vel = int(round(velocity))
-            channel = int(round(voice))
+            channel = int(round(chan))
             onset_tick = int(round(current_onset_ms * ticks_per_ms))
             off_tick = int(round((current_onset_ms + duration) * ticks_per_ms))
             messages.append((onset_tick, mido.Message(type='note_on',

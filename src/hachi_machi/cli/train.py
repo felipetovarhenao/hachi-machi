@@ -37,10 +37,9 @@ def train(**params):
     Console.action("\nParsing MIDI...", italic=True)
 
     parser = MidiParser(midi_file)
-    num_voices = parser.numvoices()
-    if parser.numvoices() < num_voices:
+    if parser.numvoices() < 2:
         raise RuntimeError(
-            "MIDI file must contain of two or more channels, one for each player.")
+            "MIDI file must contain of two or more channels.")
     data = parser.events().to(device)
 
     feature_map = FeatureMap(data, features={
@@ -54,7 +53,7 @@ def train(**params):
     input_layer, output_layer = factory.make(data=data,
                                              transforms=transforms)
 
-    augmentator = MidiAugmentator(num_voices=parser.numvoices(),
+    augmentator = MidiAugmentator(channels=parser.channels,
                                   transforms=params['transform'])
     dataset = EventDataset(data=data,
                            input_dims=feature_map.input_dims(),

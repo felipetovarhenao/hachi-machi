@@ -43,14 +43,15 @@ class Augmentator(ABC):
 
 class MidiAugmentator(Augmentator):
 
-    def __init__(self, num_voices: int = 2, *args, **kwargs):
+    def __init__(self, channels: list[int], num_voices: int = 2, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.num_voices = num_voices
+        self.channels = channels
         self._feature_to_dim_map = {
             k: i for i, k in enumerate(
                 [
                     'ioi',
-                    'voice',
+                    'channel',
                     'pitch',
                     'velocity',
                     'duration',
@@ -69,9 +70,9 @@ class MidiAugmentator(Augmentator):
 
     def use_pitch_inversion(self, x: torch.Tensor) -> torch.Tensor:
         p_dim = self.get('pitch')
-        v_dim = self.get('voice')
-        for v in range(self.num_voices):
-            mask = x[..., v_dim] == v
+        v_dim = self.get('channel')
+        for ch in self.channels:
+            mask = x[..., v_dim] == ch
             pitch = x[..., p_dim]
             inverted = pitch[mask].mean(0) * 2 - pitch
             x[..., p_dim] = torch.where(mask, inverted, pitch)
@@ -93,12 +94,12 @@ class MidiAugmentator(Augmentator):
         x[..., dim] *= max_vel
         return x
 
-    def use_voice_swap(self, x: torch.Tensor) -> torch.Tensor:
-        dim = self.get('voice')
-        voices = x[..., dim].unique()
-        swap = voices[torch.randperm(self.num_voices)]
+    def use_channel_swap(self, x: torch.Tensor) -> torch.Tensor:
+        dim = self.get('channel')
+        channels = x[..., dim].unique()
+        swap = channels[torch.randperm(len(self.channels))]
         result = x.clone()
-        for v, s in zip(voices, swap):
+        for v, s in zip(channels, swap):
             mask = x[..., dim] == v
             result[..., dim] = torch.where(mask, s, result[..., dim])
         return result
