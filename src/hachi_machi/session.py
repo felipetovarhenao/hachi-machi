@@ -23,8 +23,8 @@ class Session:
         self.host = host
         self.name = os.path.basename(model)
         self.model: PerformerModel = torch.load(f=model,
-                                                  map_location=device,
-                                                  weights_only=False)
+                                                map_location=device,
+                                                weights_only=False)
         self.classes = set(self.model.input_layer.layers[-2].get_buffer(
             'classes_0').clone().int().tolist())
         self.input_classes = set(list(self.classes)[:1])
@@ -36,21 +36,23 @@ class Session:
         self.out_port = out_port
         self._lock = threading.RLock()
         self._last_time: float | None = None
+        self.display = Console.get_display(1)
         self._set_handlers()
 
     def is_input_class(self, i: int):
-        return self.input_classes.issubset([i])
+        return self.input_classes.issuperset({i})
 
     def set_input_classes(self, classes: set):
-        if not self.classes.issubset(classes):
+        if not self.classes.issuperset(classes):
             raise ValueError(f"{classes} is not a subset of {self.classes}")
         self.input_classes = classes
 
     def safe_handler(self, func: Callable[[str, Any], None]) -> Callable:
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
+            _, *rest = args
             try:
-                func(*args, **kwargs)
+                func(*rest, **kwargs)
             except Exception:
                 Console.error(traceback.format_exc())
         return wrapper
@@ -65,11 +67,15 @@ class Session:
             self.dispatcher.map(address=f"/{address}",
                                 handler=handler)
 
+    def send(self, msg):
+        self.client.send_message("/output", msg)
+        self.display.update(output=msg)
+
     def schedule(self, event: torch.Tensor, delay: float) -> None:
         def emit():
             out = event.tolist()
             msg = out[1:]
-            self.client.send_message("/output", msg)
+            self.send(msg)
             if self.is_input_class(msg[0]):
                 self.predict(event[..., self.model.input_mask])
 
@@ -104,8 +110,7 @@ class Session:
         server.serve_forever()
 
     def handle_input(self, *args):
-        _, *args = args
-        class_id = args[:1]
+        class_id = {args[0]}
         if len(args) != self.input_size:
             raise ValueError(
                 f"Invalid input length: {len(args)}. Expected: {self.input_size}")
@@ -126,4 +131,9 @@ class Session:
         with self._lock:
             self.model.reset()
             self._last_time = None
-        Console.action("Hidden state reset.", italic=True)
+        self.display.update(reset='*')
+
+    def handle_input_classes(self, *classes):
+        classes = set(classes)
+        self.set_input_classes(classes)
+        self.display.update(input_classes=classes)
