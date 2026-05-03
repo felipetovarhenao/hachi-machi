@@ -5,7 +5,7 @@ import os
 import time
 import threading
 import torch
-from .nn import MultiplayerAgent
+from .nn import PerformerModel
 from .console import Console
 import traceback
 from typing import Callable, Any
@@ -22,7 +22,7 @@ class Session:
         self.device = device
         self.host = host
         self.name = os.path.basename(model)
-        self.model: MultiplayerAgent = torch.load(f=model,
+        self.model: PerformerModel = torch.load(f=model,
                                                   map_location=device,
                                                   weights_only=False)
         self.classes = set(self.model.input_layer.layers[-2].get_buffer(

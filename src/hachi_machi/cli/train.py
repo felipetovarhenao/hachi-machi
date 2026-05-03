@@ -115,7 +115,7 @@ def _train(**params):
                           dropout=params['dropout'],
                           slope=params['slope'],
                           device=device)
-    model = nn.MultiplayerAgent(rnn=rnn,
+    model = nn.PerformerModel(rnn=rnn,
                                 input_layer=input_layer,
                                 output_layer=output_layer,
                                 input_mask=feature_map.input_dims(),

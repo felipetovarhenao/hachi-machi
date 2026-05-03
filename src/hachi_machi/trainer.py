@@ -4,7 +4,7 @@ import torch
 from torch.optim import AdamW
 from .timer import Timer
 from .console import Console
-from .nn import MultiplayerAgent
+from .nn import PerformerModel
 from .loss import NLLLoss
 from .data import EventDataset, EventLoader
 from .utils import validate_path, progress
@@ -13,7 +13,7 @@ from .utils import validate_path, progress
 class Trainer:
 
     def __init__(self,
-                 model: MultiplayerAgent,
+                 model: PerformerModel,
                  dataset: EventDataset,
                  batch_size: int = 32,
                  lr: float = 0.001,
@@ -68,7 +68,7 @@ class Trainer:
         return stop
 
     @classmethod
-    def benchmark(cls, model: MultiplayerAgent, n_warmup: int = 100, n_runs: int = 500) -> None:
+    def benchmark(cls, model: PerformerModel, n_warmup: int = 100, n_runs: int = 500) -> None:
         model.eval()
         device = next(model.parameters()).device
         with torch.no_grad():

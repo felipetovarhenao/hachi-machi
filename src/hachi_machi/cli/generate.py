@@ -1,7 +1,7 @@
 import click
 import torch
 from ..midi import MidiParser
-from ..nn import MultiplayerAgent
+from ..nn import PerformerModel
 from ..console import Console
 from ..utils import (tensor_to_txt,
                      progress,)
@@ -36,7 +36,7 @@ def generate(**params):
     if seed != 0:
         torch.manual_seed(params['seed'])
 
-    model: MultiplayerAgent = torch.load(f=model_path,
+    model: PerformerModel = torch.load(f=model_path,
                                          weights_only=False,
                                          map_location=device)
     model.reset()

@@ -5,7 +5,7 @@ from .rnn import RecurrentMDN
 from . import transforms as T
 
 
-class MultiplayerAgent(nn.Module):
+class PerformerModel(nn.Module):
 
     input_mask: torch.Tensor
 

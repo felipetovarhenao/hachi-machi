@@ -2,7 +2,7 @@ import click
 import torch
 from .middleware import ClickMiddleware as M
 from ..console import Console
-from ..nn.agent import MultiplayerAgent
+from ..nn.agent import PerformerModel
 from ..trainer import Trainer
 
 
@@ -17,7 +17,7 @@ def info(**params):
     INPUT: Path to pre-trained (.pt) model"""
     input = params['input']
     device = params['device']
-    model: MultiplayerAgent = torch.load(f=input,
+    model: PerformerModel = torch.load(f=input,
                                          map_location=device,
                                          weights_only=False)
     model = model.to(device)
