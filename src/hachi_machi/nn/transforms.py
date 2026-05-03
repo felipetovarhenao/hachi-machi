@@ -2,41 +2,44 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from ..features import FeatureMap
-from abc import ABC
+from abc import ABC, abstractmethod
 
 
-class TransformLayer(nn.Module, ABC):
+class BaseTransform(nn.Module, ABC):
 
     BIJECTIVE = True
+
+    def __init__(self, *args, **kwargs):
+        super().__init__()
 
     @classmethod
     def bijective(cls):
         return cls.BIJECTIVE
 
-    def fit(self, *args, **kwargs): ...
+    def fit(self, data: torch.Tensor):
+        ...
 
-    def forward(self, x: torch.Tensor, inverse: bool = False): ...
+    @abstractmethod
+    def forward(self, x: torch.Tensor, inverse: bool = False):
+        ...
 
 
-class Normalize(TransformLayer):
+class Normalize(BaseTransform):
 
     mean: torch.Tensor
     std: torch.Tensor
 
-    def __init__(self, *args, **kwargs):
-        super().__init__()
-
-    def fit(self, x: torch.Tensor) -> None:
-        std = x.std(0)
+    def fit(self, data: torch.Tensor) -> None:
+        std = data.std(0)
         std[std == 0] = 1
-        self.register_buffer('mean', x.mean(0))
+        self.register_buffer('mean', data.mean(0))
         self.register_buffer('std', std)
 
     def forward(self, x: torch.Tensor, inverse: bool = False):
         return x * self.std + self.mean if inverse else (x - self.mean) / self.std
 
 
-class Categorical(TransformLayer):
+class Categorical(BaseTransform):
 
     dims: torch.Tensor
     sizes: torch.Tensor
@@ -77,7 +80,7 @@ class Categorical(TransformLayer):
         return x
 
 
-class TimePhase(TransformLayer):
+class TimePhase(BaseTransform):
 
     dims: torch.Tensor
     BIJECTIVE = False
@@ -96,7 +99,7 @@ class TimePhase(TransformLayer):
         return torch.cat([x, torch.cos(t), torch.sin(t)], dim=-1)
 
 
-class LogSpace(TransformLayer):
+class LogSpace(BaseTransform):
 
     dims: torch.Tensor
 
@@ -110,46 +113,7 @@ class LogSpace(TransformLayer):
         return x
 
 
-# class CategorySum(TransformLayer):
-
-#     BIJECTIVE = False
-
-#     def __init__(self, key_dim: int = 0, value_dim: int = 0, num_voices: int = 3):
-#         super().__init__()
-#         self.register_buffer('cache', torch.zeros(num_voices))
-#         self.register_buffer('key_dim', torch.tensor(key_dim, dtype=torch.int))
-#         self.register_buffer('value_dim', torch.tensor(
-#             value_dim, dtype=torch.int))
-
-#     def forward(self, x: torch.Tensor, inverse: bool = False):
-#         if inverse:
-#             return x[..., :-1]
-#         if x.size(0) > 1:
-#             return self._batch_forward(x)
-#         return self._step_forward(x)
-
-#     def _step_forward(self, x: torch.Tensor):
-#         k = x[..., self.key_dim].to(torch.long)
-#         v = x[..., self.value_dim].item()
-#         r = self.cache[k:k+1].clone().unsqueeze(0).unsqueeze(0)
-#         mask = F.one_hot(k, self.cache.size(0)).flatten().bool()
-#         self.cache[~mask] += v
-#         self.cache[mask] = v
-#         return torch.cat([x, r], dim=-1)
-
-#     def _batch_forward(self, x: torch.Tensor) -> torch.Tensor:
-#         keys = x[..., self.key_dim]
-#         values = x[..., self.value_dim]
-#         same_key = keys.unsqueeze(-1) == keys.unsqueeze(-2)
-#         causal = torch.ones(x.shape[-2], x.shape[-2]
-#                             ).to(x.device).tril().bool()
-#         mask = same_key & causal
-#         cumsum = (mask * values.unsqueeze(-1)).sum(dim=-2)
-#         y = torch.cat([x, cumsum.unsqueeze(-1)], dim=-1)
-#         return y
-
-
-class Transform(TransformLayer):
+class Transform(BaseTransform):
 
     def __init__(self, layers: list[nn.Module], *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -217,7 +181,7 @@ class TransformFactory:
                 if k not in transforms:
                     continue
                 opt: dict = self.OPTIONS[k]
-                cls: TransformLayer = opt['cls']
+                cls: BaseTransform = opt['cls']
                 if i == 1 and not cls.bijective():
                     continue
                 type = opt.get('type', None)
