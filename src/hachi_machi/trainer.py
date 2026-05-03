@@ -36,7 +36,7 @@ class Trainer:
         self.loss = NLLLoss()
         self.display = None
         Console.pretty({'classes': ' '.join(
-            [str(c) for c in model.input_layer.layers[-2].get_buffer('classes_0').clone().int().tolist()])})
+            [str(c) for c in model.input_layer.layers[-2].get_buffer('classes_0').clone().int().tolist()])}, header='info')
 
     def _loss(self, x) -> float:
         return 1 / (1 + math.exp(-min(x, 709)))
