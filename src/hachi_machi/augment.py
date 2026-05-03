@@ -61,22 +61,6 @@ class MidiAugmentator(Augmentator):
     def get(self, *labels) -> list[int]:
         return [self._feature_to_dim_map[key] for key in labels if key in self._feature_to_dim_map]
 
-    def use_time_stretch(self, x: torch.Tensor) -> torch.Tensor:
-        dims = self.get('ioi', 'duration')
-        s = (torch.rand(1).item() * 2 - 1) * 0.66
-        x[..., dims] *= 2 ** s
-        return x
-
-    def use_pitch_inversion(self, x: torch.Tensor) -> torch.Tensor:
-        p_dim = self.get('pitch')
-        v_dim = self.get('channel')
-        for ch in self.channels:
-            mask = x[..., v_dim] == ch
-            pitch = x[..., p_dim]
-            inverted = pitch[mask].mean(0) * 2 - pitch
-            x[..., p_dim] = torch.where(mask, inverted, pitch)
-        return x
-
     def use_pitch_shift(self, x: torch.Tensor) -> torch.Tensor:
         dim = self.get('pitch')
         s = torch.rand(1).item() * 2 - 1
@@ -91,6 +75,22 @@ class MidiAugmentator(Augmentator):
         theta = (x[..., dim] + s).clip(0, 1) * torch.pi
         x[..., dim] = 0.5 - 0.5 * torch.cos(theta)
         x[..., dim] *= max_vel
+        return x
+
+    def use_time_stretch(self, x: torch.Tensor) -> torch.Tensor:
+        dims = self.get('ioi', 'duration')
+        s = (torch.rand(1).item() * 2 - 1) * 0.66
+        x[..., dims] *= 2 ** s
+        return x
+
+    def use_pitch_inversion(self, x: torch.Tensor) -> torch.Tensor:
+        p_dim = self.get('pitch')
+        v_dim = self.get('channel')
+        for ch in self.channels:
+            mask = x[..., v_dim] == ch
+            pitch = x[..., p_dim]
+            inverted = pitch[mask].mean(0) * 2 - pitch
+            x[..., p_dim] = torch.where(mask, inverted, pitch)
         return x
 
     def use_channel_swap(self, x: torch.Tensor) -> torch.Tensor:
