@@ -141,9 +141,9 @@ class ClickMiddleware:
         @click.option('--seed',
                       default=1,
                       help='Random seed. Use 0 for non-deterministic training.')
-        @click.option('--features', '-f',
+        @click.option('--transforms', '-t',
                       type=click.Choice(T.TransformFactory.options()),
-                      help='Feature transform layers.',
+                      help='Optional transform layers.',
                       multiple=True)
         @self.wrapper
         @functools.wraps(func)

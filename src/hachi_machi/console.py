@@ -77,7 +77,10 @@ class Console:
             indent = ''
             if isinstance(v, list | tuple):
                 indent = ' ' * col_size
-                v = f',\n{indent}'.join([str(i) for i in v])
+                if len(v) > 0:
+                    v = f',\n{indent}'.join([str(i) for i in v])
+                else:
+                    v = 'none'
             k: str = k.replace('_', " ")
             k = f"- {k}:"
             k += " " * max(1, col_size - len(k))

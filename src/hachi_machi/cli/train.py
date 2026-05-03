@@ -12,10 +12,10 @@ from .middleware import ClickMiddleware as M
 
 
 @click.command(context_settings={'show_default': True})
-@click.option('--transform', '-t',
+@click.option('--augmentation', '-a',
               default=MidiAugmentator.options(),
               type=click.Choice(MidiAugmentator.options()),
-              help='Data augmentation transform to randomly apply during training.',
+              help='Data augmentation techniques to stochastically apply during training.',
               multiple=True)
 @M([
     ('input', '.mid', '.midi'),
@@ -96,11 +96,11 @@ def _train(**params):
             "2": {'masked': True}
         })
         augmentator = MidiAugmentator(channels=parser.channels,
-                                      transforms=params['transform'])
+                                      augmentation=params['augmentation'])
 
     factory = T.TransformFactory(feature_map=feature_map)
     input_layer, output_layer = factory.make(data=data,
-                                             transforms=params['features'])
+                                             transforms=params['transforms'])
     dataset = EventDataset(data=data,
                            input_dims=feature_map.input_dims(),
                            output_dims=feature_map.output_dims(),
@@ -116,11 +116,11 @@ def _train(**params):
                           slope=params['slope'],
                           device=device)
     model = nn.PerformerModel(rnn=rnn,
-                                input_layer=input_layer,
-                                output_layer=output_layer,
-                                input_mask=feature_map.input_dims(),
-                                voice_dim=VOICE_DIM,
-                                device=device,)
+                              input_layer=input_layer,
+                              output_layer=output_layer,
+                              input_mask=feature_map.input_dims(),
+                              voice_dim=VOICE_DIM,
+                              device=device,)
     trainer = Trainer(model=model,
                       dataset=dataset,
                       batch_size=params['batch_size'],

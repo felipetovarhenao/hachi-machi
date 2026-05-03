@@ -5,13 +5,13 @@ from abc import ABC
 
 class Augmentator(ABC):
 
-    def __init__(self, transforms: None | tuple | list = None):
+    def __init__(self, augmentation: None | tuple | list = None):
         super().__init__()
         self.augmentators = []
         for attr in dir(self):
             if attr.startswith('use_'):
                 name = attr[4:].replace('_', '-')
-                if transforms is not None and name not in transforms:
+                if augmentation is not None and name not in augmentation:
                     continue
                 self.augmentators.append(getattr(self, attr))
         if len(self.augmentators) == 0:

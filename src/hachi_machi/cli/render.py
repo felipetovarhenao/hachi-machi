@@ -18,7 +18,7 @@ from .middleware import ClickMiddleware as M
                 type=click.Path(file_okay=True,
                                 dir_okay=False,
                                 resolve_path=True,))
-@click.option('--transform', '-t',
+@click.option('--augmentation', '-a',
               default=[],
               type=click.Choice(MidiAugmentator.options()),
               multiple=True)
@@ -37,24 +37,24 @@ def render(**params):
     OUTPUT: Path to output MIDI file
     """
 
-    if len(params['transform']) == 0:
-        params['transform'] = None
+    if len(params['augmentation']) == 0:
+        params['augmentation'] = None
 
     device = params['device']
     input = params['input']
     output = params['output']
     seed = params['seed']
-    transforms = params['transform']
+    augmentation = params['augmentation']
 
     if seed != 0:
         torch.manual_seed(seed)
     midi = MidiParser(file=input)
     events = midi.events().to(device)
 
-    if transforms is not None:
+    if augmentation is not None:
         aug = MidiAugmentator(channels=midi.channels,
-                              transforms=transforms)
-        for name in transforms:
+                              augmentation=augmentation)
+        for name in augmentation:
             name = f"use_{name.replace('-', '_')}"
             cb = getattr(aug, name)
             events = cb(events.clone())
