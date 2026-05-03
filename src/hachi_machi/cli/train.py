@@ -13,8 +13,6 @@ from .middleware import ClickMiddleware as M
 
 @click.command(context_settings={'show_default': True})
 @click.option('--augmentation', '-a',
-              default=['pitch-shift', 'dynamics',
-                       'time-stretch', 'chord-shuffle'],
               type=click.Choice(MidiAugmentator.options()),
               help='Data augmentation techniques to stochastically apply during training.',
               multiple=True)
