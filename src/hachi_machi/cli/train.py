@@ -13,7 +13,6 @@ from .middleware import ClickMiddleware as M
 
 @click.command(context_settings={'show_default': True})
 @click.option('--augmentation', '-a',
-              default=MidiAugmentator.options(),
               type=click.Choice(MidiAugmentator.options()),
               help='Data augmentation techniques to stochastically apply during training.',
               multiple=True)
@@ -60,6 +59,7 @@ def _train(**params):
     device = params['device']
     seed = params['seed']
     file_path: str = params['input']
+    augmentator = None
     TIME_DIM, VOICE_DIM = 0, 1
     if seed != 0:
         torch.manual_seed(params['seed'])
@@ -83,7 +83,6 @@ def _train(**params):
 
         data[1:, TIME_DIM] = data[..., TIME_DIM].diff(dim=-1)
         feature_map = FeatureMap(data, features)
-        augmentator = None
 
     else:
         parser = MidiParser(file_path)
@@ -95,8 +94,10 @@ def _train(**params):
         feature_map = FeatureMap(data, features={
             "2": {'masked': True}
         })
-        augmentator = MidiAugmentator(channels=parser.channels,
-                                      augmentation=params['augmentation'])
+        augmentation = params['augmentation']
+        if len(augmentation) > 0:
+            augmentator = MidiAugmentator(channels=parser.channels,
+                                          augmentation=augmentation)
 
     factory = T.TransformFactory(feature_map=feature_map)
     input_layer, output_layer = factory.make(data=data,
