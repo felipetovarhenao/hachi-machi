@@ -76,7 +76,7 @@ class Session:
             out = event.tolist()
             msg = out[1:]
             self.send(msg)
-            if self.is_input_class(msg[0]):
+            if not self.is_input_class(msg[0]):
                 self.predict(event[..., self.model.input_mask])
 
         t = threading.Timer(delay / 1000.0, emit)
