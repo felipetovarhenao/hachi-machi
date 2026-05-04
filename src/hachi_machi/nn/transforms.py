@@ -137,6 +137,28 @@ class Transform(BaseTransform):
         self.output_size = x.size(-1)
 
 
+class HarmonicScore(BaseTransform):
+
+    def __init__(self, dims: list[int], n: int = 4, sigma: float = 0.01, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        i = torch.arange(1, n + 1, dtype=torch.float32)
+        ii, jj = torch.meshgrid(i, i, indexing='ij')
+        self.register_buffer('i', ii.unsqueeze(-1))
+        self.register_buffer('j', jj.unsqueeze(-1))
+        self.register_buffer('w', 1 / (self.i * self.j))
+        self.register_buffer('dims', torch.tensor(dims, dtype=torch.int))
+        self.sigma = sigma
+
+    def forward(self, x: torch.Tensor, inverse: bool = False) -> float:
+        if inverse:
+            return x[..., :-len(self.dims)]
+        xd = x[..., self.dims].unsqueeze(-2).unsqueeze(-2) / 1000
+        diff = torch.abs(self.i - self.j * xd)
+        score = self.w * torch.exp(-0.5 * (diff / self.sigma) ** 2)
+        score = score.transpose(-3, -1).sum((-2, -1))
+        return torch.cat([x, score], dim=-1)
+
+
 class TransformFactory:
 
     REQUIRED = ['categorical', 'normalize']
@@ -144,6 +166,10 @@ class TransformFactory:
     OPTIONS = {
         "time-phase": {
             "cls": TimePhase,
+            "type": 'temporal',
+        },
+        "harmonic-score": {
+            "cls": HarmonicScore,
             "type": 'temporal',
         },
         "log-space": {
