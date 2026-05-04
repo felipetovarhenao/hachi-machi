@@ -40,6 +40,15 @@ class Augmentator(ABC):
                 y = fn(y)
         return y
 
+    def use_time_reverse(self, x: torch.Tensor):
+        x[..., 0] = x[..., 0].cumsum(dim=0)
+        sort = torch.sort(x[..., 0].max(
+            dim=0).values.item() - x[..., 0], dim=0)
+        x[..., 0] = sort.values
+        x[1:, 0] = x[..., 0].diff(dim=0)
+        x[..., 1:] = x[sort.indices, 1:]
+        return x
+
 
 class MidiAugmentator(Augmentator):
 
