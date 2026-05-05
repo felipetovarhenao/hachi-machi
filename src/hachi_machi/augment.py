@@ -73,7 +73,7 @@ class MidiAugmentator(Augmentator):
     def use_pitch_shift(self, x: torch.Tensor) -> torch.Tensor:
         dim = self.get('pitch')
         s = torch.rand(1).item() * 2 - 1
-        x[..., dim] += s * 700
+        x[..., dim] += s * 7
         return x
 
     def use_dynamics(self, x: torch.Tensor) -> torch.Tensor:

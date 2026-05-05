@@ -25,10 +25,8 @@ class Session:
         self.model: PerformerModel = torch.load(f=model,
                                                 map_location=device,
                                                 weights_only=False)
-        self.classes = set(self.model.input_layer.layers[-2].get_buffer(
-            'classes_0').clone().int().tolist())
-        self.input_classes = set(list(self.classes)[:1])
         self.input_size = self.model.input_size - 1
+        self.output_size = self.model.output_layer.input_size - 1
         self.model.eval()
         self.client = SimpleUDPClient(host, out_port)
         self.dispatcher = Dispatcher()
@@ -38,14 +36,6 @@ class Session:
         self._last_time: float | None = None
         self.display = Console.get_display(1)
         self._set_handlers()
-
-    def is_input_class(self, i: int):
-        return self.input_classes.issuperset({i})
-
-    def set_input_classes(self, classes: set):
-        if not self.classes.issuperset(classes):
-            raise ValueError(f"{classes} is not a subset of {self.classes}")
-        self.input_classes = classes
 
     def safe_handler(self, func: Callable[[str, Any], None]) -> Callable:
         @functools.wraps(func)
@@ -69,16 +59,11 @@ class Session:
 
     def send(self, msg):
         self.client.send_message("/output", msg)
-        self.display.update(output=msg)
+        # self.display.update(output=msg)
 
     def schedule(self, event: torch.Tensor, delay: float) -> None:
-        def emit():
-            out = event.tolist()
-            msg = out[1:]
-            self.send(msg)
-            self.predict(event[..., self.model.input_mask])
-
-        t = threading.Timer(delay / 1000.0, emit)
+        t = threading.Timer(
+            delay / 1000.0, lambda: self.send(event.tolist()[1:]))
         t.daemon = True
         t.start()
 
@@ -93,8 +78,6 @@ class Session:
             x = x.unsqueeze(0).unsqueeze(0).float().to(self.device)
             with torch.no_grad():
                 y = self.model.step(x)
-            if self.is_input_class(y[..., 1].item()):
-                return
             event = y.squeeze()
 
         delay = event[0].item()
@@ -109,21 +92,17 @@ class Session:
         server.serve_forever()
 
     def handle_input(self, *args):
-        class_id = {args[0]}
-        if len(args) != self.input_size:
+        nargs = len(args)
+        if nargs not in [self.input_size, self.output_size]:
             raise ValueError(
-                f"Invalid input length: {len(args)}. Expected: {self.input_size}")
-        elif not self.classes.issuperset(class_id):
-            raise ValueError(
-                f"{args[0]} is not a valid class for this model. Expected i ∈ {self.classes}")
-        elif not self.input_classes.issuperset(class_id):
-            raise ValueError(
-                f"{args[0]} has not been set as a input class. Expected i ∈ {self.input_classes}")
+                f"Invalid input length: {nargs}. Expected: {', or '.join([str(self.input_size), str(self.output_size)])}")
 
         x = torch.tensor(
             [0.0, *args],
             dtype=torch.float32
         )
+        if nargs == self.output_size:
+            x = x[self.model.input_mask]
         self.predict(x)
 
     def handle_reset(self, *_):
@@ -131,8 +110,3 @@ class Session:
             self.model.reset()
             self._last_time = None
         self.display.update(reset='*')
-
-    def handle_input_classes(self, *classes):
-        classes = set(classes)
-        self.set_input_classes(classes)
-        self.display.update(input_classes=classes)

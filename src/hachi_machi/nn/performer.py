@@ -15,14 +15,12 @@ class PerformerModel(nn.Module):
                  output_layer: T.Transform,
                  input_mask: list[int],
                  device: str = 'mps',
-                 voice_dim: int = 1,
                  *args,
                  **kwargs):
         super().__init__(*args, **kwargs)
         self.input_layer = input_layer
         self.rnn = rnn
         self.output_layer = output_layer
-        self.voice_dim = voice_dim
         self.register_buffer(name='input_mask',
                              tensor=torch.tensor(input_mask,
                                                  dtype=torch.int).to(device))

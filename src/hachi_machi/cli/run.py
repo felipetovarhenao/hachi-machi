@@ -31,9 +31,6 @@ MODEL: Path to pre-trained PyTorch model (.pt)"""
                       out_port=config['out_port'],
                       host=config['address'],
                       device=device)
-    Console.pretty({'classes': ' '.join([str(c) for c in session.classes])})
-    Console.pretty({'input classes': ' '.join(
-        [str(c) for c in session.input_classes])})
     try:
         session.start()
     except KeyboardInterrupt:

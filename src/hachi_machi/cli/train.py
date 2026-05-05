@@ -60,7 +60,6 @@ def _train(**params):
     seed = params['seed']
     file_path: str = params['input']
     augmentator = None
-    TIME_DIM, VOICE_DIM = 0, 1
     if seed != 0:
         torch.manual_seed(params['seed'])
 
@@ -81,7 +80,7 @@ def _train(**params):
             raise ValueError(
                 "data must be structured as a 2D matrix, each row with the same number of elements")
 
-        data[1:, TIME_DIM] = data[..., TIME_DIM].diff(dim=-1)
+        data[1:, 0] = data[..., 0].diff(dim=-1)
         feature_map = FeatureMap(data, features)
 
     else:
@@ -92,7 +91,10 @@ def _train(**params):
                 "MIDI file must contain of two or more channels.")
         data = parser.events().to(device)
         feature_map = FeatureMap(data, features={
-            "2": {
+            "0": {
+                "type": "categorical"
+            },
+            "3": {
                 'masked': True,
                 'type': 'temporal'
             }
@@ -123,7 +125,6 @@ def _train(**params):
                               input_layer=input_layer,
                               output_layer=output_layer,
                               input_mask=feature_map.input_dims(),
-                              voice_dim=VOICE_DIM,
                               device=device,)
     trainer = Trainer(model=model,
                       dataset=dataset,

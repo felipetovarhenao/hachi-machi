@@ -27,7 +27,7 @@ class MidiParser:
                 continue
             channel = msg.channel
             channels.add(channel)
-            pitch = msg.note * 100
+            pitch = msg.note
             key = (channel, pitch)
             if msg.velocity > 0:
                 active_notes[key] = (onset, channel, pitch, msg.velocity)
@@ -75,7 +75,7 @@ class MidiParser:
             ioi, chan, pitch, velocity, duration = row.tolist()
             current_onset_ms += ioi
             duration = 1000
-            note = int(round(pitch / 100))
+            note = int(round(pitch))
             vel = int(round(velocity))
             channel = int(round(chan))
             onset_tick = int(round(current_onset_ms * ticks_per_ms))

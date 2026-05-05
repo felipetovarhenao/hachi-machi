@@ -23,11 +23,6 @@ def info(**params):
                                        weights_only=False)
     model = model.to(device)
     Trainer.benchmark(model)
-    classes = model.input_layer.layers[-2].get_buffer(
-        'classes_0').int().tolist()
-    Console.pretty({
-        'classes': ' '.join([str(c) for c in classes]),
-    }, header="info")
 
     graph = f"{model}"
     graph = re.sub(pattern=r"([A-Z][A-Za-z]*)(?=\()",

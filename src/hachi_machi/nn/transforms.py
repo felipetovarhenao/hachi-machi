@@ -178,7 +178,7 @@ class TransformFactory:
         },
         'categorical': {
             "cls": Categorical,
-            "type": "class"
+            "type": "categorical"
         },
         "normalize": {
             "cls": Normalize,

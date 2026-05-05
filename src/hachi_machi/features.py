@@ -5,7 +5,7 @@ import enum
 class FeatureType(enum.Enum):
 
     NORMAL = 0
-    CLASS = 1
+    CATEGORICAL = 1
     TEMPORAL = 2
 
 
@@ -13,11 +13,10 @@ class FeatureMap:
 
     DEFAULTS = {
         '0': {'type': 'temporal'},
-        '1': {'type': 'class'},
     }
 
     def __init__(self, data: torch.Tensor, features: dict):
-        features = {str(int(k) + 2): v for (k, v) in features.items()}
+        features = {str(int(k) + 1): v for (k, v) in features.items()}
         features = {
             **self.DEFAULTS,
             **features
