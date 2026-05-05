@@ -2,5 +2,5 @@
 - [] Allow multiple files for training data.
 - [] Skip data split.
 - [x] Implement custom data API
-- [ ] Midi augmentation:
-  - [] Retrograde
+- [x] Midi augmentation:
+  - [x] Retrograde
