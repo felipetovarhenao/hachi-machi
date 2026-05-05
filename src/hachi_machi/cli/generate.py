@@ -16,7 +16,7 @@ from .middleware import ClickMiddleware as M
 @M([
     ('model', '.pt'),
     ('output', '.mid', '.midi', '.txt')
-]).wrapper
+], device='cpu').wrapper
 def generate(**params):
     """Generates data auto-regressively given some pre-trained model.
 
@@ -37,8 +37,8 @@ def generate(**params):
         torch.manual_seed(params['seed'])
 
     model: PerformerModel = torch.load(f=model_path,
-                                         weights_only=False,
-                                         map_location=device)
+                                       weights_only=False,
+                                       map_location=device)
     model.reset()
     model.eval()
     events = []
