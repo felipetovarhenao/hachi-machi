@@ -116,4 +116,3 @@ class Session:
         with self._lock:
             self.model.reset()
             self._last_time = None
-        self.display.update(reset='*')
