@@ -62,27 +62,35 @@ def _train(**params):
     augmentator = None
     if seed != 0:
         torch.manual_seed(params['seed'])
-
+    temporal = True
     if file_path.endswith('.json'):
         with open(params['input'], 'r') as f:
             content = json.load(f)
-            if isinstance(content, list):
-                data = content
-                features = {}
-            elif isinstance(content, dict):
-                if 'data' not in content:
-                    raise TypeError(f"Invalid data:\n{data}")
-                data = content['data']
-                features = content.get('features', dict())
+        if not isinstance(content, dict) or 'data' not in content:
+            raise TypeError(
+                f'Invalid data. Format sequence under "data" key and provide sequence as a 2D matrix.')
+        data = content['data']
+        features: dict = content.get('features', dict())
         try:
-            data = torch.tensor(data).to(device)
+            data = torch.tensor(data, dtype=torch.float32).to(device)
         except:
             raise ValueError(
                 "data must be structured as a 2D matrix, each row with the same number of elements")
-
-        data[1:, 0] = data[..., 0].diff(dim=-1)
+        if 'time' not in content:
+            temporal = False
+        else:
+            time = torch.tensor(
+                content['time'], dtype=torch.float32).reshape(-1, 1).to(device)
+            data = torch.cat([time, data], dim=-1)
+            data[1:, 0] = data[..., 0].diff(dim=-1)
+            features = {str(int(k) + 1): v for (k, v) in features.items()}
+            features = {
+                '0': {
+                    'type': 'temporal'
+                },
+                **features
+            }
         feature_map = FeatureMap(data, features)
-
     else:
         parser = MidiParser(file_path)
         num_channels = len(parser.channels)
@@ -125,6 +133,7 @@ def _train(**params):
                               input_layer=input_layer,
                               output_layer=output_layer,
                               input_mask=feature_map.input_dims(),
+                              temporal=temporal,
                               device=device,)
     trainer = Trainer(model=model,
                       dataset=dataset,

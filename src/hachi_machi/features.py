@@ -11,16 +11,7 @@ class FeatureType(enum.Enum):
 
 class FeatureMap:
 
-    DEFAULTS = {
-        '0': {'type': 'temporal'},
-    }
-
     def __init__(self, data: torch.Tensor, features: dict):
-        features = {str(int(k) + 1): v for (k, v) in features.items()}
-        features = {
-            **self.DEFAULTS,
-            **features
-        }
         size = data.size(-1)
         self.dims = list(range(size))
         self.mask = []

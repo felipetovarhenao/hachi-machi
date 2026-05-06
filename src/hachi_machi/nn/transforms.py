@@ -35,7 +35,7 @@ class Normalize(BaseTransform):
         self.register_buffer('mean', data.mean(0))
         self.register_buffer('std', std)
 
-    def forward(self, x: torch.Tensor, inverse: bool = False):
+    def forward(self, x: torch.Tensor, inverse: bool = False) -> torch.Tensor:
         return x * self.std + self.mean if inverse else (x - self.mean) / self.std
 
 
@@ -89,7 +89,7 @@ class TimePhase(BaseTransform):
         super().__init__()
         self.register_buffer('dims', torch.tensor(dims, dtype=torch.int))
 
-    def forward(self, x: torch.Tensor, inverse: bool = False):
+    def forward(self, x: torch.Tensor, inverse: bool = False) -> torch.Tensor:
         if inverse:
             return x[..., :len(self.dims) * -2]
         c = x[..., self.dims]
@@ -107,7 +107,7 @@ class LogSpace(BaseTransform):
         super().__init__()
         self.register_buffer('dims', torch.tensor(dims, dtype=torch.int))
 
-    def forward(self, x: torch.Tensor, inverse: bool = False):
+    def forward(self, x: torch.Tensor, inverse: bool = False) -> torch.Tensor:
         x[..., self.dims] = torch.log1p(
             x[..., self.dims]) if not inverse else torch.expm1(x[..., self.dims])
         return x
@@ -121,7 +121,7 @@ class Transform(BaseTransform):
         self.input_size = 0
         self.output_size = 0
 
-    def forward(self, x: torch.Tensor, inverse: bool = False):
+    def forward(self, x: torch.Tensor, inverse: bool = False) -> torch.Tensor:
         layers = reversed(self.layers) if inverse else self.layers
         for layer in layers:
             x = layer(x, inverse)
@@ -149,7 +149,7 @@ class HarmonicScore(BaseTransform):
         self.register_buffer('dims', torch.tensor(dims, dtype=torch.int))
         self.sigma = sigma
 
-    def forward(self, x: torch.Tensor, inverse: bool = False) -> float:
+    def forward(self, x: torch.Tensor, inverse: bool = False) -> torch.Tensor:
         if inverse:
             return x[..., :-len(self.dims)]
         xd = x[..., self.dims].unsqueeze(-2).unsqueeze(-2) / 1000
@@ -182,7 +182,8 @@ class TransformFactory:
         },
         "normalize": {
             "cls": Normalize,
-        }
+        },
+
     }
 
     @classmethod

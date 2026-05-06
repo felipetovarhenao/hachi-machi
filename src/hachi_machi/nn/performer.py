@@ -14,11 +14,13 @@ class PerformerModel(nn.Module):
                  input_layer: T.Transform,
                  output_layer: T.Transform,
                  input_mask: list[int],
+                 temporal: bool = True,
                  device: str = 'mps',
                  *args,
                  **kwargs):
         super().__init__(*args, **kwargs)
         self.input_layer = input_layer
+        self.temporal = int(temporal)
         self.rnn = rnn
         self.output_layer = output_layer
         self.register_buffer(name='input_mask',
@@ -39,5 +41,6 @@ class PerformerModel(nn.Module):
         y, self.hidden_state = self.rnn.step(x=x,
                                              hidden=self.hidden_state)
         y: torch.Tensor = self.output_layer(y, inverse=True)
-        y[..., 0] = y[..., 0].clip(0)
+        if self.temporal == 1:
+            y[..., 0] = y[..., 0].clip(0)
         return y

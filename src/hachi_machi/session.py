@@ -25,8 +25,15 @@ class Session:
         self.model: PerformerModel = torch.load(f=model,
                                                 map_location=device,
                                                 weights_only=False)
-        self.input_size = self.model.input_size - 1
-        self.output_size = self.model.output_layer.input_size - 1
+        self.input_size = self.model.input_size
+        self.output_size = self.model.output_layer.input_size
+        self.input_mask = self.model.input_mask
+        self.temporal = bool(self.model.temporal)
+        if not self.temporal:
+            self.input_mask += 1
+        else:
+            self.input_size -= 1
+            self.output_size -= 1
         self.model.eval()
         self.client = SimpleUDPClient(host, out_port)
         self.dispatcher = Dispatcher()
@@ -34,7 +41,6 @@ class Session:
         self.out_port = out_port
         self._lock = threading.RLock()
         self._last_time: float | None = None
-        self.display = Console.get_display(1)
         self._set_handlers()
 
     def safe_handler(self, func: Callable[[str, Any], None]) -> Callable:
@@ -59,11 +65,10 @@ class Session:
 
     def send(self, msg):
         self.client.send_message("/output", msg)
-        # self.display.update(output=msg)
 
-    def schedule(self, event: torch.Tensor, delay: float) -> None:
+    def schedule(self, event: list, delay: float) -> None:
         t = threading.Timer(
-            delay / 1000.0, lambda: self.send(event.tolist()[1:]))
+            delay / 1000.0, lambda: self.send(event[1:]))
         t.daemon = True
         t.start()
 
@@ -71,18 +76,20 @@ class Session:
         now = time.perf_counter()
         with self._lock:
             x = x.clone()
-            x[..., 0] = 0 if self._last_time is None else (
-                now - self._last_time) * 1000
-            self._last_time = now
-
+            if self.temporal:
+                x[..., 0] = 0 if self._last_time is None else (
+                    now - self._last_time) * 1000
+                self._last_time = now
             x = x.unsqueeze(0).unsqueeze(0).float().to(self.device)
             with torch.no_grad():
                 y = self.model.step(x)
-            event = y.squeeze()
-
-        delay = event[0].item()
-        inference_ms = (time.perf_counter() - now) * 1000
-        self.schedule(event, max(0.0, delay - inference_ms))
+            event = y.squeeze().tolist()
+        if self.temporal:
+            delay = event[0]
+            inference_ms = (time.perf_counter() - now) * 1000
+            self.schedule(event, max(0.0, delay - inference_ms))
+        else:
+            self.send(event)
 
     def start(self):
         server = BlockingOSCUDPServer(
@@ -95,7 +102,7 @@ class Session:
         nargs = len(args)
         if nargs not in [self.input_size, self.output_size]:
             raise ValueError(
-                f"Invalid input length: {nargs}. Expected: {', or '.join([str(self.input_size), str(self.output_size)])}")
+                f"Invalid input length: {nargs}. Expected: {', or '.join([str(x) for x in list({self.input_size, self.output_size})])}")
 
         x = torch.tensor(
             [0.0, *args],
