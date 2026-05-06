@@ -6,7 +6,9 @@
 
 ### How it works
 
-To train a model in _hachi-machi_, all you need is a data set to train the model. While _hachi-machi_ provides out-of-the-box training on MIDI files directly, the architecture is, in principle, data agnostic. This means they can be trained on any kind of user-defined sequential data—not musical data, but any type of data that changes over time. In the simplest of cases for custom data models, the data must be provided in the form of a JSON file, as follows:
+To train a model in _hachi-machi_, all you need is a set of sequential data to train the model. While _hachi-machi_ works out-of-the-box for training models of MIDI data, the model's architecture is, in principle, data agnostic. This means they can be trained on any kind of user-defined sequential data—not only musical data, but any other type of data that in temporal in nature.
+
+In the simplest of cases for custom data models, the data must be provided in the form of a JSON file, as a 2D rectangular matrix—i.e., a list of lists, each column being a feature and each row being an event:
 
 ```json
 [
