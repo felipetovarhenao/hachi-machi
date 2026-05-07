@@ -110,10 +110,6 @@ class ClickMiddleware:
                       default=200,
                       type=int,
                       help='Length of sequence segments to use during training.')
-        @click.option('--split',
-                      default=0.7,
-                      type=float,
-                      help='Training split factor.')
         @click.option('--epochs',
                       default=1000,
                       help='Maximum number of epochs.')

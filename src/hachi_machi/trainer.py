@@ -39,9 +39,11 @@ class Trainer:
     def _loss(self, x) -> float:
         return 1 / (1 + math.exp(-min(x, 709)))
 
-    def check(self, epoch: int, train_loss: float, eval_loss: float) -> bool:
-        if eval_loss < self.min_loss:
-            self.min_loss = eval_loss
+    def check(self, epoch: int, loss: float) -> bool:
+        loss = self._loss(loss)
+        delta = self.min_loss - loss
+        if loss < self.min_loss:
+            self.min_loss = loss
             self.patience = 0
         else:
             self.patience += 1
@@ -56,12 +58,12 @@ class Trainer:
             time=str(self.timer),
             progress=progress(self.progress, self.max_patience + 1),
             epoch=epoch,
-            train_loss=f"{self._loss(train_loss):1.4f}",
-            validation_loss=f"{self._loss(self.min_loss):.4f}"
+            loss=f"{self.min_loss:1.4f}",
+            learning=f"{'+' if delta > 0 else ''}{delta:.3f}",
         )
         if stop:
             Console.success(
-                f"\nEpochs:\t\t{epoch:4d}\nFinal loss:\t{self._loss(self.min_loss):.6f}", bold=True)
+                f"\nEpochs:\t\t{epoch:4d}\nFinal loss:\t{self.min_loss:.6f}", bold=True)
 
         return stop
 
@@ -106,7 +108,6 @@ class Trainer:
         Console.print("\nTraining", bold=True)
         for epoch in range(epochs):
             self.model.train()
-            self.dataset.train()
             train_loss = 0
             train_batches = 0
             for (x, y) in self.loader:
@@ -119,19 +120,6 @@ class Trainer:
                 train_loss += loss.item()
                 train_batches += 1
             train_loss /= train_batches
-            self.model.eval()
-            self.dataset.eval()
-            with torch.no_grad():
-                eval_loss = 0
-                eval_batches = 0
-                for (x, y) in self.loader:
-                    y = self.model.output_layer(y)
-                    pi, mu, sigma, _ = self.model(x)
-                    loss: torch.Tensor = self.loss(pi, mu, sigma, y)
-                    eval_loss += loss.item()
-                    eval_batches += 1
-                eval_loss /= eval_batches
             if self.check(epoch=epoch,
-                          train_loss=train_loss,
-                          eval_loss=eval_loss):
+                          loss=train_loss):
                 break

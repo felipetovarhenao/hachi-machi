@@ -14,7 +14,6 @@ class EventDataset(Dataset):
                  input_dims: list[int],
                  output_dims: list[int],
                  context_length: int = 16,
-                 split: float = 0.6,
                  augmentator: Augmentator | None = None):
         with torch.no_grad():
             self.mean = data.mean(0)
@@ -24,11 +23,10 @@ class EventDataset(Dataset):
                                size=context_length + 1,
                                step=1)
             self.size = len(data)
-            split = int(split * self.size)
             data = data.transpose(2, 1)
             data = data[torch.randperm(n=self.size)]
-            self.train_set, self.eval_set = data[:split], data[split:]
-        self.training = True
+
+        self.data = data
 
         self._in_dims = input_dims
         self._out_dims = output_dims
@@ -45,23 +43,13 @@ class EventDataset(Dataset):
                 f'Adjusting context length due to insufficient data samples: {context_length} -> {y}')
         return y
 
-    def get_split(self) -> torch.Tensor:
-        return self.train_set if self.training else self.eval_set
-
-    def train(self, mode: bool = True) -> None:
-        self.training = mode
-
-    def eval(self) -> None:
-        self.training = False
-
     def __len__(self) -> int:
-        data = self.get_split()
-        return len(data)
+        return len(self.data)
 
     def __getitem__(self, index) -> torch.Tensor:
-        data = self.get_split()
+        data = self.data
         item = data[index]
-        if self.augmentator is not None and self.training:
+        if self.augmentator is not None:
             item = self.augmentator(item)
         x, y = item[..., :-1, self._in_dims], item[...,
                                                    1:, self._out_dims]

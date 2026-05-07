@@ -119,7 +119,6 @@ def _train(**params):
                            input_dims=feature_map.input_dims(),
                            output_dims=feature_map.output_dims(),
                            context_length=params['context'],
-                           split=params['split'],
                            augmentator=augmentator)
     rnn = nn.RecurrentMDN(k=params['mixtures'],
                           input_size=input_layer.output_size,
