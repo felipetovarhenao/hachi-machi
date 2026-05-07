@@ -13,7 +13,6 @@ class MidiParser:
 
         midi.tracks = [mido.merge_tracks(midi.tracks)]
         self._midi = midi
-        self._numvoices = 0
         self._events = self._parse()
 
     def _parse(self) -> torch.Tensor:
