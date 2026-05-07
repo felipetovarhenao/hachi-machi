@@ -10,67 +10,66 @@ To train a model in _hachi-machi_, all you need is a set of sequential data to t
 
 ### Custom data models
 
+Training a custom model requires a JSON file describing your dataset. The exact structure depends on whether timing information is relevant to your use case.
+
 #### Non-temporal data
 
-The most trivial type of model is a _non-temporal_ model, meaning a model that is trained on sequential data, where there is no need for the model to have a sense of time, but only of order. Examples could include, for instance, predicting the next chord in a chord progression. In this case, the data should be structured as follows:
+Use this format when event order matters but timing does not—for example, predicting the next chord in a chord progression.
 
 ```json
 {
-	"data": [
-		[<feature[0,0]>, ..., <feature[0,N]>],
-		[<feature[1,0]>, ..., <feature[1_N]>],
-		[<feature[2,0]>, ..., <feature[2,N]>],
-		...
-		[<feature[M,0]>, ..., <feature[M,N]>]
-	]
+    "data": [
+        [<feature_0>, ..., <feature_N>],
+        [<feature_0>, ..., <feature_N>],
+        ...
+    ]
 }
 ```
+
+`"data"` is a list of events, where each event is a list of `N` feature values. Features are ordered consistently across all events.
 
 #### Temporal data
 
-The more relevant case is models where the timing of an event is important, the content of the prediction is as important as when the prediction is supposed to happen. A clear example would be to predict MIDI notes, which not only requires predicting information such as pitch, velocity, but also when that note happens. In such case, the data must be structured as follows:
+Use this format when the timing of each event is part of what the model should learn—for example, predicting MIDI notes requires knowing not just pitch and velocity, but when each note occurs.
 
 ```json
 {
-	"time": [
-		<ms_time[0],
-		<ms_time[1]>,
-		...,
-		<ms_time[N]>
-	]
-	,
-	"data": [
-		[<feature[0,0]>, ..., <feature[0,N]>],
-		[<feature[1,0]>, ..., <feature[1,N]>],
-		[<feature[2,0]>, ..., <feature[2,N]>],
-		...
-		[<feature[M,0]>, ..., <feature[M,N]>]
-	]
+    "time": [
+        <ms_time_0>,
+        <ms_time_1>,
+        ...
+    ],
+    "data": [
+        [<feature_0>, ..., <feature_N>],
+        [<feature_0>, ..., <feature_N>],
+        ...
+    ]
 }
 ```
 
-Where time denotes the onset, in milliseconds, at which each event in `"data"` happens. Not that the length of `"time"`, must match the number of events in `"data"`.
+`"time"` is a list of onset times in milliseconds, one per event. Its length must match the number of events in `"data"`.
 
-### Feature types
+#### Feature types
 
-By default, all event features are considered continuous—i.e., they can take any value within a range. An example of continuous features include pitch, amplitude, duration. However, it is also possible to mark certain features as discrete or _categorical_, which is useful for features such as class identifiers—e.g., instrument ID, ON/OFF flags, etc.. In that case, the features can be marked as such in the JSON file as such:
+By default, all features are treated as **continuous**—that is, they can take any numeric value within a range (e.g., pitch, amplitude, duration).
+
+Features can also be declared **categorical**, which is appropriate for discrete identifiers such as instrument IDs or ON/OFF flags. Doing so improves model training by changing how those features are encoded internally.
+
+To mark a feature as categorical, add a `"features"` entry to the JSON file, keyed by the feature's zero-based index:
 
 ```json
 {
-	"features": {
-		"1": { "type": "categorical" }
-	},
-	"data": [
-		[<feature[0,0]>, *<feature[0,1]>*, ..., <feature[0,N]>],
-		[<feature[1,0]>, *<feature[1,1]>*, ..., <feature[1,N]>],
-		[<feature[2,0]>, *<feature[2,1]>*, ..., <feature[2,N]>],
-		...
-		[<feature[M,0]>, *<feature[M,1]>*, ..., <feature[M,N]>]
-	]
+    "features": {
+        "1": { "type": "categorical" }
+    },
+    "data": [
+        [<feature_0>, <feature_1>, ..., <feature_N>],
+        ...
+    ]
 }
 ```
 
-This means feature at index `1` (highlighted with asterisk), will be treated as a categorical feature, which improves model training.
+In this example, the second feature in each event (index `1`) will be treated as categorical. Any feature index not listed in `"features"` is assumed continuous.
 
 ---
 
