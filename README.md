@@ -30,7 +30,7 @@ Use this format when event order matters but timing does not—for example, pred
 
 #### Temporal data
 
-Use this format when the timing of each event is part of what the model should learn—for example, predicting MIDI notes requires knowing not just pitch and velocity, but when each note occurs.
+Use this format when the timing of each event is part of what the model should learn—for example, predicting MIDI notes requires knowing not just pitch and velocity, but when each note occurs. This will determine how temporal vs non-temporal models behave during _streaming_ mode (via the `run` command): the prediction will be emitted immediately for non-temporal models, while the prediction is scheduled to be emitted at some time in the future based on what the model learned.
 
 ```json
 {
