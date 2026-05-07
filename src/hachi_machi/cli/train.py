@@ -99,10 +99,10 @@ def _train(**params):
                 "MIDI file must contain of two or more channels.")
         data = parser.events().to(device)
         feature_map = FeatureMap(data, features={
-            "0": {
+            "1": {
                 "type": "categorical"
             },
-            "3": {
+            "4": {
                 'masked': True,
                 'type': 'temporal'
             }
