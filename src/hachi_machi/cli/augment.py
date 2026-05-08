@@ -6,7 +6,7 @@ from ..augment import DataAugmentator
 from .middleware import ClickMiddleware as M
 
 
-@click.command(name='augment', context_settings={'show_default': True})
+@click.command(context_settings={'show_default': True})
 @click.argument('input', type=click.Path(exists=True,
                                          file_okay=True,
                                          dir_okay=False,
@@ -25,7 +25,7 @@ from .middleware import ClickMiddleware as M
     ('input', '.json'),
     ('output', '.txt'),
 ]).wrapper
-def render(**params):
+def augment(**params):
     """Renders a MIDI file, with optional data augmentation.
 
     Arguments:

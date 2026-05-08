@@ -1,11 +1,10 @@
 import click
 import datetime
 from ..console import Console
-from . import (gen,
+from . import (augment, gen,
                format,
                train,
                run,
-               render,
                info)
 
 __banner__ = f"""
@@ -31,6 +30,6 @@ def main():
 main.add_command(train.train)
 main.add_command(run.run)
 main.add_command(gen.gen)
-main.add_command(render.render)
+main.add_command(augment.augment)
 main.add_command(info.info)
 main.add_command(format.format)
