@@ -8,7 +8,7 @@ from ..utils import (tensor_to_txt,
 from .middleware import ClickMiddleware as M
 
 
-@click.command(context_settings={'show_default': True})
+@click.command(name='gen', context_settings={'show_default': True})
 @click.argument('model', type=click.Path(exists=True, file_okay=True, dir_okay=False, resolve_path=True))
 @click.argument('output', default='out.txt', type=click.Path(file_okay=True, dir_okay=False))
 @click.option('--tokens',  default=100, help='Number of tokens to generate.')
