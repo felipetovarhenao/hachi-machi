@@ -1,7 +1,7 @@
 import click
 import datetime
 from ..console import Console
-from . import (generate,
+from . import (gen,
                format,
                train,
                run,
@@ -30,7 +30,7 @@ def main():
 
 main.add_command(train.train)
 main.add_command(run.run)
-main.add_command(generate.generate)
+main.add_command(gen.gen)
 main.add_command(render.render)
 main.add_command(info.info)
 main.add_command(format.format)
