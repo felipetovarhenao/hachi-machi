@@ -1,5 +1,7 @@
+import os
 import click
 import torch
+import json
 from ..midi import MidiParser
 from ..nn import PerformerModel
 from ..console import Console
@@ -15,7 +17,7 @@ from .middleware import ClickMiddleware as M
 @click.option('--seed', default=0, help='Random seed.')
 @M([
     ('model', '.pt'),
-    ('output', '.mid', '.midi', '.txt')
+    ('output', '.txt', '.json')
 ], device='cpu').wrapper
 def generate(**params):
     """Generates data auto-regressively given some pre-trained model.
@@ -29,9 +31,7 @@ def generate(**params):
     device = params['device']
     model_path = params['model']
     output = params['output']
-    is_txt = output.endswith('.txt')
-    if not is_txt:
-        return
+    ext = os.path.splitext(output)[1]
     seed = params['seed']
     if seed != 0:
         torch.manual_seed(params['seed'])
@@ -55,10 +55,12 @@ def generate(**params):
 
     events = torch.cat(events, dim=1).squeeze(0)
 
-    if is_txt:
+    if ext == '.txt':
         tensor_to_txt(events, output)
-    else:
-        MidiParser.render(events=events,
-                          output_path=output)
+    elif ext == '.json':
+        with open(output, 'w') as f:
+            json.dump(obj=events.tolist(),
+                      fp=f,
+                      indent=4)
 
     Console.success("\nDONE", bold=True)
