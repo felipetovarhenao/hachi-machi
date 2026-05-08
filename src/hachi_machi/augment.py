@@ -39,7 +39,7 @@ class Scale(Operation):
         self.factor = factor
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        return x * 2 ** self.random(x) * self.factor
+        return x * 2 ** (self.random(x) * self.factor)
 
 
 class Mirror(Operation):
