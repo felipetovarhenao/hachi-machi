@@ -52,13 +52,13 @@ class RandomOperation(Operation):
 class Shift(RandomOperation):
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        return x + self.random(x) * self.factor
+        return x + self.random(x) * self.var
 
 
 class Scale(RandomOperation):
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        return x * 2 ** (self.random(x) * self.factor)
+        return x * 2 ** (self.random(x) * self.var)
 
 
 class Mirror(Operation):
