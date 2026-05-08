@@ -1,3 +1,5 @@
+- [] Adjust batch size
+- [] Remove scheduled events on reset.
 - [x] Solve unstable channel to track ID assignment.
 - [] Allow multiple files for training data.
 - [x] Skip data split.
