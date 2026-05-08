@@ -24,6 +24,16 @@ def info(**params):
     model = model.to(device)
     Trainer.benchmark(model)
 
+    out_size = model.output_layer.input_size
+    mask = "".join(
+        ["1" if i in model.input_mask else "0" for i in range(out_size)])
+
+    info = {"input_size": model.input_layer.input_size,
+            "output_size": model.output_layer.input_size,
+            "mask":  mask}
+
+    Console.pretty(info, "Info")
+
     graph = f"{model}"
     graph = re.sub(pattern=r"([A-Z][A-Za-z]*)(?=\()",
                    repl=Console.style(r"\g<1>", 'info', bold=True),
