@@ -5,46 +5,57 @@ import torch
 import inspect
 from .features import FeatureMap
 
+_DISTS = {
+    "normal": torch.randn,
+    "uniform": torch.rand,
+}
+
+_SCOPES = {
+    "global": lambda fn, x: fn(1),
+    "time": lambda fn, x: fn(x.shape[-2], 1),
+    "feature": lambda fn, x: fn(1, x.shape[-1]),
+    "both": lambda fn, x: fn(*x.shape[-2:]),
+}
+
 
 class Operation(abc.ABC):
 
-    _RANDOM_MODES = {
-        "global": lambda x: torch.randn(1),
-        "time": lambda x: torch.randn(x.shape[-2], 1),
-        "feature": lambda x: torch.randn(1, x.shape[-1]),
-        "both": lambda x: torch.randn(*x.shape[-2:]),
-    }
-
-    def __init__(self, *dims: int, scope: str = "global"):
+    def __init__(self, *dims: int):
         self.dims = dims
-        self._rand_fn = self._RANDOM_MODES[scope]
+
+    @abc.abstractmethod
+    def forward(self, x: torch.Tensor) -> torch.Tensor: ...
 
     def __call__(self, x: torch.Tensor) -> torch.Tensor:
         x[..., self.dims] = self.forward(x[..., self.dims])
         return x
 
+
+class RandomOperation(Operation):
+
+    def __init__(self, *dims, var: int | float = 0, scope: str = "global", dist: str = "normal"):
+        super().__init__(*dims)
+        self.var = var
+        if dist not in _DISTS:
+            raise ValueError(
+                f"Invalid dist: {dist!r}. Expected one of {list(_DISTS)}")
+        if scope not in _SCOPES:
+            raise ValueError(
+                f"Invalid scope: {scope!r}. Expected one of {list(_SCOPES)}")
+        dist_fn = _DISTS[dist]
+        self._rand_fn = lambda x: _SCOPES[scope](dist_fn, x)
+
     def random(self, x):
         return self._rand_fn(x).to(x.device)
 
-    @abc.abstractmethod
-    def forward(self, x: torch.Tensor) -> torch.Tensor: ...
 
-
-class Shift(Operation):
-
-    def __init__(self, *dims: int | str, factor: float | int = 0, **kwargs):
-        super().__init__(*dims, **kwargs)
-        self.factor = factor
+class Shift(RandomOperation):
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         return x + self.random(x) * self.factor
 
 
-class Scale(Operation):
-
-    def __init__(self, *dims: int, factor: float | int = 0, **kwargs):
-        super().__init__(*dims, **kwargs)
-        self.factor = factor
+class Scale(RandomOperation):
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         return x * 2 ** (self.random(x) * self.factor)
@@ -71,8 +82,28 @@ class DataAugmentator:
     def __len__(self):
         return len(self.operations)
 
+    def get_signature(self, cls: Operation):
+        options = {}
+        bases = [cls]
+        while True:
+            children = []
+            stop = True
+            for cls in bases:
+                options = {
+                    **inspect.signature(cls).parameters,
+                    **options
+                }
+                stop = False
+                children.extend(cls.__bases__)
+
+            bases = children
+            if stop:
+                break
+        return options
+
     def from_str(self, s: str) -> tuple[str, list, dict]:
-        s = re.sub(r'\b(t|time|global|feature|both)\b', r'"\g<1>"', s)
+        s = re.sub(
+            r'\b(t|time|global|feature|both|normal|uniform)\b', r'"\g<1>"', s)
         tree = ast.parse(s, mode='eval')
         call = tree.body
         assert isinstance(call, ast.Call)
@@ -87,7 +118,6 @@ class DataAugmentator:
     def parse(self, cmds: list[str], feature_map: FeatureMap):
         dim_offset = int(feature_map.temporal())
         ops: list[Operation] = []
-        default_params = inspect.signature(Operation).parameters
         for cmd in cmds:
             name, args, kwargs = self.from_str(cmd)
             dims = []
@@ -114,10 +144,7 @@ class DataAugmentator:
             if name not in self.OPERATIONS:
                 raise NameError(f'Invalid operation name: {name}')
             op_cls = self.OPERATIONS[name]
-            op_params = {
-                **default_params,
-                **inspect.signature(op_cls).parameters
-            }
+            op_params = self.get_signature(op_cls)
             op_keys = op_params.keys()
             for k, v in kwargs.items():
                 if k not in op_keys:

@@ -16,7 +16,7 @@ from .middleware import ClickMiddleware as M
                 type=click.Path(file_okay=True,
                                 dir_okay=False,
                                 resolve_path=True,))
-@click.option('--operation', '-op',
+@click.option('--operations', '-op',
               help='Data augmentation operation(s) to stochastically apply during training.',
               type=str,
               multiple=True)
