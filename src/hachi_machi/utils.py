@@ -1,8 +1,7 @@
 import os
 import torch
-import traceback
-from typing import Callable, Any
-from .console import Console
+import json
+from .features import FeatureMap
 
 
 def validate_path(file, ext: str | list) -> str:
@@ -37,3 +36,39 @@ def progress(n: int, N: int = 10, size: int = 12):
     end = ' ⣄⣤⣦⣶⣷⣿'[end_id]
     bar = "⣿" * i_size + end * (end_id > 0)
     return f'{bar}{"⣀" * (size - i_size - (end_id > 0))} {round(nt * 100):.1f}%'
+
+
+def load_data(file_path: str, device: str = 'cpu') -> tuple[torch.Tensor, dict, bool]:
+    temporal = True
+    with open(file_path, 'r') as f:
+        content = json.load(f)
+
+    if not isinstance(content, dict) or 'data' not in content:
+        raise TypeError(
+            f'Invalid data. Format sequence under "data" key and provide sequence as a 2D matrix.')
+
+    data = content['data']
+    features: dict = content.get('features', dict())
+
+    try:
+        data = torch.tensor(data, dtype=torch.float32).to(device)
+    except:
+        raise ValueError(
+            "data must be structured as a 2D matrix, each row with the same number of elements")
+
+    if 'time' not in content:
+        temporal = False
+    else:
+        time = torch.tensor(
+            content['time'], dtype=torch.float32).reshape(-1, 1).to(device)
+        data = torch.cat([time, data], dim=-1)
+        data[1:, 0] = data[..., 0].diff(dim=-1)
+        features = {str(int(k) + 1): v for (k, v) in features.items()}
+        features = {
+            '0': {
+                'type': 'temporal'
+            },
+            **features
+        }
+
+    return data, FeatureMap(data, features), temporal

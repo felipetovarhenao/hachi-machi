@@ -8,15 +8,23 @@ from .features import FeatureMap
 
 class Operation(abc.ABC):
 
-    def __init__(self, *dims: int):
+    _RANDOM_MODES = {
+        "global": lambda x: torch.randn(1),
+        "time": lambda x: torch.randn(x.shape[-2], 1),
+        "feature": lambda x: torch.randn(1, x.shape[-1]),
+        "both": lambda x: torch.randn(*x.shape[-2:]),
+    }
+
+    def __init__(self, *dims: int, scope: str = "global"):
         self.dims = dims
+        self._rand_fn = self._RANDOM_MODES[scope]
 
     def __call__(self, x: torch.Tensor) -> torch.Tensor:
         x[..., self.dims] = self.forward(x[..., self.dims])
         return x
 
     def random(self, x):
-        return torch.randn(1).to(x.device)
+        return self._rand_fn(x).to(x.device)
 
     @abc.abstractmethod
     def forward(self, x: torch.Tensor) -> torch.Tensor: ...
@@ -24,8 +32,8 @@ class Operation(abc.ABC):
 
 class Shift(Operation):
 
-    def __init__(self, *dims: int | str, factor: float | int = 0):
-        super().__init__(dims)
+    def __init__(self, *dims: int | str, factor: float | int = 0, **kwargs):
+        super().__init__(*dims, **kwargs)
         self.factor = factor
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
@@ -34,8 +42,8 @@ class Shift(Operation):
 
 class Scale(Operation):
 
-    def __init__(self, *dims: int, factor: float | int = 0):
-        super().__init__(dims)
+    def __init__(self, *dims: int, factor: float | int = 0, **kwargs):
+        super().__init__(*dims, **kwargs)
         self.factor = factor
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
@@ -64,7 +72,7 @@ class DataAugmentator:
         return len(self.operations)
 
     def from_str(self, s: str) -> tuple[str, list, dict]:
-        s = re.sub(r'\bt\b', '"t"', s)
+        s = re.sub(r'\b(t|time|global|feature|both)\b', r'"\g<1>"', s)
         tree = ast.parse(s, mode='eval')
         call = tree.body
         assert isinstance(call, ast.Call)
@@ -79,6 +87,7 @@ class DataAugmentator:
     def parse(self, cmds: list[str], feature_map: FeatureMap):
         dim_offset = int(feature_map.temporal())
         ops: list[Operation] = []
+        default_params = inspect.signature(Operation).parameters
         for cmd in cmds:
             name, args, kwargs = self.from_str(cmd)
             dims = []
@@ -105,7 +114,10 @@ class DataAugmentator:
             if name not in self.OPERATIONS:
                 raise NameError(f'Invalid operation name: {name}')
             op_cls = self.OPERATIONS[name]
-            op_params = inspect.signature(op_cls).parameters
+            op_params = {
+                **default_params,
+                **inspect.signature(op_cls).parameters
+            }
             op_keys = op_params.keys()
             for k, v in kwargs.items():
                 if k not in op_keys:
