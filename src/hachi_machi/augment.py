@@ -128,32 +128,32 @@ class DataAugmentator:
                 for i, dim in enumerate(args):
                     if dim == 't' and dim_offset == 0:
                         raise ValueError(
-                            "Time dimension t cannot be used in non-temporal datasets.")
+                            "Time dimension 't' cannot be used in non-temporal datasets")
 
                     if dim == 't':
                         dim = -1
 
                     if not isinstance(dim, int):
                         raise ValueError(
-                            f"{name} operation: Invalid dimension type at index {i}: {dim}.")
+                            f"Invalid dimension type at index {i} in '{name}(...)': {dim}. Expected int")
 
                     if not 0 <= (dim + dim_offset) < len(feature_map):
                         raise ValueError(
                             f"Outside of range dimension for '{name}' operation at index {i}: {dim}. Must be 0 <= dim < {len(feature_map) - dim_offset}")
                     dims.append(dim + dim_offset)
             if name not in self.OPERATIONS:
-                raise NameError(f'Invalid operation name: {name}')
+                raise NameError(f"Invalid operation name: '{name}'")
             op_cls = self.OPERATIONS[name]
             op_params = self.get_signature(op_cls)
             op_keys = op_params.keys()
             for k, v in kwargs.items():
                 if k not in op_keys:
                     raise KeyError(
-                        f"Invalid keyword argument for {name}: {k}")
+                        f"Invalid keyword argument in '{name}(...)': {k}")
                 arg_type = op_params[k].annotation
                 if not isinstance(v, arg_type):
                     raise ValueError(
-                        f'Invalid type for argument: {k}: {type(v)}. Expected: {arg_type}')
+                        f"Invalid value type for '{k}' argument in '{name}(...)': {type(v)}. Expected: {arg_type}")
             op = op_cls(*dims, **kwargs)
             ops.append(op)
         return ops

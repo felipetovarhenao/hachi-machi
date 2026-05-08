@@ -6,6 +6,7 @@ from ..console import Console
 from ..nn import transforms as T
 import click
 import functools
+import traceback
 
 
 class ClickMiddleware:
@@ -23,11 +24,22 @@ class ClickMiddleware:
                       type=click.Choice(self.get_available_devices()),
                       default=self.device,
                       help='Compute device')
+        @click.option('--debug',
+                      flag_value=True,
+                      default=False,
+                      help="Debug mode")
         @functools.wraps(func)
         def _wrapper(**kwargs):
             config = self._parse(**kwargs)
+            debug = config.pop('debug')
             Console.pretty(config, header='Settings')
-            func(**config)
+            if not debug:
+                try:
+                    func(**config)
+                except Exception as e:
+                    Console.error(f"\n{e.args[0]}")
+            else:
+                func(**config)
 
         return _wrapper
 
