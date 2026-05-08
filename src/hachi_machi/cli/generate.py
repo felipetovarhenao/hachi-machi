@@ -54,12 +54,19 @@ def generate(**params):
             x = y[..., model.input_mask]
 
     events = torch.cat(events, dim=1).squeeze(0)
+    if model.temporal:
+        events[..., 0] = events[..., 0].cumsum(0)
 
     if ext == '.txt':
         tensor_to_txt(events, output)
     elif ext == '.json':
         with open(output, 'w') as f:
-            json.dump(obj=events.tolist(),
+            if model.temporal:
+                content = {"time": events[..., 0].tolist(),
+                           "data": events[..., 1:].tolist()}
+            else:
+                content = {'data': events.tolist()}
+            json.dump(obj=content,
                       fp=f,
                       indent=4)
 

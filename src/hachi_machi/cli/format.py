@@ -25,7 +25,7 @@ def format(**params):
     input_file = params['input']
     output_file = params['output']
     midi = MidiParser(input_file)
-    data = midi.events().int()
+    data = midi.events()
     data[..., 0] = data[..., 0].cumsum(dim=0)
     time = data[..., 0]
     data = data[..., 1:]

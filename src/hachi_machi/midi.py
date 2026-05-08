@@ -21,7 +21,7 @@ class MidiParser:
         active_notes = {}
         channels = set()
         for msg in self._midi:
-            onset += int(round(msg.time * 1000))
+            onset += msg.time
             if not msg.type.startswith('note_'):
                 continue
             channel = msg.channel

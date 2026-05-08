@@ -67,8 +67,7 @@ class Session:
         self.client.send_message("/output", msg)
 
     def schedule(self, event: list, delay: float) -> None:
-        t = threading.Timer(
-            delay / 1000.0, lambda: self.send(event[1:]))
+        t = threading.Timer(delay, lambda: self.send(event[1:]))
         t.daemon = True
         t.start()
 
@@ -78,7 +77,7 @@ class Session:
             x = x.clone()
             if self.temporal:
                 x[..., 0] = 0 if self._last_time is None else (
-                    now - self._last_time) * 1000
+                    now - self._last_time)
                 self._last_time = now
             x = x.unsqueeze(0).unsqueeze(0).float().to(self.device)
             with torch.no_grad():
@@ -86,7 +85,7 @@ class Session:
             event = y.squeeze().tolist()
         if self.temporal:
             delay = event[0]
-            inference_ms = (time.perf_counter() - now) * 1000
+            inference_ms = time.perf_counter() - now
             self.schedule(event, max(0.0, delay - inference_ms))
         else:
             self.send(event)
