@@ -39,7 +39,7 @@ def progress(n: int, N: int = 10, size: int = 12):
 
 
 def load_data(file_path: str, device: str = 'cpu') -> tuple[torch.Tensor, dict, bool]:
-    temporal = True
+    temporal = False
     with open(file_path, 'r') as f:
         content = json.load(f)
 
@@ -56,9 +56,8 @@ def load_data(file_path: str, device: str = 'cpu') -> tuple[torch.Tensor, dict, 
         raise ValueError(
             "data must be structured as a 2D matrix, each row with the same number of elements")
 
-    if 'time' not in content:
-        temporal = False
-    else:
+    if 'time' in content:
+        temporal = True
         time = torch.tensor(
             content['time'], dtype=torch.float32).reshape(-1, 1).to(device)
         data = torch.cat([time, data], dim=-1)

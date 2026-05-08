@@ -20,13 +20,16 @@ _SCOPES = {
 
 class Operation(abc.ABC):
 
-    def __init__(self, *dims: int):
+    def __init__(self, *dims: int, p: int | float = 0.5):
+        self.p = max(0, min(p, 1))
         self.dims = dims
 
     @abc.abstractmethod
     def forward(self, x: torch.Tensor) -> torch.Tensor: ...
 
     def __call__(self, x: torch.Tensor) -> torch.Tensor:
+        if torch.rand(1).item() > self.p:
+            return x
         x[..., self.dims] = self.forward(x[..., self.dims])
         return x
 
@@ -67,13 +70,27 @@ class Mirror(Operation):
         return x.mean(-2) * 2 - x
 
 
+class Permute(Operation):
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        result = x.clone()
+        for dim in range(x.size(-1)):
+            channels = result[..., dim].unique()
+            swap = channels[torch.randperm(len(channels))]
+            for v, s in zip(channels, swap):
+                mask = x[..., dim] == v
+                result[..., dim] = torch.where(mask, s, result[..., dim])
+        return result
+
+
 class DataAugmentator:
 
     OPERATIONS = {
         cls.__name__.lower(): cls
         for cls in [Scale,
                     Mirror,
-                    Shift]
+                    Shift,
+                    Permute]
     }
 
     def __init__(self, operations: list[str], feature_map: FeatureMap):

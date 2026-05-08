@@ -6,7 +6,7 @@ from ..augment import DataAugmentator
 from .middleware import ClickMiddleware as M
 
 
-@click.command(context_settings={'show_default': True})
+@click.command(name='augment', context_settings={'show_default': True})
 @click.argument('input', type=click.Path(exists=True,
                                          file_okay=True,
                                          dir_okay=False,
@@ -39,7 +39,7 @@ def render(**params):
     input = params['input']
     output = params['output']
     seed = params['seed']
-    ops = params['operation']
+    ops = params['operations']
 
     if seed != 0:
         torch.manual_seed(seed)
