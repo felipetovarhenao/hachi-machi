@@ -14,7 +14,7 @@ from .middleware import ClickMiddleware as M
 @click.argument('model', type=click.Path(exists=True, file_okay=True, dir_okay=False, resolve_path=True))
 @click.argument('output', default='out.txt', type=click.Path(file_okay=True, dir_okay=False))
 @click.option('--tokens', '-n',  default=100, help='Number of tokens to generate.')
-@click.option('--seed', default=0, help='Random seed.')
+@click.option('--seed', '-s', default=0, help='Random seed.')
 @M([
     ('model', '.pt'),
     ('output', '.txt', '.json')
