@@ -141,6 +141,10 @@ class ClickMiddleware:
                       type=click.Choice(T.TransformFactory.options()),
                       help='Optional transform layers.',
                       multiple=True)
+        @click.option('--operations', '-op',
+                      type=str,
+                      help='Data augmentation operation(s) to stochastically apply during training.',
+                      multiple=True)
         @self.wrapper
         @functools.wraps(func)
         def _wrapper(**kwargs):

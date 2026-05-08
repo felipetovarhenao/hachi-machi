@@ -50,3 +50,9 @@ class FeatureMap:
 
     def __repr__(self):
         return str(torch.stack([self.dims, self.mask.int(), self.types]))
+
+    def __len__(self):
+        return len(self.dims)
+    
+    def temporal(self):
+        return self.types[0] == FeatureType.TEMPORAL.value

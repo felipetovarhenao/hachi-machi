@@ -1,6 +1,6 @@
 import torch
 from torch.utils.data import Dataset, DataLoader
-from .augment import Augmentator
+from .augment import DataAugmentator
 from .console import Console
 
 
@@ -14,7 +14,7 @@ class EventDataset(Dataset):
                  input_dims: list[int],
                  output_dims: list[int],
                  context_length: int = 16,
-                 augmentator: Augmentator | None = None):
+                 augmentator: DataAugmentator | None = None):
         with torch.no_grad():
             self.mean = data.mean(0)
             context_length = self._clamp_context(context_length, len(data))

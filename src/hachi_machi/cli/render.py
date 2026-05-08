@@ -2,7 +2,6 @@ import torch
 import click
 from ..utils import tensor_to_txt
 from ..midi import MidiParser
-from ..augment import MidiAugmentator
 from ..console import Console
 from .middleware import ClickMiddleware as M
 
@@ -18,10 +17,6 @@ from .middleware import ClickMiddleware as M
                 type=click.Path(file_okay=True,
                                 dir_okay=False,
                                 resolve_path=True,))
-@click.option('--augmentation', '-a',
-              default=[],
-              type=click.Choice(MidiAugmentator.options()),
-              multiple=True)
 @click.option('--seed', '-s', default=0)
 @M([
     ('input', '.mid', '.midi'),
@@ -44,20 +39,12 @@ def render(**params):
     input = params['input']
     output = params['output']
     seed = params['seed']
-    augmentation = params['augmentation']
 
     if seed != 0:
         torch.manual_seed(seed)
     midi = MidiParser(file=input)
     events = midi.events().to(device)
 
-    if augmentation is not None:
-        aug = MidiAugmentator(channels=midi.channels,
-                              augmentation=augmentation)
-        for name in augmentation:
-            name = f"use_{name.replace('-', '_')}"
-            cb = getattr(aug, name)
-            events = cb(events.clone())
     if not output.endswith('.txt'):
         MidiParser.render(events, output)
     else:

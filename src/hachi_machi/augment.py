@@ -1,32 +1,123 @@
+import ast
+import re
+import abc
 import torch
-from typing import Callable
-from abc import ABC
+import inspect
+from .features import FeatureMap
 
 
-class Augmentator(ABC):
+class Operation(abc.ABC):
 
-    def __init__(self, augmentation: None | tuple | list = None):
-        super().__init__()
-        self.augmentators = []
-        for attr in dir(self):
-            if attr.startswith('use_'):
-                name = attr[4:].replace('_', '-')
-                if augmentation is not None and name not in augmentation:
-                    continue
-                self.augmentators.append(getattr(self, attr))
-        if len(self.augmentators) == 0:
-            raise RuntimeError(
-                "You must define at least one augmentator method, following the naming convention `use_*`")
+    def __init__(self, *dims: int):
+        self.dims = dims
+
+    def __call__(self, x: torch.Tensor) -> torch.Tensor:
+        x[..., self.dims] = self.forward(x[..., self.dims])
+        return x
+
+    def random(self, x):
+        return torch.randn(1).to(x.device)
+
+    @abc.abstractmethod
+    def forward(self, x: torch.Tensor) -> torch.Tensor: ...
+
+
+class Shift(Operation):
+
+    def __init__(self, *dims: int | str, factor: float | int = 0):
+        super().__init__(dims)
+        self.factor = factor
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        return x + self.random(x) * self.factor
+
+
+class Scale(Operation):
+
+    def __init__(self, *dims: int, factor: float | int = 0):
+        super().__init__(dims)
+        self.factor = factor
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        return x * 2 ** self.random(x) * self.factor
+
+
+class Mirror(Operation):
+
+    def forward(self, x):
+        return x.mean(-2) * 2 - x
+
+
+class DataAugmentator:
+
+    OPERATIONS = {
+        cls.__name__.lower(): cls
+        for cls in [Scale,
+                    Mirror,
+                    Shift]
+    }
+
+    def __init__(self, operations: list[str], feature_map: FeatureMap):
+        self.operations = self.parse(operations, feature_map)
 
     def __len__(self):
-        return len(self.augmentators)
+        return len(self.operations)
 
-    def __getitem__(self, key):
-        return self.augmentators[key]
+    def from_str(self, s: str) -> tuple[str, list, dict]:
+        s = re.sub(r'\bt\b', '"t"', s)
+        tree = ast.parse(s, mode='eval')
+        call = tree.body
+        assert isinstance(call, ast.Call)
 
-    @classmethod
-    def options(cls):
-        return [k[4:].replace('_', '-') for k in dir(cls) if k.startswith('use_')]
+        name: str = call.func.id
+        args: list[int] = [ast.literal_eval(a) for a in call.args]
+        kwargs: dict = {kw.arg: ast.literal_eval(
+            kw.value) for kw in call.keywords}
+
+        return name.lower(), args, kwargs
+
+    def parse(self, cmds: list[str], feature_map: FeatureMap):
+        dim_offset = int(feature_map.temporal())
+        ops: list[Operation] = []
+        for cmd in cmds:
+            name, args, kwargs = self.from_str(cmd)
+            dims = []
+            if len(args) == 0:
+                raise KeyError(
+                    f"{name}: You must provide at least one dimension")
+            else:
+                for i, dim in enumerate(args):
+                    if dim == 't' and dim_offset == 0:
+                        raise ValueError(
+                            "Time dimension t cannot be used in non-temporal datasets.")
+
+                    if dim == 't':
+                        dim = -1
+
+                    if not isinstance(dim, int):
+                        raise ValueError(
+                            f"{name} operation: Invalid dimension type at index {i}: {dim}.")
+
+                    if not 0 <= (dim + dim_offset) < len(feature_map):
+                        raise ValueError(
+                            f"Outside of range dimension for '{name}' operation at index {i}: {dim}. Must be 0 <= dim < {len(feature_map) - dim_offset}")
+                    dims.append(dim + dim_offset)
+            if name not in self.OPERATIONS:
+                raise NameError(f'Invalid operation name: {name}')
+            op_cls = self.OPERATIONS[name]
+            op_params = inspect.signature(op_cls).parameters
+            op_keys = op_params.keys()
+            for k, v in kwargs.items():
+                if k not in op_keys:
+                    raise KeyError(
+                        f"Invalid keyword argument for {name}: {k}")
+                arg_type = op_params[k].annotation
+                if not isinstance(v, arg_type):
+                    raise ValueError(
+                        f'Invalid type for argument: {k}: {type(v)}. Expected: {arg_type}')
+            op = op_cls(*dims, **kwargs)
+            ops.append(op)
+        return ops
 
     def __call__(self, x: torch.Tensor) -> torch.Tensor:
         y = x.clone()
@@ -36,109 +127,6 @@ class Augmentator(ABC):
         order = order[:i]
         with torch.no_grad():
             for i in order:
-                fn = self.augmentators[i]
+                fn = self.operations[i]
                 y = fn(y)
         return y
-
-    def use_time_reverse(self, x: torch.Tensor):
-        x[..., 0] = x[..., 0].cumsum(dim=0)
-        sort = torch.sort(x[..., 0].max(
-            dim=0).values.item() - x[..., 0], dim=0)
-        x[..., 0] = sort.values
-        x[1:, 0] = x[..., 0].diff(dim=0)
-        x[..., 1:] = x[sort.indices, 1:]
-        return x
-
-
-class MidiAugmentator(Augmentator):
-
-    def __init__(self, channels: list[int], *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.channels = channels
-        self._feature_to_dim_map = {
-            k: i for i, k in enumerate(
-                [
-                    'ioi',
-                    'channel',
-                    'pitch',
-                    'velocity',
-                    'duration',
-                ]
-            )
-        }
-
-    def get(self, *labels) -> list[int]:
-        return [self._feature_to_dim_map[key] for key in labels if key in self._feature_to_dim_map]
-
-    def use_pitch_shift(self, x: torch.Tensor) -> torch.Tensor:
-        dim = self.get('pitch')
-        s = torch.rand(1).item() * 2 - 1
-        x[..., dim] += s * 7
-        return x
-
-    def use_dynamics(self, x: torch.Tensor) -> torch.Tensor:
-        max_vel = 127
-        dim = self.get('velocity')
-        x[..., dim] = x[..., dim] / max_vel
-        s = torch.randn(1,).item() * 0.5
-        theta = (x[..., dim] + s).clip(0, 1) * torch.pi
-        x[..., dim] = 0.5 - 0.5 * torch.cos(theta)
-        x[..., dim] *= max_vel
-        return x
-
-    def use_time_stretch(self, x: torch.Tensor) -> torch.Tensor:
-        dims = self.get('ioi', 'duration')
-        s = (torch.rand(1).item() * 2 - 1) * 0.66
-        x[..., dims] *= 2 ** s
-        return x
-
-    def use_pitch_inversion(self, x: torch.Tensor) -> torch.Tensor:
-        p_dim = self.get('pitch')
-        v_dim = self.get('channel')
-        for ch in self.channels:
-            mask = x[..., v_dim] == ch
-            pitch = x[..., p_dim]
-            inverted = pitch[mask].mean(0) * 2 - pitch
-            x[..., p_dim] = torch.where(mask, inverted, pitch)
-        return x
-
-    def use_channel_swap(self, x: torch.Tensor) -> torch.Tensor:
-        dim = self.get('channel')
-        channels = x[..., dim].unique()
-        swap = channels[torch.randperm(len(self.channels))]
-        result = x.clone()
-        for v, s in zip(channels, swap):
-            mask = x[..., dim] == v
-            result[..., dim] = torch.where(mask, s, result[..., dim])
-        return result
-
-    def __handle_time(self, x: torch.Tensor, func: Callable[[torch.Tensor], torch.Tensor]) -> torch.Tensor:
-        y = x.clone()
-        ioi_dim = self.get('ioi')
-        y[:, ioi_dim] = torch.cumsum(y[:, ioi_dim], dim=0)
-        y = func(y)
-        order = torch.sort(y[:, ioi_dim], dim=0, stable=True).indices.flatten()
-        y = y[order]
-        y[1:, ..., ioi_dim] = torch.diff(y[..., ioi_dim], dim=-2)
-        return y
-
-    def use_chord_shuffle(self, x: torch.Tensor) -> torch.Tensor:
-        return self.__handle_time(x, lambda y: y[torch.randperm(n=len(y))])
-
-    def use_time_noise(self, x: torch.Tensor) -> torch.Tensor:
-        dim = self.get('ioi')
-
-        def func(y: torch.Tensor) -> torch.Tensor:
-            y[..., dim] += torch.randn_like(y[..., dim]) * 7.5
-            return y.clip(0)
-        return self.__handle_time(x, func)
-
-    def use_time_rubato(self, x: torch.Tensor) -> torch.Tensor:
-        dim = self.get('ioi')
-        st, end = 2 ** (torch.randn(2) * 0.125)
-        warp = torch.linspace(start=st,
-                              end=end,
-                              steps=len(x)).unsqueeze(-1).to(x.device)
-
-        x[..., dim] *= warp
-        return self.__handle_time(x, lambda y: y)

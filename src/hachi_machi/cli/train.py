@@ -2,20 +2,16 @@ import click
 import torch
 import json
 from .. import nn
-from ..augment import MidiAugmentator
 from ..midi import MidiParser
 from ..data import EventDataset
 from ..nn import transforms as T
 from ..trainer import Trainer
 from ..features import FeatureMap
 from .middleware import ClickMiddleware as M
+from ..augment import DataAugmentator
 
 
 @click.command(context_settings={'show_default': True})
-@click.option('--augmentation', '-a',
-              type=click.Choice(MidiAugmentator.options()),
-              help='Data augmentation techniques to stochastically apply during training.',
-              multiple=True)
 @M([
     ('input', '.mid', '.midi'),
     ('output', '.pt')
@@ -98,19 +94,20 @@ def _train(**params):
             raise RuntimeError(
                 "MIDI file must contain of two or more channels.")
         data = parser.events().to(device)
-        feature_map = FeatureMap(data, features={
-            "1": {
-                "type": "categorical"
-            },
-            "4": {
-                'masked': True,
-                'type': 'temporal'
-            }
-        })
-        augmentation = params['augmentation']
-        if len(augmentation) > 0:
-            augmentator = MidiAugmentator(channels=parser.channels,
-                                          augmentation=augmentation)
+        feature_map = FeatureMap(data=data,
+                                 features={
+                                     "1": {
+                                         "type": "categorical"
+                                     },
+                                     "4": {
+                                         'masked': True,
+                                         'type': 'temporal'
+                                     }
+                                 })
+    operations = params['operations']
+    if len(operations) > 0:
+        augmentator = DataAugmentator(operations=operations,
+                                      feature_map=feature_map)
 
     factory = T.TransformFactory(feature_map=feature_map)
     input_layer, output_layer = factory.make(data=data,
