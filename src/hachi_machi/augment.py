@@ -180,7 +180,6 @@ class DataAugmentator:
         n = len(self)
         i = torch.randint(1, n + 1, size=(1,)).item()
         order = torch.randperm(n=n)
-        order = order[:i]
         with torch.no_grad():
             for i in order:
                 fn = self.operations[i]
