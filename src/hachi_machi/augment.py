@@ -18,17 +18,20 @@ _SCOPES = {
     "both": lambda x: x.shape[-2:],
 }
 
+
+def _make_value_fn(reduce_fn):
+    return {
+        "global": lambda x: reduce_fn(x, (-2, -1), keepdim=True),
+        "time": lambda x: reduce_fn(x, -2, keepdim=True),
+        "feature": lambda x: reduce_fn(x, -1, keepdim=True),
+    }
+
+
 _VALUES = {
-    "mean": {
-        "global": lambda x: x.mean((-2, -1), keepdim=True),
-        "time": lambda x: x.mean(-2, keepdim=True),
-        "feature": lambda x: x.mean(-1, keepdim=True),
-    },
-    "std": {
-        "global": lambda x: x.std((-2, -1), keepdim=True),
-        "time": lambda x: x.std(-2, keepdim=True),
-        "feature": lambda x: x.std(-1, keepdim=True),
-    },
+    "mean": _make_value_fn(torch.Tensor.mean),
+    "std":  _make_value_fn(torch.Tensor.std),
+    "min":  _make_value_fn(lambda x, dim, keepdim: x.amin(dim, keepdim=keepdim)),
+    "max":  _make_value_fn(lambda x, dim, keepdim: x.amax(dim, keepdim=keepdim)),
 }
 
 
@@ -56,7 +59,7 @@ class DeterministicOperation(Operation):
         scope: Reduction axis for data-derived values — 'global', 'time', or 'feature'.
     """
 
-    def __init__(self, *dims, value: int | float | str, scope: str = "global", **kwargs):
+    def __init__(self, *dims, value: int | float | str = 0, scope: str = "global", **kwargs):
         super().__init__(*dims, **kwargs)
         if isinstance(value, str):
             if value not in _VALUES:
@@ -148,46 +151,6 @@ class RandMul(RandAdd):
         return x * (2 ** r if self.space == "log" else r)
 
 
-class Rotate2D(RandAdd):
-    """Rotate two dimensions by a random angle.
-
-    Args:
-        a: Lower bound of the rotation angle range (in turns, i.e. 1.0 = 2π).
-        b: Upper bound of the rotation angle range (in turns).
-    """
-
-    def __init__(self, *dims, **kwargs):
-        if len(dims) != 2:
-            raise ValueError(
-                f"Rotate2D requires exactly 2 dimensions, got {len(dims)}")
-        super().__init__(*dims, **kwargs)
-
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
-        theta = (self.random(x).squeeze() * torch.pi)
-        cos_t, sin_t = theta.cos(), theta.sin()
-        R = torch.tensor(
-            [[cos_t, -sin_t],
-             [sin_t,  cos_t]],
-            dtype=x.dtype, device=x.device,
-        )
-        mean = x.mean(dim=-2, keepdim=True)
-        return (x - mean) @ R.T + mean
-
-
-class Permute(Operation):
-    """Randomly permute the discrete values within each selected dimension."""
-
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
-        result = x.clone()
-        for dim in range(x.size(-1)):
-            channels = result[..., dim].unique()
-            swap = channels[torch.randperm(len(channels))]
-            for v, s in zip(channels, swap):
-                mask = x[..., dim] == v
-                result[..., dim] = torch.where(mask, s, result[..., dim])
-        return result
-
-
 class DataAugmentator:
 
     OPERATIONS = {
@@ -197,9 +160,7 @@ class DataAugmentator:
                     Mul,
                     Div,
                     RandAdd,
-                    RandMul,
-                    Rotate2D,
-                    Permute,]
+                    RandMul,]
     }
 
     def __init__(self, operations: list[str], feature_map: FeatureMap):
@@ -221,7 +182,7 @@ class DataAugmentator:
 
     def from_str(self, s: str) -> tuple[str, list, dict]:
         s = re.sub(
-            r'\b(time|global|feature|both|normal|uniform|linear|log|mean|std)\b',
+            r'\b(time|global|feature|both|normal|uniform|linear|log|mean|std|min|max)\b',
             r'"\g<1>"', s)
         tree = ast.parse(s, mode='eval')
         call = tree.body
@@ -243,8 +204,7 @@ class DataAugmentator:
                 raise NameError(f"Invalid operation name: '{name}'")
             dims = []
             if len(args) == 0:
-                raise KeyError(
-                    f"{name}: You must provide at least one dimension")
+                dims.extend(feature_map.dims.tolist())
             for i, dim in enumerate(args):
                 if dim == 't' and dim_offset == 0:
                     raise ValueError(
