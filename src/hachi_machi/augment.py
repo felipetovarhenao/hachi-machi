@@ -11,7 +11,7 @@ _DISTS = {
 }
 
 _SCOPES = {
-    "global": lambda fn, x: fn(1),
+    "global": lambda fn, _: fn(1),
     "time": lambda fn, x: fn(x.shape[-2], 1),
     "feature": lambda fn, x: fn(1, x.shape[-1]),
     "both": lambda fn, x: fn(*x.shape[-2:]),
