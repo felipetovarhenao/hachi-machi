@@ -136,24 +136,16 @@ class DataAugmentator:
     def __len__(self):
         return len(self.operations)
 
-    def get_signature(self, cls: Operation):
-        options = {}
-        bases = [cls]
-        while True:
-            children = []
-            stop = True
-            for cls in bases:
-                options = {
-                    **inspect.signature(cls).parameters,
-                    **options
-                }
-                stop = False
-                children.extend(cls.__bases__)
-
-            bases = children
-            if stop:
-                break
-        return options
+    def get_signature(self, cls):
+        params = {}
+        for klass in cls.__mro__:
+            if klass is object:
+                continue
+            for name, param in inspect.signature(klass.__init__).parameters.items():
+                if name in ("self", "args", "kwargs"):
+                    continue
+                params.setdefault(name, param)
+        return params
 
     def from_str(self, s: str) -> tuple[str, list, dict]:
         s = re.sub(
