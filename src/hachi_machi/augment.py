@@ -36,7 +36,7 @@ class Operation(abc.ABC):
 
 class RandomOperation(Operation):
 
-    def __init__(self, *dims, var: int | float = 0, scope: str = "global", dist: str = "normal"):
+    def __init__(self, *dims, var: int | float = 0, scope: str = "global", dist: str = "uniform"):
         super().__init__(*dims)
         self.var = var
         if dist not in _DISTS:
