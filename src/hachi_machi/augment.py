@@ -70,6 +70,26 @@ class Mirror(Operation):
         return x.mean(-2) * 2 - x
 
 
+class Rotate2D(RandomOperation):
+
+    def __init__(self, *dims,  **kwargs):
+        if len(dims) != 2:
+            raise ValueError(
+                f"Rotate2D requires exactly 2 dimensions, got {len(dims)}")
+        super().__init__(*dims,  **kwargs)
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        theta = (self.random(x) * self.var * torch.pi).squeeze()
+        cos_t, sin_t = theta.cos(), theta.sin()
+        R = torch.tensor(
+            [[cos_t, -sin_t],
+             [sin_t,  cos_t]],
+            dtype=x.dtype, device=x.device,
+        )
+        mean = x.mean(dim=-2, keepdim=True)
+        return (x - mean) @ R.T + mean
+
+
 class Permute(Operation):
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
@@ -90,7 +110,8 @@ class DataAugmentator:
         for cls in [Scale,
                     Mirror,
                     Shift,
-                    Permute]
+                    Permute,
+                    Rotate2D,]
     }
 
     def __init__(self, operations: list[str], feature_map: FeatureMap):
