@@ -36,8 +36,8 @@ class Operation(abc.ABC):
 
 class RandomOperation(Operation):
 
-    def __init__(self, *dims, var: int | float = 0, scope: str = "global", dist: str = "uniform"):
-        super().__init__(*dims)
+    def __init__(self, *dims, var: int | float = 0, scope: str = "global", dist: str = "uniform", **kwargs):
+        super().__init__(*dims, **kwargs)
         self.var = var
         if dist not in _DISTS:
             raise ValueError(
@@ -64,19 +64,35 @@ class Scale(RandomOperation):
         return x * 2 ** (self.random(x) * self.var)
 
 
+_CENTERS = {
+    "mean": lambda x: x.mean(-2, keepdim=True),
+    "median": lambda x: x.median(-2, keepdim=True).values,
+    # "min": lambda x: x.min(-2, keepdim=True).values,
+    # "max": lambda x: x.max(-2, keepdim=True).values,
+}
+
+
 class Mirror(Operation):
 
-    def forward(self, x):
-        return x.mean(-2) * 2 - x
+    def __init__(self, *dims, axis: int | float | str = "mean", **kwargs):
+        super().__init__(*dims, **kwargs)
+        if isinstance(axis, str) and axis not in _CENTERS:
+            raise ValueError(
+                f"Invalid center: {axis!r}. Expected one of {list(_CENTERS)} or a numeric constant")
+        self._axis_fn = _CENTERS[axis] if isinstance(
+            axis, str) else lambda _: axis
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        return self._axis_fn(x) * 2 - x
 
 
 class Rotate2D(RandomOperation):
 
-    def __init__(self, *dims,  **kwargs):
+    def __init__(self, *dims, **kwargs):
         if len(dims) != 2:
             raise ValueError(
                 f"Rotate2D requires exactly 2 dimensions, got {len(dims)}")
-        super().__init__(*dims,  **kwargs)
+        super().__init__(*dims, **kwargs)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         theta = (self.random(x) * self.var * torch.pi).squeeze()
@@ -141,7 +157,7 @@ class DataAugmentator:
 
     def from_str(self, s: str) -> tuple[str, list, dict]:
         s = re.sub(
-            r'\b(t|time|global|feature|both|normal|uniform)\b', r'"\g<1>"', s)
+            r'\b(t|time|global|feature|both|normal|uniform|mean|median)\b', r'"\g<1>"', s)
         tree = ast.parse(s, mode='eval')
         call = tree.body
         assert isinstance(call, ast.Call)
