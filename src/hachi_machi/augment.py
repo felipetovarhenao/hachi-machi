@@ -7,7 +7,7 @@ from .features import FeatureMap
 
 _DISTS = {
     "normal": torch.randn,
-    "uniform": torch.rand,
+    "uniform": lambda x: torch.rand(x) - 0.5,
 }
 
 _SCOPES = {
