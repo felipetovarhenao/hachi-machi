@@ -20,7 +20,7 @@ _SCOPES = {
 
 class Operation(abc.ABC):
 
-    def __init__(self, *dims: int, p: int | float = 0.5):
+    def __init__(self, *dims: int, p: int | float = 1.0):
         self.p = max(0, min(p, 1))
         self.dims = dims
 
@@ -204,13 +204,14 @@ class DataAugmentator:
             ops.append(op)
         return ops
 
+    def __getitem__(self, key):
+        return self.operations[key]
+
     def __call__(self, x: torch.Tensor) -> torch.Tensor:
         y = x.clone()
         n = len(self)
-        i = torch.randint(1, n + 1, size=(1,)).item()
-        order = torch.randperm(n=n)
         with torch.no_grad():
-            for i in order:
-                fn = self.operations[i]
+            for i in range(n):
+                fn = self[i]
                 y = fn(y)
         return y
