@@ -1,5 +1,6 @@
 import click
 import datetime
+from .middleware import ClickMiddleware
 from ..console import Console
 from . import (augment, gen,
                format,
@@ -25,6 +26,16 @@ __banner__ = f"""
 @click.group()
 def main():
     pass
+
+
+@main.command()
+@click.argument('input', type=click.Path(exists=True, dir_okay=False))
+@click.pass_context
+def exec(ctx, input):
+    params = ClickMiddleware.from_file(input)
+    cmd_name = params.pop('cmd')
+    cmd = main.commands[cmd_name]
+    ctx.invoke(cmd, **params)
 
 
 main.add_command(train.train)
