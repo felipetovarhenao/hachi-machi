@@ -1,6 +1,6 @@
 import torch
 from torch.utils.data import Dataset, DataLoader
-from .augment import DataAugmentator
+from .operations import DataAugmentator
 from .console import Console
 
 

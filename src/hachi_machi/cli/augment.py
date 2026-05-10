@@ -2,7 +2,7 @@ import torch
 import click
 from ..utils import tensor_to_txt, load_data
 from ..console import Console
-from ..augment import DataAugmentator
+from ..operations import DataAugmentator
 from .middleware import ClickMiddleware as M
 
 

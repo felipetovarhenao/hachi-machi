@@ -8,7 +8,7 @@ from ..nn import transforms as T
 from ..trainer import Trainer
 from ..features import FeatureMap
 from .middleware import ClickMiddleware as M
-from ..augment import DataAugmentator
+from ..operations import DataAugmentator
 
 
 @click.command(context_settings={'show_default': True})
