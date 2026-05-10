@@ -189,7 +189,7 @@ class DataAugmentator:
     def from_str(self, s: str) -> tuple[str, list, dict]:
         raw = s
         s = re.sub(
-            r'\b(time|global|feature|both|normal|uniform|linear|log|mean|std|min|max)\b',
+            r'\b(t|time|global|feature|both|normal|uniform|linear|log|mean|std|min|max)\b',
             r'"\g<1>"', s)
         tree = ast.parse(s, mode='eval')
         call = tree.body

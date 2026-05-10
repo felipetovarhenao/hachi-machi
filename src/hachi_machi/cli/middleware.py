@@ -37,7 +37,7 @@ class ClickMiddleware:
                 try:
                     func(**config)
                 except Exception as e:
-                    Console.error('\n'.join(e.args))
+                    Console.error(e.args[0])
             else:
                 func(**config)
 
