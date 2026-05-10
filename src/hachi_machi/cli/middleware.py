@@ -3,10 +3,9 @@ import os
 import torch
 from ..utils import validate_path
 from ..console import Console
-from ..nn import transforms as T
 import click
 import functools
-import traceback
+import yaml
 
 
 class ClickMiddleware:
@@ -48,12 +47,6 @@ class ClickMiddleware:
             for (key, *ext) in self.path_args:
                 if key not in params:
                     continue
-                # param = params[key]
-                # if param is None and None in ext:
-                #     continue
-                # if isinstance(param, str) and param.endswith('.toml'):
-                #     config = {**params, **self.from_file(param)}
-                #     return self._parse(**config)
                 params[key] = validate_path(file=params[key],
                                             ext=ext)
         if 'device' in params:
@@ -72,10 +65,11 @@ class ClickMiddleware:
 
     @staticmethod
     def from_file(file: str):
-        file = validate_path(file, '.toml')
+        file = validate_path(file, '.toml', '.yaml')
         os.chdir(os.path.dirname(file))
+        load = toml.load if file.endswith('.toml') else yaml.load
         with open(file, 'r') as f:
-            config: dict = toml.load(f)
+            config: dict = load(f)
         return config
 
     @staticmethod
