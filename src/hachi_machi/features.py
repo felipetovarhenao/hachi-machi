@@ -25,9 +25,9 @@ class FeatureMap:
                 continue
             feature: dict = features[k]
             mask = 1 - int(feature.get('masked', False))
-            type = feature.get('type', 'continuous')
+            type = int(feature.get('categorical', False))
             self.mask.append(mask)
-            self.types.append(self.type_to_int(type))
+            self.types.append(type)
         self.dims: torch.Tensor = torch.tensor(self.dims, dtype=torch.int)
         self.mask: torch.Tensor = torch.tensor(self.mask, dtype=torch.bool)
         self.types: torch.Tensor = torch.tensor(self.types, dtype=torch.int)

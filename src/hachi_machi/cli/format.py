@@ -31,12 +31,12 @@ def format(**params):
     data = data[..., 1:]
     content = {
         "features": {
-            "0": {
-                "type": "categorical"
+            "2": {
+                "masked": True
             },
             "3": {
-                "masked": True
-            }
+                "type": "categorical"
+            },
         },
         "time": time.tolist(),
         "data": data.tolist()
