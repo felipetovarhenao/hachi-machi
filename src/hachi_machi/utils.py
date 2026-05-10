@@ -68,3 +68,19 @@ def load_data(file_path: str, device: str = 'cpu') -> tuple[torch.Tensor, dict]:
         }
 
     return data, FeatureMap(data, features, temporal)
+
+
+def tensor_to_csv(tensor: torch.Tensor, path: str, temporal: bool = False) -> None:
+    assert tensor.ndim == 2, f"Expected 2D tensor, got {tensor.ndim}D"
+
+    n_features = tensor.shape[1]
+
+    if temporal:
+        columns = ["time"] + [f"{i}" for i in range(n_features - 1)]
+    else:
+        columns = [f"{i}" for i in range(n_features)]
+
+    with open(path, "w") as f:
+        f.write(",".join(columns) + "\n")
+        for row in tensor.tolist():
+            f.write(",".join(map(str, row)) + "\n")

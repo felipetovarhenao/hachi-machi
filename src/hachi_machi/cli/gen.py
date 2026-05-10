@@ -2,11 +2,11 @@ import os
 import click
 import torch
 import json
-from ..midi import MidiParser
 from ..nn import PerformerModel
 from ..console import Console
 from ..utils import (tensor_to_txt,
-                     progress,)
+                     progress,
+                     tensor_to_csv)
 from .middleware import ClickMiddleware as M
 
 
@@ -17,7 +17,7 @@ from .middleware import ClickMiddleware as M
 @click.option('--seed', '-s', default=0, help='Random seed.')
 @M([
     ('model', '.pt'),
-    ('output', '.txt', '.json')
+    ('output', '.txt', '.json', '.csv')
 ], device='cpu').wrapper
 def gen(**params):
     """Generates data auto-regressively given some pre-trained model.
@@ -59,7 +59,9 @@ def gen(**params):
 
     if ext == '.txt':
         tensor_to_txt(events, output)
-    elif ext == '.json':
+    elif ext == '.csv':
+        tensor_to_csv(events, output, model.temporal)
+    else:
         with open(output, 'w') as f:
             if model.temporal:
                 content = {"time": events[..., 0].tolist(),

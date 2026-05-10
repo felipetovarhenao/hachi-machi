@@ -1,6 +1,6 @@
 import torch
 import click
-from ..utils import tensor_to_txt, load_data
+from ..utils import tensor_to_txt, load_data, tensor_to_csv
 from ..console import Console
 from ..operations import DataAugmenter
 from .middleware import ClickMiddleware as M
@@ -23,7 +23,7 @@ from .middleware import ClickMiddleware as M
 @click.option('--seed', '-s', default=0)
 @M([
     ('input', '.json'),
-    ('output', '.txt'),
+    ('output', '.txt', '.csv'),
 ]).wrapper
 def augment(**params):
     """Renders a MIDI file, with optional data augmentation.
@@ -52,5 +52,8 @@ def augment(**params):
         data = op(data)
     if feature_map.temporal:
         data[..., 0] = data[..., 0].cumsum(0)
-    tensor_to_txt(data, output)
+    if output.endswith('.txt'):
+        tensor_to_txt(data, output)
+    else:
+        tensor_to_csv(data, output, feature_map.temporal)
     Console.success("DONE", bold=True)
