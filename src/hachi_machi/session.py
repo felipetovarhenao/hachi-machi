@@ -41,6 +41,7 @@ class Session:
         self.out_port = out_port
         self._lock = threading.RLock()
         self._last_time: float | None = None
+        self._timers: list[threading.Timer] = []
         self._set_handlers()
 
     def safe_handler(self, func: Callable[[str, Any], None]) -> Callable:
@@ -69,6 +70,7 @@ class Session:
     def schedule(self, event: list, delay: float) -> None:
         t = threading.Timer(delay, lambda: self.send(event[1:]))
         t.daemon = True
+        self._timers.append(t)
         t.start()
 
     def predict(self, x: torch.Tensor) -> None:
@@ -114,4 +116,6 @@ class Session:
     def handle_reset(self, *_):
         with self._lock:
             self.model.reset()
+            [t.cancel() for t in self._timers]
+            self._timers.clear()
             self._last_time = None
