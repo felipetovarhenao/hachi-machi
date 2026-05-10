@@ -1,6 +1,6 @@
 import torch
 from torch.utils.data import Dataset, DataLoader
-from .operations import DataAugmentator
+from .operations import DataAugmenter
 from .console import Console
 
 
@@ -14,7 +14,7 @@ class EventDataset(Dataset):
                  input_dims: list[int],
                  output_dims: list[int],
                  context_length: int = 16,
-                 augmentator: DataAugmentator | None = None):
+                 augmenter: DataAugmenter | None = None):
         with torch.no_grad():
             self.mean = data.mean(0)
             context_length = self._clamp_context(context_length, len(data))
@@ -34,7 +34,7 @@ class EventDataset(Dataset):
         self.input_size = len(self._in_dims)
         self.output_size = len(self._out_dims)
 
-        self.augmentator = augmentator
+        self.augmenter = augmenter
 
     def _clamp_context(self, context_length: int, data_size: int):
         y = max(2, min(context_length, data_size // 2))
@@ -49,8 +49,8 @@ class EventDataset(Dataset):
     def __getitem__(self, index) -> torch.Tensor:
         data = self.data
         item = data[index]
-        if self.augmentator is not None:
-            item = self.augmentator(item)
+        if self.augmenter is not None:
+            item = self.augmenter(item)
         x, y = item[..., :-1, self._in_dims], item[...,
                                                    1:, self._out_dims]
         return x, y

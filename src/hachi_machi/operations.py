@@ -157,7 +157,7 @@ class RandMul(RandAdd):
         return x * (2 ** r if self.space == "log" else r)
 
 
-class DataAugmentator:
+class DataAugmenter:
 
     OPERATIONS = {
         cls.__name__.lower(): cls

@@ -2,7 +2,7 @@ import torch
 import click
 from ..utils import tensor_to_txt, load_data
 from ..console import Console
-from ..operations import DataAugmentator
+from ..operations import DataAugmenter
 from .middleware import ClickMiddleware as M
 
 
@@ -47,8 +47,8 @@ def augment(**params):
     data, feature_map = load_data(file_path=input,
                                   device=device)
 
-    augmentator = DataAugmentator(operations=ops, feature_map=feature_map)
-    for op in augmentator.operations:
+    augmenter = DataAugmenter(operations=ops, feature_map=feature_map)
+    for op in augmenter.operations:
         data = op(data)
     if feature_map.temporal:
         data[..., 0] = data[..., 0].cumsum(0)

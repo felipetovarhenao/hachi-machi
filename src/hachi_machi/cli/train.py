@@ -8,7 +8,7 @@ from ..nn import transforms as T
 from ..trainer import Trainer
 from ..features import FeatureMap
 from .middleware import ClickMiddleware as M
-from ..operations import DataAugmentator
+from ..operations import DataAugmenter
 
 
 @click.command(context_settings={'show_default': True})
@@ -92,7 +92,7 @@ Arguments:
     device = params['device']
     seed = params['seed']
     file_path: str = params['input']
-    augmentator = None
+    augmenter = None
     if seed != 0:
         torch.manual_seed(params['seed'])
     temporal = True
@@ -128,7 +128,7 @@ Arguments:
     operations = params['operations']
 
     if len(operations) > 0:
-        augmentator = DataAugmentator(operations=operations,
+        augmenter = DataAugmenter(operations=operations,
                                       feature_map=feature_map)
 
     factory = T.TransformFactory(feature_map=feature_map)
@@ -138,7 +138,7 @@ Arguments:
                            input_dims=feature_map.input_dims(),
                            output_dims=feature_map.output_dims(),
                            context_length=params['context'],
-                           augmentator=augmentator)
+                           augmenter=augmenter)
     rnn = nn.RecurrentMDN(k=params['mixtures'],
                           input_size=input_layer.output_size,
                           output_size=output_layer.output_size,
