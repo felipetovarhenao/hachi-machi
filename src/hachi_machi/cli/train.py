@@ -127,7 +127,7 @@ Arguments:
             **features
         }
 
-    feature_map = FeatureMap(data, features)
+    feature_map = FeatureMap(data, features, temporal)
     operations = params['operations']
 
     if len(operations) > 0:

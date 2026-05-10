@@ -166,15 +166,12 @@ class TransformFactory:
     OPTIONS = {
         "time-phase": {
             "cls": TimePhase,
-            "type": 'temporal',
         },
         "harmonic-score": {
             "cls": HarmonicScore,
-            "type": 'temporal',
         },
         "log-space": {
             "cls": LogSpace,
-            "type": "temporal",
         },
         'categorical': {
             "cls": Categorical,

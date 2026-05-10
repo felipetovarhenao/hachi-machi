@@ -38,7 +38,7 @@ def progress(n: int, N: int = 10, size: int = 12):
     return f'{bar}{"⣀" * (size - i_size - (end_id > 0))} {round(nt * 100):.1f}%'
 
 
-def load_data(file_path: str, device: str = 'cpu') -> tuple[torch.Tensor, dict, bool]:
+def load_data(file_path: str, device: str = 'cpu') -> tuple[torch.Tensor, dict]:
     temporal = False
     with open(file_path, 'r') as f:
         content = json.load(f)
@@ -70,4 +70,4 @@ def load_data(file_path: str, device: str = 'cpu') -> tuple[torch.Tensor, dict, 
             **features
         }
 
-    return data, FeatureMap(data, features), temporal
+    return data, FeatureMap(data, features, temporal)

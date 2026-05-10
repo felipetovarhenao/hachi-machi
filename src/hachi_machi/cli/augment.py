@@ -44,8 +44,8 @@ def augment(**params):
     if seed != 0:
         torch.manual_seed(seed)
 
-    data, feature_map, _ = load_data(file_path=input,
-                                     device=device)
+    data, feature_map = load_data(file_path=input,
+                                  device=device)
 
     augmentator = DataAugmentator(operations=ops, feature_map=feature_map)
     for op in augmentator.operations:

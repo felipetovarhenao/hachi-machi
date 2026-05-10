@@ -3,7 +3,7 @@ import re
 import abc
 import torch
 import inspect
-from .features import FeatureMap
+from .features import FeatureMap, FeatureType
 
 
 _DISTS = {
@@ -37,6 +37,8 @@ _VALUES = {
 
 class Operation(abc.ABC):
 
+    TYPE = FeatureType.CONTINUOUS
+
     def __init__(self, *dims: int, p: float = 1.0):
         self.p = max(0.0, min(float(p), 1.0))
         self.dims = dims
@@ -49,6 +51,10 @@ class Operation(abc.ABC):
             return x
         x[..., self.dims] = self.forward(x[..., self.dims])
         return x
+
+    @classmethod
+    def type(self):
+        return self.TYPE
 
 
 class DeterministicOperation(Operation):
@@ -224,7 +230,11 @@ class DataAugmentator:
                         f"Must be 0 <= dim < {len(feature_map) - dim_offset}")
                 dims.append(dim + dim_offset)
 
-            op_cls = self.OPERATIONS[name]
+            op_cls: Operation = self.OPERATIONS[name]
+
+            if not torch.all(op_cls.type().value == feature_map.types[dims]):
+                raise TypeError(
+                    f"{name!r} operation can only be applied to dims of type {op_cls.type().name.lower()!r}")
             op_params = self.get_signature(op_cls)
             op_keys = op_params.keys()
             for k, v in kwargs.items():

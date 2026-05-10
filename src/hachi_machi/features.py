@@ -4,19 +4,19 @@ import enum
 
 class FeatureType(enum.Enum):
 
-    NORMAL = 0
+    CONTINUOUS = 0
     CATEGORICAL = 1
-    TEMPORAL = 2
 
 
 class FeatureMap:
 
-    def __init__(self, data: torch.Tensor, features: dict):
+    def __init__(self, data: torch.Tensor, features: dict, temporal: bool = False):
         size = data.size(-1)
         self.dims = list(range(size))
         self.mask = []
+        self._temporal = temporal
         self.types = []
-        default_type = FeatureType.NORMAL.value
+        default_type = FeatureType.CONTINUOUS.value
         for i in range(size):
             k = str(i)
             if k not in features:
@@ -25,7 +25,7 @@ class FeatureMap:
                 continue
             feature: dict = features[k]
             mask = 1 - int(feature.get('masked', False))
-            type = feature.get('type', 'normal')
+            type = feature.get('type', 'continuous')
             self.mask.append(mask)
             self.types.append(self.type_to_int(type))
         self.dims: torch.Tensor = torch.tensor(self.dims, dtype=torch.int)
@@ -53,6 +53,6 @@ class FeatureMap:
 
     def __len__(self):
         return len(self.dims)
-    
+
     def temporal(self):
-        return self.types[0] == FeatureType.TEMPORAL.value
+        return self._temporal
