@@ -33,7 +33,18 @@ def main():
 @click.pass_context
 def exec(ctx, input):
     params = ClickMiddleware.from_file(input)
-    cmd_name = params.pop('cmd')
+    valid_cmds = [x for x in list(main.commands) if x != 'exec']
+    options = ', '.join(valid_cmds)
+    try:
+        cmd_name = params.pop('cmd')
+    except:
+        Console.error(
+            f"You must specify one of the following commands: {options}")
+        exit()
+    if cmd_name not in valid_cmds:
+        Console.error(
+            f"Invalid command: {cmd_name!r}. Expected: {options}")
+        exit()
     cmd = main.commands[cmd_name]
     ctx.invoke(cmd, **params)
 
