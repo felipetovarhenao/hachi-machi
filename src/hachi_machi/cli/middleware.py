@@ -37,7 +37,7 @@ class ClickMiddleware:
                 try:
                     func(**config)
                 except Exception as e:
-                    Console.error(f"\n{e.args[0]}")
+                    Console.error('\n'.join(e.args))
             else:
                 func(**config)
 
@@ -48,12 +48,12 @@ class ClickMiddleware:
             for (key, *ext) in self.path_args:
                 if key not in params:
                     continue
-                param = params[key]
-                if param is None and None in ext:
-                    continue
-                if isinstance(param, str) and param.endswith('.toml'):
-                    config = {**params, **self.from_file(param)}
-                    return self._parse(**config)
+                # param = params[key]
+                # if param is None and None in ext:
+                #     continue
+                # if isinstance(param, str) and param.endswith('.toml'):
+                #     config = {**params, **self.from_file(param)}
+                #     return self._parse(**config)
                 params[key] = validate_path(file=params[key],
                                             ext=ext)
         if 'device' in params:

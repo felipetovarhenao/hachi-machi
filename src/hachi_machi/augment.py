@@ -181,6 +181,7 @@ class DataAugmentator:
         return params
 
     def from_str(self, s: str) -> tuple[str, list, dict]:
+        raw = s
         s = re.sub(
             r'\b(time|global|feature|both|normal|uniform|linear|log|mean|std|min|max)\b',
             r'"\g<1>"', s)
@@ -188,10 +189,13 @@ class DataAugmentator:
         call = tree.body
         assert isinstance(call, ast.Call)
 
-        name: str = call.func.id
-        args: list = [ast.literal_eval(a) for a in call.args]
-        kwargs: dict = {kw.arg: ast.literal_eval(
-            kw.value) for kw in call.keywords}
+        try:
+            name: str = call.func.id
+            args: list = [ast.literal_eval(a) for a in call.args]
+            kwargs: dict = {kw.arg: ast.literal_eval(
+                kw.value) for kw in call.keywords}
+        except:
+            raise SyntaxError(f"Invalid operation syntax: {raw!r}")
 
         return name.lower(), args, kwargs
 
