@@ -35,10 +35,10 @@ def info(**params):
 
     Console.pretty(info, "Info")
 
-    graph = f"{model}"
-    graph = re.sub(pattern=r"([A-Z][A-Za-z]*)(?=\()",
-                   repl=Console.style(r"\g<1>", 'info', bold=True),
-                   string=graph,
-                   flags=re.DOTALL)
-    Console.print("\nGraph", bold=True)
-    Console.print(graph)
+    # graph = f"{model}"
+    # graph = re.sub(pattern=r"([A-Z][A-Za-z]*)(?=\()",
+    #                repl=Console.style(r"\g<1>", 'info', bold=True),
+    #                string=graph,
+    #                flags=re.DOTALL)
+    # Console.print("\nGraph", bold=True)
+    # Console.print(graph)
