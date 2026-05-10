@@ -50,5 +50,7 @@ def augment(**params):
     augmentator = DataAugmentator(operations=ops, feature_map=feature_map)
     for op in augmentator.operations:
         data = op(data)
+    if feature_map.temporal:
+        data[..., 0] = data[..., 0].cumsum(0)
     tensor_to_txt(data, output)
     Console.success("DONE", bold=True)
