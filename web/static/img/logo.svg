@@ -1,0 +1,34 @@
+<svg width="100%" viewBox="170 170 340 340" role="img" xmlns="http://www.w3.org/2000/svg" style="">
+  <title
+    style="fill:rgb(0, 0, 0);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">
+    hachi-machi logo</title>
+  <desc
+    style="fill:rgb(0, 0, 0);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">
+    A compact square icon: three rows of dots with the last dot in each row hollow, enclosed in a rounded square.</desc>
+
+
+
+  <rect x="190" y="190" width="300" height="300" rx="48" fill="#EEEDFE"
+    style="fill:#4D51B5;stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto" />
+
+  <circle cx="272" cy="272" r="18" fill="#534AB7"
+    style="fill:rgb(175, 169, 236);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto" />
+  <circle cx="340" cy="272" r="18" fill="#534AB7"
+    style="fill:rgb(175, 169, 236);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto" />
+  <circle cx="408" cy="272" r="18" fill="#534AB7"
+    style="fill:rgb(175, 169, 236);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto" />
+
+  <circle cx="272" cy="340" r="18" fill="#534AB7"
+    style="fill:rgb(175, 169, 236);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto" />
+  <circle cx="340" cy="340" r="18" fill="#534AB7"
+    style="fill:rgb(175, 169, 236);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto" />
+  <circle cx="408" cy="340" r="18" fill="none" stroke="#534AB7" stroke-width="4.5"
+    style="fill:none;stroke:rgb(175, 169, 236);color:rgb(251, 251, 254);stroke-width:4.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto" />
+
+  <circle cx="272" cy="408" r="18" fill="#534AB7"
+    style="fill:rgb(175, 169, 236);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto" />
+  <circle cx="340" cy="408" r="18" fill="none" stroke="#534AB7" stroke-width="4.5"
+    style="fill:none;stroke:rgb(175, 169, 236);color:rgb(251, 251, 254);stroke-width:4.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto" />
+  <circle cx="408" cy="408" r="18" fill="none" stroke="#534AB7" stroke-width="4.5" opacity="0.35"
+    style="fill:none;stroke:rgb(175, 169, 236);color:rgb(251, 251, 254);stroke-width:4.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.35;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto" />
+</svg>

@@ -79,9 +79,9 @@ def train(**params):
     """Trains a model on custom sequential data. 
 The data must be provided as a JSON file, and each event in the sequence must structured as follows:
 
-[<ms_time> <voice_id> <feature_1> ... <feature_N> ]
+[ms_time voice_id feature_1 ... feature_N ]
 
-Note that <voice_id> must be an zero-based integer.
+Note that voice_id must be an zero-based integer.
 
 Arguments:
 
@@ -129,7 +129,7 @@ Arguments:
 
     if len(operations) > 0:
         augmenter = DataAugmenter(operations=operations,
-                                      feature_map=feature_map)
+                                  feature_map=feature_map)
 
     factory = T.TransformFactory(feature_map=feature_map)
     input_layer, output_layer = factory.make(data=data,

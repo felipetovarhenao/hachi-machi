@@ -17,7 +17,7 @@ class ClickMiddleware:
         self.device = device
 
     def wrapper(self, func):
-        func.__doc__ = Console.info(func.__doc__, defer=True)
+        # func.__doc__ = Console.info(func.__doc__, defer=True)
 
         @click.option('--device', '-d',
                       type=click.Choice(self.get_available_devices()),
