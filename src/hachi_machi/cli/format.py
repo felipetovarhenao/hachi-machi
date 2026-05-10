@@ -35,7 +35,7 @@ def format(**params):
                 "masked": True
             },
             "3": {
-                "type": "categorical"
+                "categorical": True
             },
         },
         "time": time.tolist(),
