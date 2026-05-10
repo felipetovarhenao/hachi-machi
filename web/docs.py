@@ -1,15 +1,16 @@
-from hachi_machi.cli import main
 
+from hachi_machi.cli import main
 import itertools
 import os
 import re
 import textwrap
 from pathlib import Path
-
 import click
 
+CLI_CMD = 'hxmx'
 
-class ClickToDocusaurus:
+
+class AutoDoc:
     def __init__(
         self,
         cli: click.Command,
@@ -26,10 +27,6 @@ class ClickToDocusaurus:
         self._walk(self.cli, self.cli_name, [], self.output_dir, counter)
         print(f"Docs written to: {self.output_dir.resolve()}")
 
-    # ------------------------------------------------------------------
-    # Recursive walker
-    # ------------------------------------------------------------------
-
     def _walk(
         self,
         cmd: click.Command,
@@ -39,7 +36,7 @@ class ClickToDocusaurus:
         counter: itertools.count,
     ) -> None:
 
-        pos = next(counter) if len(parents) > 0 else 0
+        pos = next(counter) + 1 if len(parents) > 0 else 1
 
         if isinstance(cmd, click.Group):
             subdir = output_dir / name if parents else output_dir
@@ -77,7 +74,7 @@ class ClickToDocusaurus:
         short_desc = description.split("\n")[0] if description else ""
 
         sections = [
-            ClickToDocusaurus._frontmatter(
+            AutoDoc._frontmatter(
                 full_name, sidebar_position, short_desc),
             "",
             f"# `{full_name}`",
@@ -88,9 +85,9 @@ class ClickToDocusaurus:
             sections += [description, ""]
 
         ctx = click.Context(cmd, info_name=full_name)
-        usage = " ".join(['hxmx'] + ctx.command_path.split()) + \
-            ClickToDocusaurus._usage_suffix(cmd)
-        sections += ["## Usage", "", ClickToDocusaurus._code_block(usage), ""]
+        usage = " ".join([CLI_CMD] + ctx.command_path.split()) + \
+            AutoDoc._usage_suffix(cmd)
+        sections += ["## Usage", "", AutoDoc._code_block(usage), ""]
 
         arguments = [p for p in cmd.params if isinstance(p, click.Argument)]
         options = [p for p in cmd.params if isinstance(p, click.Option)]
@@ -100,7 +97,7 @@ class ClickToDocusaurus:
                 "## Arguments", "",
                 "| Name | Type | Required | Default | Description |",
                 "|------|------|:--------:|---------|-------------|",
-                *ClickToDocusaurus._param_rows(arguments),
+                *AutoDoc._param_rows(arguments),
                 "",
             ]
 
@@ -109,7 +106,7 @@ class ClickToDocusaurus:
                 "## Options", "",
                 "| Option | Type | Required | Default | Description |",
                 "|--------|------|:--------:|---------|-------------|",
-                *ClickToDocusaurus._param_rows(options),
+                *AutoDoc._param_rows(options),
                 "",
             ]
 
@@ -132,7 +129,7 @@ class ClickToDocusaurus:
         short_desc = description.split("\n")[0] if description else ""
 
         sections = [
-            ClickToDocusaurus._frontmatter(
+            AutoDoc._frontmatter(
                 full_name or "CLI Reference", sidebar_position, short_desc),
             "",
             f"# `{full_name}`" if full_name else "# CLI Reference",
@@ -181,14 +178,14 @@ class ClickToDocusaurus:
                 required = "✓" if p.required else ""
                 default = f"`{p.default}`" if p.default is not None else "—"
                 multiple = " *(multiple)*" if p.multiple else ""
-                type_label = ClickToDocusaurus._type_name(p.type) + multiple
+                type_label = AutoDoc._type_name(p.type) + multiple
                 help_text = (p.help or "").replace("|", "\\|")
                 rows.append(
                     f"| `{name}` | {type_label} | {required} | {default} | {help_text} |")
             elif isinstance(p, click.Argument):
                 required = "✓" if p.required else ""
                 multiple = " *(multiple)*" if p.nargs == -1 else ""
-                type_label = ClickToDocusaurus._type_name(p.type) + multiple
+                type_label = AutoDoc._type_name(p.type) + multiple
                 rows.append(
                     f"| `{p.human_readable_name}` | {type_label} | {required} | — | *(positional argument)* |")
         return rows
@@ -255,11 +252,12 @@ class ClickToDocusaurus:
             hi = param_type.max if param_type.max is not None else "+∞"
             return f"float [{lo}, {hi}]"
         if isinstance(param_type, click.Tuple):
-            return "tuple (" + ", ".join(ClickToDocusaurus._type_name(t) for t in param_type.types) + ")"
+            return "tuple (" + ", ".join(AutoDoc._type_name(t) for t in param_type.types) + ")"
 
         return type(param_type).__name__.lower()
 
 
 if __name__ == "__main__":
-    ClickToDocusaurus(main, output_dir='./docs/',
-                      cli_name='hxmx').generate()
+    AutoDoc(cli=main,
+            output_dir='./docs/cmds/',
+            cli_name=CLI_CMD).generate()
