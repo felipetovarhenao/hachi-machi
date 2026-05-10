@@ -6,7 +6,6 @@ class FeatureType(enum.Enum):
 
     CONTINUOUS = 0
     CATEGORICAL = 1
-    TEMPORAL = 2
 
 
 class FeatureMap:

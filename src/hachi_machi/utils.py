@@ -64,9 +64,6 @@ def load_data(file_path: str, device: str = 'cpu') -> tuple[torch.Tensor, dict]:
         data[1:, 0] = data[..., 0].diff(dim=-1)
         features = {str(int(k) + 1): v for (k, v) in features.items()}
         features = {
-            '0': {
-                'type': 'temporal'
-            },
             **features
         }
 
