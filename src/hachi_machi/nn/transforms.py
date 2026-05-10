@@ -198,8 +198,9 @@ class TransformFactory:
         transform_layers = []
         for i, io in enumerate(['input', 'output']):
             layers = []
-            fn = getattr(self.feature_map, f"{io}_dims")
-            dims = fn()
+            get_dims = getattr(self.feature_map, f"{io}_dims")
+            dims: list = get_dims()
+            dim_map = {v: i for i, v in enumerate(dims)}
             data_subset = data[..., dims]
             for k in self.OPTIONS.keys():
                 if k not in transforms:
@@ -209,8 +210,9 @@ class TransformFactory:
                 if i == 1 and not cls.bijective():
                     continue
                 type = opt.get('type', None)
-                dims: list = fn(type)
-                layer = cls(dims)
+                type_dims: list = get_dims(type)
+                post_dims = [dim_map[v] for v in type_dims]
+                layer = cls(post_dims)
                 layers.append(layer)
             t = Transform(layers).to(data.device)
             t.fit(data_subset)
