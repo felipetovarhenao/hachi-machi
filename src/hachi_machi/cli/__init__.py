@@ -25,6 +25,15 @@ __banner__ = f"""
 @click.version_option(message=Console.style(__banner__, 'success'))
 @click.group()
 def main():
+    """
+    High-level and controllable human interface for machine improvisation.
+
+    ## Usage
+
+    ```
+    hxmx <command> ...
+    ```
+    """
     pass
 
 
@@ -32,6 +41,28 @@ def main():
 @click.argument('input', type=click.Path(exists=True, dir_okay=False))
 @click.pass_context
 def exec(ctx, input):
+    """
+    Allows to run commands via YAML or TOML configuration files. 
+    All configuration files must provide values for the command, via the `cmd` key, and any required positional argument.
+
+    For instance:
+
+    ### YAML 
+
+    ```yaml title="config.yaml" showLineNumbers
+    cmd: info
+    input: ./mymodel.pt
+    ```
+
+    ### TOML
+
+    ```toml title="config.toml" showLineNumbers
+    cmd = "gen"
+    input = "./mymodel.pt"
+    output = "output.txt"
+    tokens = 300
+    ```
+    """
     try:
         params = ClickMiddleware.from_file(input)
         valid_cmds = [x for x in list(main.commands) if x != 'exec']

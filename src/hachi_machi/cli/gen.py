@@ -20,13 +20,8 @@ from .middleware import ClickMiddleware as M
     ('output', '.txt', '.json', '.csv')
 ], device='cpu').wrapper
 def gen(**params):
-    """Generates data auto-regressively given some pre-trained model.
-
-    Arguments:
-
-    MODEL: Path to PyTorch model
-
-    OUTPUT: Path to output file, in either MIDI or TXT format
+    """Given a path to a pre-trained (`.pt`) **MODEL**, it generates **OUTPUT** data auto-regressively. 
+    The generated data can be written in any of the following formats: `.txt`, `.json`, or `.csv`.
     """
     device = params['device']
     model_path = params['model']

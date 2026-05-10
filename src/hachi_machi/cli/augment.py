@@ -26,13 +26,9 @@ from .middleware import ClickMiddleware as M
     ('output', '.txt', '.csv'),
 ]).wrapper
 def augment(**params):
-    """Renders a MIDI file, with optional data augmentation.
-
-    Arguments:
-
-    INPUT: Path to JSON file
-
-    OUTPUT: Path to output MIDI file
+    """
+    Given some **INPUT** data, it generates an **OUTPUT** data file (`.txt` or `.csv`), given any number of optional data augmentation operations.
+    This command is most useful as a playground to test and experiment with data augmentation pipelines before training a model.
     """
 
     device = params['device']

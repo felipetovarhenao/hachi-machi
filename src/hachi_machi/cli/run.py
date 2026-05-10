@@ -18,12 +18,9 @@ from .middleware import ClickMiddleware as M
 @M(path_args=[('model', '.pt'),],
    device='cpu').wrapper
 def run(**config):
-    """Runs a pre-trained (`.pt`) model for real-time inference, via OSC.
-Note that, in some cases, running the model on CPU results in lower latency.
-
-Arguments:
-
-MODEL: Path to pre-trained PyTorch model (.pt)"""
+    """Given a path to pre-trained (`.pt`) **MODEL**, starts a sessions for real-time inference, via OSC.
+    Note that, in some cases, running the model on CPU results in lower latency.
+    """
     model = config['model']
     device = config['device']
     session = Session(model=model,
