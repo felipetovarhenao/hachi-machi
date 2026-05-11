@@ -140,7 +140,7 @@ class Div(DeterministicOperation):
 
 
 class RandAdd(Operation):
-    """Add a random value sampled from the specified distribution.
+    """Performs addition with value(s) sampled from a specified random distribution.
     """
 
     DOCS = {
@@ -182,7 +182,7 @@ class RandAdd(Operation):
 
 
 class RandMul(RandAdd):
-    """Multiply x by a random value sampled from the specified distribution.
+    """Performs multiplication with value(s) sampled from a specified random distribution.
     """
 
     DOCS = {
