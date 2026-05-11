@@ -39,6 +39,11 @@ class Operation(abc.ABC):
 
     TYPE = FeatureType.CONTINUOUS
 
+    DOCS = {
+        '*dims': 'Feature dimensions to apply operation to. If none are provided, all feature dimensions are used.',
+        'p': 'Probability for operation to be applied to data sequence'
+    }
+
     def __init__(self, *dims: int, p: float = 1.0):
         self.p = max(0.0, min(float(p), 1.0))
         self.dims = dims
@@ -56,14 +61,33 @@ class Operation(abc.ABC):
     def type(self):
         return self.TYPE
 
+    @classmethod
+    def docs(cls):
+        docs = {}
+        for base in reversed(cls.__bases__):
+            if not hasattr(base, 'docs'):
+                continue
+            docs = {
+                **docs,
+                **base.docs()
+            }
+
+        return {**docs, **cls.DOCS}
+
 
 class DeterministicOperation(Operation):
-    """Base for operations that apply a constant or data-derived scalar.
-
-    Args:
-        value: Numeric constant or one of 'mean', 'std'.
-        scope: Reduction axis for data-derived values — 'global', 'time', or 'feature'.
     """
+    Base for operations that apply a constant or data-derived scalar.
+    """
+
+    DOCS = {
+        'value': ("Numeric constant, or one of the following keywords for referencing data-derived properties."
+                  "\n\t- `mean`\n\t- `std`\n\t- `min`\n\t- `max`"),
+        'scope': ("Reduction axis for data-derived values. Ignored when `value` is a constant:\n"
+                  "\n\t- `global`: data-derived value is based on all dimensions and time steps."
+                  "\n\t- `time`: data-derived value is computed along the time-step dimension."
+                  "\n\t- `feature`: data-derived value is computed for each step along the feature dimension.")
+    }
 
     def __init__(self, *dims, value: int | float | str = 0, scope: str = "global", **kwargs):
         super().__init__(*dims, **kwargs)
@@ -89,29 +113,48 @@ class Add(DeterministicOperation):
 
 
 class Sub(DeterministicOperation):
+    """
+    Performs subtraction on the sequence `dims`.
+    """
+
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         return x - self._value_fn(x)
 
 
 class Mul(DeterministicOperation):
+    """
+    Performs multiplication on the sequence `dims`.
+    """
+
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         return x * self._value_fn(x)
 
 
 class Div(DeterministicOperation):
+    """
+    Performs division on the sequence `dims`.
+    """
+
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         return x / self._value_fn(x)
 
 
 class RandAdd(Operation):
     """Add a random value sampled from the specified distribution.
-
-    Args:
-        a: Distribution parameter — lower bound for 'uniform', mean for 'normal'.
-        b: Distribution parameter — upper bound for 'uniform', std for 'normal'.
-        scope: Shape of the random tensor — 'global', 'time', 'feature', or 'both'.
-        dist: Distribution — 'uniform' or 'normal'.
     """
+
+    DOCS = {
+        'a': "Distribution parameter. Lower bound for `scope=uniform`, mean for `scope=normal`.",
+        'b': "Distribution parameter.\nUpper bound `scope=uniform`, standard deviation for `scope=normal`.",
+        'scope': ("Shape of the random tensor"
+                  "\n\t- `global`: a single random value is applied globally"
+                  "\n\t- `time`: random values are applied, one for each time step, but constant for all feature `dims`"
+                  "\n\t- `feature`: random values are applied, one for each feature, but constant for all steps"
+                  "\n\t- `both`: random values are applied, one for each feature and time steps"),
+        'dist': ("Type of random distribution to sample from."
+                 "\n\t- `uniform`: Even distribution."
+                 "\n\t- `normal`: Gaussian distribution"),
+    }
 
     def __init__(self, *dims, a: int | float = 0, b: int | float = 1,
                  scope: str = "global", dist: str = "uniform", **kwargs):
@@ -140,14 +183,13 @@ class RandAdd(Operation):
 
 class RandMul(RandAdd):
     """Multiply x by a random value sampled from the specified distribution.
-
-    Args:
-        a: Distribution parameter — lower bound for `uniform`, mean for `normal`.
-        b: Distribution parameter — upper bound for `uniform`, std for `normal`.
-        scope: Shape of the random tensor — `global`, `time`, `feature`, or `both`.
-        dist: Distribution — 'uniform' or 'normal'.
-        space: Use `linear` for `x * r` or `log` for `x * 2**r`.
     """
+
+    DOCS = {
+        'space': ('Use `linear` for `x * r` or `log` for `x * 2**r`.',
+                  "\n\t- `linear`: `x * r`",
+                  "\n\t- `log`: `x * 2 ** r`")
+    }
 
     def __init__(self, *dims, space: str = "linear", **kwargs):
         if space not in ("linear", "log"):

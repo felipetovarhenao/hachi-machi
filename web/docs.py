@@ -272,19 +272,11 @@ class AutoDoc:
                     args[current_key] += " " + line.strip()
             return args
 
-        def collect_args(cls) -> dict[str, str]:
-            merged = {}
-            for klass in reversed(cls.__mro__):
-                if klass is object:
-                    continue
-                merged.update(parse_args_section(inspect.getdoc(klass)))
-            return merged
-
         def class_description(cls) -> str:
             doc = inspect.getdoc(cls)
             if not doc:
                 return ""
-            return doc.split("Args:")[0].strip()
+            return doc.strip()
         op_docs = {}
 
         for op_name, op_cls in cls.OPERATIONS.items():
@@ -307,21 +299,11 @@ class AutoDoc:
             if desc:
                 lines.append(f"{desc}\n")
 
-            class_args = collect_args(op_cls)
+            class_args = op_cls.docs()
 
-            specific_args = {k: v for k,
-                             v in class_args.items() if k not in BASE_ARGS}
-
-            all_args = {**BASE_ARGS, **
-                        {k: v for k, v in specific_args.items()}}
-
-            relevant_keys = {"dims", "p"} | set(signature_params.keys())
-            displayed_args = {k: v for k,
-                              v in all_args.items() if k in relevant_keys}
-
-            if displayed_args:
-                lines.append("**Parameters:**\n")
-                for arg_name, arg_desc in displayed_args.items():
+            if class_args:
+                lines.append("### Arguments\n")
+                for arg_name, arg_desc in class_args.items():
                     lines.append(f"- `{arg_name}`: {arg_desc}")
                 lines.append("")
             op_docs[op_name] = lines
