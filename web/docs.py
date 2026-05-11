@@ -317,5 +317,5 @@ class AutoDoc:
 
 if __name__ == "__main__":
     AutoDoc(cli=main,
-            output_dir='./docs/cmds/',
+            output_dir='./docs/commands/',
             cli_name="Documentation").generate()

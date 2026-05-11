@@ -1,5 +1,6 @@
 import click
 import datetime
+import webbrowser
 from .middleware import ClickMiddleware
 from ..console import Console
 from . import (augment, gen,
@@ -22,8 +23,30 @@ __banner__ = f"""
 © {datetime.datetime.now().year} https://felipe-tovar-henao.com"""
 
 
+class CustomGroup(click.Group):
+
+    @staticmethod
+    def open_docs(ctx, param, value):
+        if not value or ctx.resilient_parsing:
+            return
+        # print(ctx.command)
+        webbrowser.open("http://localhost:3000/")
+        ctx.exit()
+
+    def add_command(self, cmd, name=None):
+        cmd.params.append(
+            click.Option(["--help"],
+                         is_flag=True,
+                         is_eager=True,
+                         expose_value=False,
+                         callback=self.open_docs,
+                         help="Open documentation in browser.")
+        )
+        super().add_command(cmd, name)
+
+
 @click.version_option(message=Console.style(__banner__, 'success'))
-@click.group()
+@click.group(cls=CustomGroup)
 def main():
     """
     High-level and controllable human interface for machine improvisation.
