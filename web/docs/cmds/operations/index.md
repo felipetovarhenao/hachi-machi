@@ -2,19 +2,39 @@
 
 Some commands, such as `train` or `augment`, support passing a series of optional operations via the `--operations` option.
 
-Operations provide a flexible way to design data augmentation pipelines, by composing a sequence of data operations to be applied to our data, specified as python-like functions calls.
-For instance, consider a YAML configuration file that specifies the following data augmentation operations:
+Operations provide a flexible way to design data augmentation pipelines, by composing a sequence of data operations to be applied to the data, specified as python-like functions calls.
+For instance, consider a configuration file that specifies the following data augmentation operations:
 
-```yaml title="train_config.yml"
-cmd: train
-input: data.json
-operations:
-  - sub(0, value=mean)
-  - div(0, value=std)
-  - randmul(0, a=0.9, b=1.1, dist=uniform)
-  - mul(0, value=std)
-  - add(0, value=mean)
-```
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+<Tabs groupId="config-files">
+  <TabItem value="yaml" label="yaml">
+  ```yaml title="train_config.yaml"
+  cmd: train
+  input: data.json
+  operations:
+    - sub(0, value=mean)
+    - div(0, value=std)
+    - randmul(0, a=0.9, b=1.1, dist=uniform)
+    - mul(0, value=std)
+    - add(0, value=mean)
+  ```
+  </TabItem>
+  <TabItem value="toml" label="toml" default>
+    ```toml title="config.toml" showLineNumbers
+    cmd = "train"
+    input = "data.json"
+    operations = [
+      "sub(0, value=mean)",
+      "div(0, value=std)",
+      "randmul(0, a=0.9, b=1.1, dist=uniform)",
+      "mul(0, value=std)",
+      "add(0, value=mean)"
+    ]
+    ```
+  </TabItem>
+</Tabs>
 
 :::info
 Note that text-like values such as `mean` or `normal` are not in quotes.
@@ -30,10 +50,6 @@ In this example, the following series of operations will be applied to feature a
 
 :::warning
 For any augmentation pipeline, always ensure your data always remains in a realistic range.
-:::
-
-:::tip
-All operations accept an optional leading list of feature indices `*dims` and a keyword `p`, which sets the probability for the operation being applied for each batch sequence during training.
 :::
 
 The following are all currently available operations for data augmentation during training.
