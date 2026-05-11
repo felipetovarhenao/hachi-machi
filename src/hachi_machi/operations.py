@@ -175,7 +175,8 @@ class DataAugmenter:
     def __len__(self):
         return len(self.operations)
 
-    def get_signature(self, cls):
+    @staticmethod
+    def get_signature(cls):
         params = {}
         for klass in cls.__mro__:
             if klass is object:
