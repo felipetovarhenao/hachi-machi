@@ -15,8 +15,8 @@ const FeatureList: FeatureItem[] = [
     Svg: require("@site/static/img/undraw_personal-settings.svg").default,
     description: (
       <>
-        <b>hachi-machi</b> runs entirely on your own machine, with no cloud dependency or external service required. Your training data and models stay on
-        your computer.
+        <b>hachi-machi</b> runs entirely on your own machine, with no cloud dependency or external service required. Your training data and models
+        stay on your computer.
       </>
     ),
   },
@@ -25,8 +25,8 @@ const FeatureList: FeatureItem[] = [
     Svg: require("@site/static/img/undraw_data-at-work.svg").default,
     description: (
       <>
-        <b>hachi-machi</b> is data-agnostic. Anything that can be represented as a sequence of events — musical or otherwise — can be
-        used as training data via a straightforward JSON format.
+        <b>hachi-machi</b> is data-agnostic. Anything that can be represented as a sequence of events — musical or otherwise — can be used as training
+        data via a straightforward JSON format.
       </>
     ),
   },
