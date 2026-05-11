@@ -147,7 +147,7 @@ class AutoDoc:
             sections += ["## Commands", ""]
             for sub in sorted(subcommand_names):
                 sub_cmd = group.commands.get(sub)
-                sub_help = (sub_cmd.help or "").split(
+                sub_help = (sub_cmd.help.strip() or "").split(
                     "\n")[0] if sub_cmd else ""
                 entry = f"- [`{sub}`](./{sub}) — {sub_help}" if sub_help else f"- [`{sub}`](./{sub})"
                 sections.append(entry)
