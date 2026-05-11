@@ -6,7 +6,7 @@ import type * as Preset from "@docusaurus/preset-classic";
 
 const config: Config = {
   title: "hachi machi",
-  tagline: "a high-level and controllable human interface for machine improvisation",
+  tagline: "high-level and controllable human interface for machine improvisation",
   favicon: "img/favicon.ico",
 
   stylesheets: ["https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"],
