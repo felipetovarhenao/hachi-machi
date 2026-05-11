@@ -33,20 +33,24 @@ class CustomGroup(click.Group):
         webbrowser.open("http://localhost:3000/docs/")
         ctx.exit()
 
+    @classmethod
+    def help_params(cls):
+        return dict(is_flag=True,
+                    is_eager=True,
+                    expose_value=False,
+                    callback=cls.open_docs,
+                    help="Open documentation in browser.")
+
     def add_command(self, cmd, name=None):
         cmd.params.append(
-            click.Option(["--help", "-h"],
-                         is_flag=True,
-                         is_eager=True,
-                         expose_value=False,
-                         callback=self.open_docs,
-                         help="Open documentation in browser.")
+            click.Option(['-h', '--help'], **self.help_params())
         )
         super().add_command(cmd, name)
 
 
 @click.version_option(message=Console.style(__banner__, 'success'))
 @click.group(cls=CustomGroup)
+@click.option('-h', '--help', **CustomGroup.help_params())
 def main():
     """
     High-level and controllable human interface for machine improvisation.

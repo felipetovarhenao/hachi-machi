@@ -2,7 +2,7 @@
 sidebar_position: 0
 ---
 
-# Tutorial
+# Workflow
 
 This tutorial provides a quick-and-dirty overview of the workflow in **hachi-machi**, by training and running a custom model for MIDI sequence generation.
 
