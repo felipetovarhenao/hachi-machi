@@ -50,6 +50,8 @@ class AutoDoc:
                                                 sidebar_position=pos,
                                                 subcommand_names=subcommand_names)
             (subdir / "index.md").write_text(index_md, encoding="utf-8")
+            (subdir / "_category_.json").write_text(
+                '{ "collapsed": false }', encoding="utf-8")
 
             new_parents = parents + [name] if parents else [name]
             child_counter = itertools.count(1)
