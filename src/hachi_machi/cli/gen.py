@@ -1,13 +1,10 @@
-import os
 import click
 import torch
-import json
 from ..nn import PerformerModel
 from ..console import Console
-from ..utils import (tensor_to_txt,
-                     progress,
-                     tensor_to_csv)
+from ..utils import progress
 from .middleware import ClickMiddleware as M
+from ..io import FileIO
 
 
 @click.command(context_settings={'show_default': True})
@@ -27,8 +24,8 @@ def gen(**params):
     device = params['device']
     model_path = params['model']
     output = params['output']
-    ext = os.path.splitext(output)[1]
     seed = params['seed']
+
     if seed != 0:
         torch.manual_seed(params['seed'])
 
@@ -50,22 +47,6 @@ def gen(**params):
             x = y[..., model.input_mask]
 
     events = torch.cat(events, dim=1).squeeze(0)
-    if model.temporal:
-        events[..., 0] = events[..., 0].cumsum(0)
 
-    if ext == '.txt':
-        tensor_to_txt(events, output)
-    elif ext == '.csv':
-        tensor_to_csv(events, output, model.temporal)
-    else:
-        with open(output, 'w') as f:
-            if model.temporal:
-                content = {"time": events[..., 0].tolist(),
-                           "data": events[..., 1:].tolist()}
-            else:
-                content = {'data': events.tolist()}
-            json.dump(obj=content,
-                      fp=f,
-                      indent=4)
-
+    FileIO.write(events, output, model.temporal)
     Console.success("\nDONE", bold=True)

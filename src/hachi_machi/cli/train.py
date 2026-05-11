@@ -2,13 +2,13 @@ import click
 import torch
 import json
 from .. import nn
-from ..midi import MidiParser
 from ..data import EventDataset
 from ..nn import transforms as T
 from ..trainer import Trainer
 from ..features import FeatureMap
 from .middleware import ClickMiddleware as M
 from ..operations import DataAugmenter
+from ..io import FileIO
 
 
 @click.command(context_settings={'show_default': True})
@@ -72,7 +72,7 @@ from ..operations import DataAugmenter
               help='Data augmentation operation(s) to stochastically apply during training.',
               multiple=True)
 @M([
-    ('input', '.json'),
+    ('input', *FileIO.EXT),
     ('output', '.pt')
 ]).wrapper
 def train(**params):
@@ -128,40 +128,14 @@ def train(**params):
     device = params['device']
     seed = params['seed']
     file_path: str = params['input']
-    augmenter = None
+    operations = params['operations']
+
     if seed != 0:
         torch.manual_seed(params['seed'])
-    temporal = True
-    with open(file_path, 'r') as f:
-        content = json.load(f)
 
-    if not isinstance(content, dict) or 'data' not in content:
-        raise TypeError(
-            f'Invalid data. Format sequence under "data" key and provide sequence as a 2D matrix.')
+    augmenter = None
 
-    data = content['data']
-    features: dict = content.get('features', dict())
-
-    try:
-        data = torch.tensor(data, dtype=torch.float32).to(device)
-    except:
-        raise ValueError(
-            "data must be structured as a 2D matrix, each row with the same number of elements")
-
-    if 'time' not in content:
-        temporal = False
-    else:
-        time = torch.tensor(
-            content['time'], dtype=torch.float32).reshape(-1, 1).to(device)
-        data = torch.cat([time, data], dim=-1)
-        data[1:, 0] = data[..., 0].diff(dim=-1)
-        features = {str(int(k) + 1): v for (k, v) in features.items()}
-        features = {
-            **features
-        }
-
-    feature_map = FeatureMap(data, features, temporal)
-    operations = params['operations']
+    data, feature_map = FileIO.read(file_path, device)
 
     if len(operations) > 0:
         augmenter = DataAugmenter(operations=operations,
@@ -187,7 +161,7 @@ def train(**params):
                               input_layer=input_layer,
                               output_layer=output_layer,
                               input_mask=feature_map.input_dims(),
-                              temporal=temporal,
+                              temporal=feature_map.temporal(),
                               device=device,)
     trainer = Trainer(model=model,
                       dataset=dataset,

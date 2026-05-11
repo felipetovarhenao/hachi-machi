@@ -1,9 +1,9 @@
 import torch
 import click
-from ..utils import tensor_to_txt, load_data, tensor_to_csv
 from ..console import Console
 from ..operations import DataAugmenter
 from .middleware import ClickMiddleware as M
+from ..io import FileIO
 
 
 @click.command(context_settings={'show_default': True})
@@ -40,16 +40,14 @@ def augment(**params):
     if seed != 0:
         torch.manual_seed(seed)
 
-    data, feature_map = load_data(file_path=input,
-                                  device=device)
+    data, feature_map = FileIO.read(file_path=input,
+                                    device=device)
 
     augmenter = DataAugmenter(operations=ops, feature_map=feature_map)
     for op in augmenter.operations:
         data = op(data)
     if feature_map.temporal:
         data[..., 0] = data[..., 0].cumsum(0)
-    if output.endswith('.txt'):
-        tensor_to_txt(data, output)
-    else:
-        tensor_to_csv(data, output, feature_map.temporal)
+
+    FileIO.write(data, output, feature_map.temporal())
     Console.success("DONE", bold=True)

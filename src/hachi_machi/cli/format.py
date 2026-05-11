@@ -1,7 +1,7 @@
 import click
 from .middleware import ClickMiddleware as M
 from ..midi import MidiParser
-import json
+from ..io import FileIO
 
 
 @click.command()
@@ -14,7 +14,7 @@ import json
                 type=click.Path(file_okay=True,
                                 dir_okay=False,
                                 resolve_path=False,))
-@M([('input', '.mid', '.midi'), ('output', '.json')]).wrapper
+@M([('input', '.mid', '.midi'), ('output', *FileIO.EXT)]).wrapper
 def format(**params):
     """Convert a MIDI file into a JSON dataset, to be used as training data.
 
@@ -25,22 +25,13 @@ def format(**params):
     input_file = params['input']
     output_file = params['output']
     midi = MidiParser(input_file)
-    data = midi.events()
-    data[..., 0] = data[..., 0].cumsum(dim=0)
-    time = data[..., 0]
-    data = data[..., 1:]
-    content = {
-        "features": {
-            "2": {
-                "masked": True
-            },
-            "3": {
-                "categorical": True
-            },
+    tensor = midi.events()
+    features = {
+        "2": {
+            "masked": True
         },
-        "time": time.tolist(),
-        "data": data.tolist()
+        "3": {
+            "categorical": True
+        },
     }
-
-    with open(output_file, 'w') as f:
-        json.dump(obj=content, fp=f, indent=4)
+    FileIO.write(tensor, output_file, True, features=features)

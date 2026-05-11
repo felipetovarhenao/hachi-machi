@@ -1,4 +1,3 @@
-import re
 import click
 import torch
 from .middleware import ClickMiddleware as M
