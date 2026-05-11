@@ -14,7 +14,7 @@ from ..io import FileIO
 @click.option('--seed', '-s', default=0, help='Random seed.')
 @M([
     ('model', '.pt'),
-    ('output', '.txt', '.json', '.csv')
+    ('output', *FileIO.EXT)
 ], device='cpu').wrapper
 def gen(**params):
     """Given a path to a pre-trained (`.pt`) **MODEL**, it writes an **OUTPUT** 
