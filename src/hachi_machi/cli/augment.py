@@ -12,7 +12,7 @@ from ..io import FileIO
                                          dir_okay=False,
                                          resolve_path=True,))
 @click.argument('output',
-                default='output.txt',
+                default='output.csv',
                 type=click.Path(file_okay=True,
                                 dir_okay=False,
                                 resolve_path=True,))
@@ -22,8 +22,8 @@ from ..io import FileIO
               multiple=True)
 @click.option('--seed', '-s', default=0)
 @M([
-    ('input', '.json'),
-    ('output', '.txt', '.csv'),
+    ('input', *FileIO.EXT),
+    ('output', *FileIO.EXT),
 ]).wrapper
 def augment(**params):
     """
@@ -40,14 +40,13 @@ def augment(**params):
     if seed != 0:
         torch.manual_seed(seed)
 
-    data, feature_map = FileIO.read(file_path=input,
+    data, feature_map = FileIO.read(path=input,
                                     device=device)
 
     augmenter = DataAugmenter(operations=ops, feature_map=feature_map)
+
     for op in augmenter.operations:
         data = op(data)
-    if feature_map.temporal:
-        data[..., 0] = data[..., 0].cumsum(0)
 
     FileIO.write(data, output, feature_map.temporal())
     Console.success("DONE", bold=True)

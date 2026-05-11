@@ -10,11 +10,12 @@ from ..io import FileIO
                                 dir_okay=False,
                                 resolve_path=True,))
 @click.argument('output',
-                default='data.json',
+                default='data.csv',
                 type=click.Path(file_okay=True,
                                 dir_okay=False,
                                 resolve_path=False,))
-@M([('input', '.mid', '.midi'), ('output', *FileIO.EXT)]).wrapper
+@M([('input', '.mid', '.midi'),
+    ('output', *FileIO.EXT)]).wrapper
 def format(**params):
     """Convert a MIDI file into a JSON dataset, to be used as training data.
 

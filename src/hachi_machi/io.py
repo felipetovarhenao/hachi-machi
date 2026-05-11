@@ -4,6 +4,9 @@ import torch
 import csv
 from .features import FeatureMap
 
+CAT_CHAR = '#'
+MASKED_CHAR = '~'
+
 
 class FileIO:
 
@@ -30,6 +33,8 @@ class FileIO:
     @classmethod
     def write(cls, tensor: torch.Tensor, path: str, temporal: bool = False, **kwargs) -> None:
         assert tensor.ndim == 2, f"Expected 2D tensor, got {tensor.ndim}D"
+        if temporal:
+            tensor[..., 0] = tensor[..., 0].cumsum(0)
         path, ext = cls.validate_path(path)
         writer = getattr(cls, f'write_{ext[1:]}')
         writer(tensor, path, temporal, **kwargs)
@@ -43,11 +48,21 @@ class FileIO:
         return tensor
 
     @classmethod
-    def write_csv(cls, tensor: torch.Tensor, path: str, temporal: bool = False, **_) -> None:
+    def write_csv(cls, tensor: torch.Tensor, path: str, temporal: bool = False, **kwargs) -> None:
         n_features = tensor.shape[1]
-
         header = ["time"]
-        header += [f"{i}" for i in range(n_features - int(temporal))]
+        cols = [f"{i}" for i in range(n_features - int(temporal))]
+        features: dict = kwargs.get("features", {})
+        if len(features) > 0:
+            for (k, v) in features.items():
+                i = int(k)
+                col = cols[i]
+                if v.get('categorical', False):
+                    col += CAT_CHAR
+                if v.get('masked', False):
+                    col = f"{MASKED_CHAR}{col}"
+                cols[i] = col
+        header += cols
         header = header[-n_features:]
         with open(path, "w") as f:
             f.write(",".join(header) + "\n")
@@ -68,9 +83,9 @@ class FileIO:
         features = {}
         for (i, k) in enumerate(header[int(temporal):]):
             ft = {}
-            if k.startswith('-'):
+            if k.startswith(MASKED_CHAR):
                 ft['masked'] = True
-            if k.endswith('!'):
+            if k.endswith(CAT_CHAR):
                 ft['categorical'] = True
             if len(ft) > 0:
                 features[str(i)] = ft
@@ -117,10 +132,6 @@ class FileIO:
             temporal = True
             time = cls.to_tensor(content['time']).reshape(-1, 1)
             data = torch.cat([time, data], dim=-1)
-            features = {str(int(k) + 1): v for (k, v) in features.items()}
-            features = {
-                **features
-            }
 
         return data, FeatureMap(data, features, temporal)
 

@@ -18,7 +18,7 @@ class FeatureMap:
         self.types = []
         default_type = FeatureType.CONTINUOUS.value
         for i in range(size):
-            k = str(i)
+            k = str(i - int(temporal))
             if k not in features:
                 self.mask.append(1)
                 self.types.append(default_type)
