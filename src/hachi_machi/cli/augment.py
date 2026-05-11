@@ -48,5 +48,9 @@ def augment(**params):
     for op in augmenter.operations:
         data = op(data)
 
-    FileIO.write(data, output, feature_map.temporal())
+    FileIO.write(tensor=data,
+                 path=output,
+                 temporal=feature_map.temporal(),
+                 features=feature_map.to_dict())
+
     Console.success("DONE", bold=True)

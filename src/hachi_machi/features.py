@@ -56,3 +56,17 @@ class FeatureMap:
 
     def temporal(self):
         return self._temporal
+
+    def to_dict(self):
+        features = {}
+        for (dim, type, mask) in zip(self.dims, self.types, self.mask):
+            f = {}
+            if type == FeatureType.CATEGORICAL.value:
+                f['categorical'] = True
+            if mask == 0:
+                f['masked'] = True
+            id = int(dim.item())
+            if self.temporal():
+                id -= 1
+            features[str(id)] = f
+        return features
