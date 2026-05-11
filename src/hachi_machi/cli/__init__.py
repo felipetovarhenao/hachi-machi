@@ -35,7 +35,7 @@ class CustomGroup(click.Group):
 
     def add_command(self, cmd, name=None):
         cmd.params.append(
-            click.Option(["--help"],
+            click.Option(["--help", "-h"],
                          is_flag=True,
                          is_eager=True,
                          expose_value=False,

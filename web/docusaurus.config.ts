@@ -141,8 +141,9 @@ const config: Config = {
       copyright: `Copyright © ${new Date().getFullYear()} Felipe Tovar-Henao.`,
     },
     prism: {
-      theme: prismThemes.github,
-      darkTheme: prismThemes.dracula,
+      theme: prismThemes.duotoneLight,
+      darkTheme: prismThemes.duotoneDark,
+      additionalLanguages: ["toml"],
     },
   } satisfies Preset.ThemeConfig,
 };
