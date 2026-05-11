@@ -1,11 +1,13 @@
 
 from hachi_machi.cli import main
+from hachi_machi.operations import DataAugmenter
 import itertools
 import os
 import re
 import textwrap
 from pathlib import Path
 import click
+import inspect
 
 CLI_CMD = 'hxmx'
 
@@ -14,8 +16,8 @@ class AutoDoc:
     def __init__(
         self,
         cli: click.Command,
-        output_dir: str | os.PathLike = "docs/cli",
-        cli_name: str = "",
+        output_dir: str | os.PathLike,
+        cli_name: str,
     ) -> None:
         self.cli = cli
         self.output_dir = Path(output_dir)
@@ -25,6 +27,10 @@ class AutoDoc:
         self.output_dir.mkdir(parents=True, exist_ok=True)
         counter = itertools.count(1)
         self._walk(self.cli, self.cli_name, [], self.output_dir, counter)
+
+        with open(self.output_dir.parent / 'operations.md', 'w') as f:
+            f.write(self.ops_docs())
+
         print(f"Docs written to: {self.output_dir.resolve()}")
 
     def _walk(
@@ -255,6 +261,102 @@ class AutoDoc:
             return "tuple (" + ", ".join(AutoDoc._type_name(t) for t in param_type.types) + ")"
 
         return type(param_type).__name__.lower()
+
+    @classmethod
+    def ops_docs(self) -> str:
+        cls = DataAugmenter
+        BASE_ARGS = {
+            "dims": (
+                "`*dims: int` — Feature indices to apply the operation to. "
+                "Use `t` for the time dimension (temporal datasets only). "
+                "If omitted, the operation is applied to all features."
+            ),
+            "p": "`p: float` — Probability of applying the operation. Default: `1.0`.",
+        }
+
+        def parse_args_section(docstring: str) -> dict[str, str]:
+            if not docstring:
+                return {}
+            match = re.search(r"Args:\s*\n((?:[ \t]+.+\n?)+)", docstring)
+            if not match:
+                return {}
+            args = {}
+            current_key = None
+            for line in match.group(1).splitlines():
+                kv = re.match(r"^\s{4,8}(\w+):\s*(.+)", line)
+                if kv:
+                    current_key = kv.group(1)
+                    args[current_key] = kv.group(2).strip()
+                elif current_key and re.match(r"^\s{8,}", line):
+                    args[current_key] += " " + line.strip()
+            return args
+
+        def collect_args(cls) -> dict[str, str]:
+            merged = {}
+            for klass in reversed(cls.__mro__):
+                if klass is object:
+                    continue
+                merged.update(parse_args_section(inspect.getdoc(klass)))
+            return merged
+
+        def class_description(cls) -> str:
+            doc = inspect.getdoc(cls)
+            if not doc:
+                return ""
+            return doc.split("Args:")[0].strip()
+
+        lines = ["# Operations API\n"]
+        lines.append(
+            """
+            Operations allow customizing data augmentation pipelines, by composing a sequence of data operations as python-like callbacks, e.g. `randadd(0, 1, scope=feature, dist=normal)`
+            """
+        )
+        lines.append(
+            "All operations accept an optional leading list of feature indices `*dims` "
+            "and a keyword `p`, which sets the probability for the operation being applied for each batch sequence during training.\n"
+        )
+
+        for op_name, op_cls in cls.OPERATIONS.items():
+            signature_params = cls.get_signature(op_cls)
+            # Build a readable signature string
+            sig_parts = []
+            for name, param in signature_params.items():
+                if name == 'dims':
+                    name = f"*{name}"
+                if param.default is inspect.Parameter.empty:
+                    sig_parts.append(name)
+                else:
+                    default = param.default
+                    sig_parts.append(f"{name}={default}")
+            signature = f"\n\n```rust\n{op_name}({', '.join(sig_parts)})\n```\n"
+
+            lines.append(f"## `{op_name}`\n")
+            lines.append(f"{signature}\n")
+
+            desc = class_description(op_cls)
+            if desc:
+                lines.append(f"{desc}\n")
+
+            # Collect args: base args first, then class-specific ones
+            class_args = collect_args(op_cls)
+            # Exclude base args from class_args to avoid duplication
+            specific_args = {k: v for k,
+                             v in class_args.items() if k not in BASE_ARGS}
+
+            all_args = {**BASE_ARGS, **
+                        {k: v for k, v in specific_args.items()}}
+            # Only show args that appear in this class's actual signature
+            relevant_keys = {"dims", "p"} | set(signature_params.keys())
+            displayed_args = {k: v for k,
+                              v in all_args.items() if k in relevant_keys}
+
+            if displayed_args:
+                lines.append("**Parameters:**\n")
+                for arg_desc in displayed_args.values():
+                    lines.append(f"- {arg_desc}")
+                lines.append("")
+
+        return "\n".join(lines)
 
 
 if __name__ == "__main__":
