@@ -203,6 +203,107 @@ class RandMul(RandAdd):
         return x * (2 ** r if self.space == "log" else r)
 
 
+class CumSum(Operation):
+    """
+    Replaces each time step with the cumulative sum along the `time` axis.
+    """
+
+    DOCS = {}
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        return torch.cumsum(x, dim=-2)
+
+
+class Diff(Operation):
+    """
+    Replaces each time step with the _n_-th discrete difference along the time axis.
+
+    To preserve the original sequence length a constant `prepend_value` is
+    inserted before differencing, so the output shape is always identical to
+    the input shape.
+    """
+
+    DOCS = {
+        'prepend_value': ('Scalar prepended to the sequence before differencing to keep '
+                          'the time dimension length unchanged.'),
+    }
+
+    def __init__(self, *dims, prepend_value: float = 0.0, **kwargs):
+        super().__init__(*dims, **kwargs)
+        self.prepend_value = prepend_value
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        prepend = torch.full(
+            (*x.shape[:-2], 1, x.shape[-1]),
+            self.prepend_value,
+            dtype=x.dtype,
+            device=x.device,
+        )
+        return torch.diff(x, n=self.n, dim=-2, prepend=prepend)
+
+
+class Clip(DeterministicOperation):
+    """
+    Clips values to the range `[min, max]` along the specified dims.
+
+    `value` sets the lower bound and `value_max` sets the upper bound.
+    Either may be omitted (`None`) to clip only one side.
+    """
+
+    DOCS = {
+        'value': ("Lower bound for clipping. Accepts a numeric constant or a data-derived "
+                  "keyword (`mean`, `std`, `min`, `max`). Pass `None` to skip."),
+        'value_max': ("Upper bound for clipping. Accepts a numeric constant or a data-derived "
+                      "keyword (`mean`, `std`, `min`, `max`). Pass `None` to skip."),
+    }
+
+    def __init__(self, *dims, value: int | float | str | None = None,
+                 value_max: int | float | str | None = None, **kwargs):
+        # We don't want DeterministicOperation's __init__ to process value_max,
+        # so we call Operation.__init__ directly and handle both bounds manually.
+        Operation.__init__(self, *dims, **kwargs)
+        self._min_fn = self._resolve(value, kwargs.get('scope', 'global'))
+        self._max_fn = self._resolve(value_max, kwargs.get('scope', 'global'))
+
+    @staticmethod
+    def _resolve(value, scope):
+        if value is None:
+            return None
+        if isinstance(value, str):
+            if value not in _VALUES:
+                raise ValueError(
+                    f"Invalid value: {value!r}. Expected one of {list(_VALUES)} or a numeric constant")
+            if scope not in _VALUES[value]:
+                raise ValueError(
+                    f"Invalid scope: {scope!r}. Expected one of {list(_VALUES[value])}")
+            return _VALUES[value][scope]
+        return lambda _: float(value)
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        lo = self._min_fn(x) if self._min_fn is not None else None
+        hi = self._max_fn(x) if self._max_fn is not None else None
+        return torch.clamp(x, min=lo, max=hi)
+
+
+class Quantize(Operation):
+    """
+    Rounds values to the nearest multiple of `step`.
+    """
+
+    DOCS = {
+        'step': 'Quantization resolution. Values are rounded to the nearest multiple of this.',
+    }
+
+    def __init__(self, *dims, step: int | float = 1.0, **kwargs):
+        super().__init__(*dims, **kwargs)
+        if step <= 0:
+            raise ValueError(f"step must be > 0, got {step}")
+        self.step = float(step)
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        return torch.round(x / self.step) * self.step
+
+
 class DataAugmenter:
 
     OPERATIONS = {
@@ -212,7 +313,11 @@ class DataAugmenter:
                     Mul,
                     Div,
                     RandAdd,
-                    RandMul,]
+                    RandMul,
+                    CumSum,
+                    Diff,
+                    Clip,
+                    Quantize]
     }
 
     def __init__(self, operations: list[str], feature_map: FeatureMap):
@@ -235,6 +340,7 @@ class DataAugmenter:
 
     def from_str(self, s: str) -> tuple[str, list, dict]:
         raw = s
+        s = re.sub(r"\bnone\b", 'None')
         s = re.sub(
             r'\b(t|time|global|feature|both|normal|uniform|linear|log|mean|std|min|max)\b',
             r'"\g<1>"', s)
