@@ -16,7 +16,8 @@
 !**/__*__.py
 **/*.egg-info
 web/docs/cmds/*.md
-web/docs/operations.md
+web/docs/cmds/operations/*
+!web/docs/cmds/operations/index.md
 !README.md
 !web/*.json
 

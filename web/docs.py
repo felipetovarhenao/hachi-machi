@@ -27,9 +27,7 @@ class AutoDoc:
         self.output_dir.mkdir(parents=True, exist_ok=True)
         counter = itertools.count(1)
         self._walk(self.cli, self.cli_name, [], self.output_dir, counter)
-
-        with open(self.output_dir.parent / 'operations.md', 'w') as f:
-            f.write(self.ops_docs())
+        self.ops_docs()
 
         print(f"Docs written to: {self.output_dir.resolve()}")
 
@@ -262,16 +260,15 @@ class AutoDoc:
 
         return type(param_type).__name__.lower()
 
-    @classmethod
     def ops_docs(self) -> str:
         cls = DataAugmenter
         BASE_ARGS = {
             "dims": (
-                "`*dims: int` — Feature indices to apply the operation to. "
+                "Feature indices to apply the operation to. "
                 "Use `t` for the time dimension (temporal datasets only). "
                 "If omitted, the operation is applied to all features."
             ),
-            "p": "`p: float` — Probability of applying the operation. Default: `1.0`.",
+            "p": "Probability of applying the operation. Default: `1.0`.",
         }
 
         def parse_args_section(docstring: str) -> dict[str, str]:
@@ -283,7 +280,7 @@ class AutoDoc:
             args = {}
             current_key = None
             for line in match.group(1).splitlines():
-                kv = re.match(r"^\s{4,8}(\w+):\s*(.+)", line)
+                kv = re.match(r"^\s*(\w+):\s*(.+)", line)
                 if kv:
                     current_key = kv.group(1)
                     args[current_key] = kv.group(2).strip()
@@ -304,19 +301,10 @@ class AutoDoc:
             if not doc:
                 return ""
             return doc.split("Args:")[0].strip()
-
-        lines = ["# Operations API\n"]
-        lines.append(
-            """
-            Operations allow customizing data augmentation pipelines, by composing a sequence of data operations as python-like callbacks, e.g. `randadd(0, 1, scope=feature, dist=normal)`
-            """
-        )
-        lines.append(
-            "All operations accept an optional leading list of feature indices `*dims` "
-            "and a keyword `p`, which sets the probability for the operation being applied for each batch sequence during training.\n"
-        )
+        op_docs = {}
 
         for op_name, op_cls in cls.OPERATIONS.items():
+            lines = []
             signature_params = cls.get_signature(op_cls)
             # Build a readable signature string
             sig_parts = []
@@ -330,7 +318,7 @@ class AutoDoc:
                     sig_parts.append(f"{name}={default}")
             signature = f"\n\n```rust\n{op_name}({', '.join(sig_parts)})\n```\n"
 
-            lines.append(f"## `{op_name}`\n")
+            # lines.append(f"## `{op_name}`\n")
             lines.append(f"{signature}\n")
 
             desc = class_description(op_cls)
@@ -352,14 +340,20 @@ class AutoDoc:
 
             if displayed_args:
                 lines.append("**Parameters:**\n")
-                for arg_desc in displayed_args.values():
-                    lines.append(f"- {arg_desc}")
+                for arg_name, arg_desc in displayed_args.items():
+                    lines.append(f"- `{arg_name}`: {arg_desc}")
                 lines.append("")
+            op_docs[op_name] = lines
 
-        return "\n".join(lines)
+        ops_dir = self.output_dir / 'operations/'
+        ops_dir.mkdir(exist_ok=True)
+
+        for name, lines in op_docs.items():
+            with open(ops_dir / f'{name}.md', 'w') as f:
+                f.write("\n".join(lines))
 
 
 if __name__ == "__main__":
     AutoDoc(cli=main,
             output_dir='./docs/cmds/',
-            cli_name=CLI_CMD).generate()
+            cli_name="Documentation").generate()

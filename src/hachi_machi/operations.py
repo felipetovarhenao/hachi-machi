@@ -80,6 +80,10 @@ class DeterministicOperation(Operation):
 
 
 class Add(DeterministicOperation):
+    """
+    Performs addition on the sequence `dims`.
+    """
+
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         return x + self._value_fn(x)
 
@@ -138,11 +142,11 @@ class RandMul(RandAdd):
     """Multiply x by a random value sampled from the specified distribution.
 
     Args:
-        a: Distribution parameter — lower bound for 'uniform', mean for 'normal'.
-        b: Distribution parameter — upper bound for 'uniform', std for 'normal'.
-        scope: Shape of the random tensor — 'global', 'time', 'feature', or 'both'.
+        a: Distribution parameter — lower bound for `uniform`, mean for `normal`.
+        b: Distribution parameter — upper bound for `uniform`, std for `normal`.
+        scope: Shape of the random tensor — `global`, `time`, `feature`, or `both`.
         dist: Distribution — 'uniform' or 'normal'.
-        space: 'linear' for x * r, 'log' for x * 2**r.
+        space: Use `linear` for `x * r` or `log` for `x * 2**r`.
     """
 
     def __init__(self, *dims, space: str = "linear", **kwargs):
