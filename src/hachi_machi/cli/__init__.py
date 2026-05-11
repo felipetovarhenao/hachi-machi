@@ -30,7 +30,7 @@ class CustomGroup(click.Group):
         if not value or ctx.resilient_parsing:
             return
         # print(ctx.command)
-        webbrowser.open("http://localhost:3000/")
+        webbrowser.open("http://localhost:3000/docs/")
         ctx.exit()
 
     def add_command(self, cmd, name=None):
