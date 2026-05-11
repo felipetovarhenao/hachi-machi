@@ -13,12 +13,11 @@ CLI_CMD = 'hxmx'
 
 
 class AutoDoc:
-    def __init__(
-        self,
-        cli: click.Command,
-        output_dir: str | os.PathLike,
-        cli_name: str,
-    ) -> None:
+    def __init__(self,
+                 cli: click.Command,
+                 output_dir: str | os.PathLike,
+                 cli_name: str,
+                 ) -> None:
         self.cli = cli
         self.output_dir = Path(output_dir)
         self.cli_name = cli_name or cli.name or "cli"
@@ -31,14 +30,12 @@ class AutoDoc:
 
         print(f"Docs written to: {self.output_dir.resolve()}")
 
-    def _walk(
-        self,
-        cmd: click.Command,
-        name: str,
-        parents: list[str],
-        output_dir: Path,
-        counter: itertools.count,
-    ) -> None:
+    def _walk(self,
+              cmd: click.Command,
+              name: str,
+              parents: list[str],
+              output_dir: Path,
+              counter: itertools.count,) -> None:
 
         pos = next(counter) + 1 if len(parents) > 0 else 1
 
@@ -47,8 +44,11 @@ class AutoDoc:
             subdir.mkdir(parents=True, exist_ok=True)
 
             subcommand_names = list(getattr(cmd, "commands", {}).keys())
-            index_md = self._render_group_index(
-                cmd, name, parents, pos, subcommand_names)
+            index_md = self._render_group_index(group=cmd,
+                                                name=name,
+                                                parents=parents,
+                                                sidebar_position=pos,
+                                                subcommand_names=subcommand_names)
             (subdir / "index.md").write_text(index_md, encoding="utf-8")
 
             new_parents = parents + [name] if parents else [name]
@@ -57,22 +57,14 @@ class AutoDoc:
                 self._walk(sub_cmd, sub_name, new_parents,
                            subdir, child_counter)
         else:
-            md = self._render_command(cmd, name, parents, pos)
+            md = self._render_command(cmd, name,  pos)
             output_dir.mkdir(parents=True, exist_ok=True)
             (output_dir / f"{name}.md").write_text(md, encoding="utf-8")
 
-    # ------------------------------------------------------------------
-    # Page renderers
-    # ------------------------------------------------------------------
-
     @staticmethod
-    def _render_command(
-        cmd: click.Command,
-        name: str,
-        parents: list[str],
-        sidebar_position: int,
-    ) -> str:
-        # full_name = "/".join(parents + [name])
+    def _render_command(cmd: click.Command,
+                        name: str,
+                        sidebar_position: int,) -> str:
         full_name = name
         description = textwrap.dedent(cmd.help or "").strip()
         short_desc = description.split("\n")[0] if description else ""
@@ -121,13 +113,11 @@ class AutoDoc:
         return "\n".join(sections)
 
     @staticmethod
-    def _render_group_index(
-        group: click.Group,
-        name: str,
-        parents: list[str],
-        sidebar_position: int,
-        subcommand_names: list[str],
-    ) -> str:
+    def _render_group_index(group: click.Group,
+                            name: str,
+                            parents: list[str],
+                            sidebar_position: int,
+                            subcommand_names: list[str],) -> str:
         full_name = " ".join(parents + [name]) if parents or name else name
         description = textwrap.dedent(group.help or "").strip()
         short_desc = description.split("\n")[0] if description else ""
@@ -155,12 +145,10 @@ class AutoDoc:
 
         return "\n".join(sections)
 
-    # ------------------------------------------------------------------
-    # Markdown primitives
-    # ------------------------------------------------------------------
-
     @staticmethod
-    def _frontmatter(title: str, sidebar_position: int, description: str = "") -> str:
+    def _frontmatter(title: str,
+                     sidebar_position: int,
+                     description: str = "") -> str:
         lines = ["---", f"title: {title}",
                  f"sidebar_position: {sidebar_position}"]
         if description:
@@ -215,10 +203,6 @@ class AutoDoc:
                     parts.append(f"[{flag} <{p.type.name.upper()}>]")
         suffix = " ".join(parts)
         return f" {suffix}" if suffix else ""
-
-    # ------------------------------------------------------------------
-    # Type helper
-    # ------------------------------------------------------------------
 
     @staticmethod
     def _type_name(param_type: click.ParamType) -> str:
@@ -306,7 +290,6 @@ class AutoDoc:
         for op_name, op_cls in cls.OPERATIONS.items():
             lines = []
             signature_params = cls.get_signature(op_cls)
-            # Build a readable signature string
             sig_parts = []
             for name, param in signature_params.items():
                 if name == 'dims':
@@ -318,22 +301,20 @@ class AutoDoc:
                     sig_parts.append(f"{name}={default}")
             signature = f"\n\n```rust\n{op_name}({', '.join(sig_parts)})\n```\n"
 
-            # lines.append(f"## `{op_name}`\n")
             lines.append(f"{signature}\n")
 
             desc = class_description(op_cls)
             if desc:
                 lines.append(f"{desc}\n")
 
-            # Collect args: base args first, then class-specific ones
             class_args = collect_args(op_cls)
-            # Exclude base args from class_args to avoid duplication
+
             specific_args = {k: v for k,
                              v in class_args.items() if k not in BASE_ARGS}
 
             all_args = {**BASE_ARGS, **
                         {k: v for k, v in specific_args.items()}}
-            # Only show args that appear in this class's actual signature
+
             relevant_keys = {"dims", "p"} | set(signature_params.keys())
             displayed_args = {k: v for k,
                               v in all_args.items() if k in relevant_keys}
@@ -349,8 +330,7 @@ class AutoDoc:
         ops_dir.mkdir(exist_ok=True)
 
         for name, lines in op_docs.items():
-            with open(ops_dir / f'{name}.md', 'w') as f:
-                f.write("\n".join(lines))
+            (ops_dir / f'{name}.md').write_text("\n".join(lines))
 
 
 if __name__ == "__main__":
