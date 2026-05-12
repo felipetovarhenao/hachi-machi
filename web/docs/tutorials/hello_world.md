@@ -1,5 +1,6 @@
 ---
 sidebar_position: 0
+slug: basics
 ---
 
 # Basic workflow
@@ -12,6 +13,8 @@ This tutorial provides a quick overview of the workflow in **hachi-machi**, by s
 4. Run the model for interactive MIDI generation (_real-time_), via [Open Sound Control](https://en.wikipedia.org/wiki/Open_Sound_Control).
 
 ![workflow](@site/static/img/hachi_machi_workflow.svg)
+
+_A visual representation of a workflow in **hachi-machi**._
 
 ### Requirements
 
@@ -34,9 +37,9 @@ This will generate a JSON file in the same directory, called `data.json`. This f
 
 ```json
 {
-  "features": {...},
-  "time": [...],
-  "data": [...]
+  "features": { ... },
+  "time": [ ... ],
+  "data": [ ... ]
 }
 ```
 
@@ -82,6 +85,8 @@ This will expose the model to receive input and send output messages via [OSC](h
 
 > 🙌 Machines ≠ humans 🙌
 
-As obvious as this statement is, it's easy to have unrealistic expectations of what our models can and cannot do. As we'll see in the next tutorials, there are things we can do to improve our models, they will almost always require some degree of "manual" (i.e., rule-based) tweaking on our side.
+As obvious as this statement is, it's easy to have unrealistic expectations of what our models can and cannot do. We might, for instance, expect this model to have learned human-level understanding of concepts such as harmony and rhythm.
 
-In the case of our MIDI model, this can mean, for instance, applying quantization to the pitch feature so that it adheres to some harmonic scheme, or clipping velocity values that ocassionally go outside of the `0-127` range. Of course, the type of post-processing we apply will vary based on the use case.
+As we'll see in the next tutorials, while there are things we can do to meaningfully improve our models, they will almost always require some degree of "manual" (i.e., rule-based) tweaking on our side. In the case of our MIDI model, this can mean, for instance, applying quantization to the pitch values so that it adheres to some harmonic scheme, or clipping velocity values that ocassionally go outside of the `0-127` range. Naturally, the type of post-processing we need will vary based on factors such as use case, data quality, and training parameters.
+
+Next we'll take a look at how to format our data to improve our models' performance.

@@ -75,7 +75,7 @@ class AutoDoc:
             AutoDoc._frontmatter(
                 full_name, sidebar_position, short_desc),
             "",
-            f"# `{full_name}`",
+            f"# {full_name}",
             "",
         ]
 
@@ -125,10 +125,11 @@ class AutoDoc:
         short_desc = description.split("\n")[0] if description else ""
 
         sections = [
-            AutoDoc._frontmatter(
-                full_name or "CLI Reference", sidebar_position, short_desc),
+            AutoDoc._frontmatter(title=full_name,
+                                 sidebar_position=sidebar_position,
+                                 description=short_desc),
             "",
-            f"# `{full_name}`" if full_name else "# CLI Reference",
+            f"# `{full_name}`"
             "",
         ]
 
@@ -248,31 +249,6 @@ class AutoDoc:
 
     def ops_docs(self) -> str:
         cls = DataAugmenter
-        BASE_ARGS = {
-            "dims": (
-                "Feature indices to apply the operation to. "
-                "Use `t` for the time dimension (temporal datasets only). "
-                "If omitted, the operation is applied to all features."
-            ),
-            "p": "Probability of applying the operation. Default: `1.0`.",
-        }
-
-        def parse_args_section(docstring: str) -> dict[str, str]:
-            if not docstring:
-                return {}
-            match = re.search(r"Args:\s*\n((?:[ \t]+.+\n?)+)", docstring)
-            if not match:
-                return {}
-            args = {}
-            current_key = None
-            for line in match.group(1).splitlines():
-                kv = re.match(r"^\s*(\w+):\s*(.+)", line)
-                if kv:
-                    current_key = kv.group(1)
-                    args[current_key] = kv.group(2).strip()
-                elif current_key and re.match(r"^\s{8,}", line):
-                    args[current_key] += " " + line.strip()
-            return args
 
         def class_description(cls) -> str:
             doc = inspect.getdoc(cls)
@@ -293,7 +269,8 @@ class AutoDoc:
                 else:
                     default = param.default
                     sig_parts.append(f"{name}={default}")
-            signature = f"\n\n```rust\n{op_name}({', '.join(sig_parts)})\n```\n".lower()
+            signature = f"\n\n```rust\n{op_name}({', '.join(sig_parts)})\n```\n".lower(
+            )
 
             lines.append(f"{signature}\n")
 
@@ -320,4 +297,4 @@ class AutoDoc:
 if __name__ == "__main__":
     AutoDoc(cli=main,
             output_dir='./docs/commands/',
-            cli_name="Documentation").generate()
+            cli_name="CLI Reference").generate()
