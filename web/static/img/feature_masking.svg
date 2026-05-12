@@ -8,12 +8,12 @@
   </defs>
 
 
-  <text x="160" y="36" text-anchor="middle" dominant-baseline="central"
+  <text x="155" y="45" text-anchor="middle" dominant-baseline="central"
     style="fill:rgb(250, 249, 245);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono">Input
-    vector</text>
-  <text x="520" y="36" text-anchor="middle" dominant-baseline="central"
+    features</text>
+  <text x="510" y="45" text-anchor="middle" dominant-baseline="central"
     style="fill:rgb(250, 249, 245);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono">Output
-    vector</text>
+    features</text>
 
 
   <path d="M88 55 L76 55 L76 274 L88 274" fill="none" stroke="var(--color-border-primary)" stroke-width="1.5"
