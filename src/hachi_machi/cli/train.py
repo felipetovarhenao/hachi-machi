@@ -94,7 +94,7 @@ def train(**params):
 
     factory = T.TransformFactory(feature_map=feature_map)
     input_layer, output_layer = factory.make(data=data,
-                                             #  transforms=params['transforms']
+                                            #   transforms=params['transforms']
                                              )
     dataset = EventDataset(data=data,
                            input_dims=feature_map.input_dims(),

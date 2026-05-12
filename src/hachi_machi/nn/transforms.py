@@ -193,8 +193,9 @@ class TransformFactory:
     @torch.no_grad()
     def make(self,
              data: torch.Tensor,
-             transforms: list[str]) -> tuple[Transform, Transform]:
-        transforms = list(set([*transforms, *self.REQUIRED]))
+             transforms: list[str] | None = None) -> tuple[Transform, Transform]:
+        
+        transforms = list(set([*(transforms or []), *self.REQUIRED]))
         transform_layers = []
         for i, io in enumerate(['input', 'output']):
             layers = []
