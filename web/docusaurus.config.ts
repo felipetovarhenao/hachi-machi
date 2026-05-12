@@ -9,7 +9,9 @@ const config: Config = {
   tagline: "high-level and controllable human interface for machine improvisation",
   favicon: "img/favicon.ico",
 
-  stylesheets: ["https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"],
+  stylesheets: [
+    "https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap",
+  ],
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
   future: {
