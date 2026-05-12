@@ -32,13 +32,13 @@ All configuration files require specifying the command to execute via the `cmd` 
 
 Then, we can run:
 
-<Tabs groupId="exec">
-  <TabItem value="yaml-exec" label="yaml">
+<Tabs groupId="config-files">
+  <TabItem value="yaml" label="yaml">
   	```bash
     hxmx exec config.yaml
     ```
   </TabItem>
-  <TabItem value="toml-exec" label="toml" default>
+  <TabItem value="toml" label="toml" default>
     ```bash
     hxmx exec config.toml
     ```

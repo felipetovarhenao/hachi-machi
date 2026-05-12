@@ -36,22 +36,51 @@ To continue with the MIDI data example, let's remember how our data is formatted
     }
     ```
     </TabItem>
+        <TabItem value="csv" label="csv">
+    ```csv
+    time,f0,f1,f2,f3
+    0.0,60,80,0.25,0
+    0.25,64,75,0.25,1
+    0.5,67,85,0.25,0
+    0.75,64,70,0.25,1
+    1.0,60,90,0.5,0
+    ```
+    </TabItem>
 </Tabs>
 
 Now consider the following series of operations and the likely effects each of them will have on the model.
 
-```yaml
-cmd: train
-input: midi.csv
-output: model.pt
-operations:
-  # random MIDI pitch transposition
-  - randadd(0, a=-6, b=6)
-  # random velocity scaling
-  - randmul(1, a=0.5, b=1)
-  # random time stretching, applied to time and duration
-  - randmul(t, 3, a=-0.5, b=0.5, space=log)
-```
+<Tabs groupId="config">
+    <TabItem value="yaml" label="yaml">
+    ```yaml
+    cmd: train
+    input: midi.csv
+    output: model.pt
+    operations:
+    # random MIDI pitch transposition
+    - randadd(0, a=-6, b=6)
+    # random velocity scaling
+    - randmul(1, a=0.5, b=1)
+    # random time stretching, applied to time and duration
+    - randmul(t, 3, a=-0.5, b=0.5, space=log)
+    ```
+    </TabItem>
+     <TabItem value="toml" label="toml">
+    ```toml
+    cmd = 'train'
+    input = 'midi.csv'
+    output = 'model.pt'
+    operations = [
+        # random MIDI pitch transposition
+        'randadd(0, a=-6, b=6)'
+        # random velocity scaling
+        'randmul(1, a=0.5, b=1)'
+        # random time stretching, applied to time and duration
+        'randmul(t, 3, a=-0.5, b=0.5, space=log)'
+    ]
+    ```
+    </TabItem>
+</Tabs>
 
 ---
 
