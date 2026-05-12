@@ -126,6 +126,10 @@ To mark a feature as categorical, add a `"features"` entry to the JSON file, key
 
 In this example, the third feature in each event (index `2`) will be treated as categorical. Any feature not marked as `categorical` is assumed to be continuous.
 
+:::caution
+Note that categorical values not present in the data won't be recognized by the model during inference, and will lead to errors.
+:::
+
 ## Masked features
 
 Often times, we will want (or need) the model to predict features we can't realistically know at the moment we want to predict the next event. A very obvious example of this is not knowing how long a note the moment it starts. In this case, we can _mask_ a feature, meaning we tell the model that the feature should be **output only**. This way the model can predict what that feature will be in the next event, even if it doesn't see what it currently is.
@@ -134,11 +138,11 @@ Often times, we will want (or need) the model to predict features we can't reali
   <TabItem value="json" label="json">
     ```json
     {
-        "time": [0.0, 0.25, 0.5, 0.75, 1.0],
         "features": {
             "2": { "categorical": true },
             "3": { "masked": true }
         },
+        "time": [0.0, 0.25, 0.5, 0.75, 1.0],
         "data": [
             [60, 80, 1, 0.25],
             [64, 75, 1, 0.25],
