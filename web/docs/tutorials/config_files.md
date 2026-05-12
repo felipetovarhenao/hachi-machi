@@ -9,7 +9,7 @@ All configuration files require specifying the command to execute via the `cmd` 
 
 <Tabs groupId="config-files">
   <TabItem value="yaml" label="yaml">
-    ```yaml title="config.yaml" showLineNumbers
+    ```yaml title="config.yaml"
     cmd: gen
     input: ./mymodel.pt
     output: seq.txt
@@ -17,7 +17,7 @@ All configuration files require specifying the command to execute via the `cmd` 
     ```
   </TabItem>
   <TabItem value="toml" label="toml" default>
-    ```toml title="config.toml" showLineNumbers
+    ```toml title="config.toml"
     cmd = "gen"
     input = "./mymodel.pt"
     output = "seq.txt"

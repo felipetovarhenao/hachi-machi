@@ -76,54 +76,7 @@ from ..io import FileIO
     ('output', '.pt')
 ]).wrapper
 def train(**params):
-    """Given a path to an **INPUT** sequential dataset, generates an pre-trained `.pt` **OUTPUT** model, trained on that dataset. The dataset must be provided as a JSON file, with the following schema:
-
-    ```json title="data.json" showLineNumbers
-    {
-        "data": [
-            [<feature_0>, <feature_1>, ..., <feature_N>],
-            ...
-            [<feature_0>, <feature_1>, ..., <feature_N>],
-        ]
-    }
-    ```
-
-    If the dataset is temporal, you must provide timestamps for each step in the sequence, in seconds:
-
-    ```json title="timed-data.json" showLineNumbers
-    {
-        "time": [
-            0.0,
-            0.25,
-            1.25,
-            ...
-        ],
-        "data": [
-            ...
-        ]
-    }
-    ```
-
-    Optionally, you may provide information about how the features should be treated by the model:
-
-    ```json title="data-features.json" showLineNumbers
-    {
-        "features": {
-            "0": { "categorical": true },
-            "2": { "masked": true },
-        },
-        "data": [
-            [0, 0.25, 0.1],
-            [1, 0.125, 0.2],
-            [0, 0.5, 0.5],
-            ...
-        ]
-    }
-    ```
-
-    In this example, we're telling the model that feature at index `0` is categorical, and that feature at index `2` should be masked. 
-    This means that this feature is output only, and the model will learn how to predict it.
-
+    """Given a path to an **INPUT** sequential dataset (`.csv`, `.json`, `.txt`), generates an pre-trained `.pt` **OUTPUT** model, trained on that dataset. 
     """
     device = params['device']
     seed = params['seed']

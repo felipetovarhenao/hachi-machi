@@ -22,7 +22,7 @@ import TabItem from "@theme/TabItem";
   ```
   </TabItem>
   <TabItem value="toml" label="toml" default>
-    ```toml title="config.toml" showLineNumbers
+    ```toml title="config.toml"
     cmd = "train"
     input = "data.json"
     operations = [
