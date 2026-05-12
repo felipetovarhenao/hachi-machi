@@ -1,6 +1,6 @@
 # hachi machi
 
-To learn more, please visit: https://hachi-machi.com
+To learn more, please visit: https://felipe-tovar-henao.com/hachi-machi
 
 ## Setup
 
