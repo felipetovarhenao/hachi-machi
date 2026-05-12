@@ -13,5 +13,3 @@ sidebar_position: -2
 To train a model with **hachi-machi**, all you need is a set of sequential data to train the model. **hachi-machi**'s model architecture is, in principle, data agnostic. This means they can be trained on any kind of user-defined sequential data—such as musical data, and any other type of data where the order of events is semantically meaningful.
 
 ![training](@site/static/img/hachi_machi_training.svg)
-
-_Model training_
