@@ -1,11 +1,9 @@
 import click
 import torch
-import json
 from .. import nn
 from ..data import EventDataset
 from ..nn import transforms as T
 from ..trainer import Trainer
-from ..features import FeatureMap
 from .middleware import ClickMiddleware as M
 from ..operations import DataAugmenter
 from ..io import FileIO
@@ -96,7 +94,7 @@ def train(**params):
 
     factory = T.TransformFactory(feature_map=feature_map)
     input_layer, output_layer = factory.make(data=data,
-                                            #  transforms=params['transforms']
+                                             #  transforms=params['transforms']
                                              )
     dataset = EventDataset(data=data,
                            input_dims=feature_map.input_dims(),
