@@ -53,7 +53,7 @@
     <text x="436" y="80" text-anchor="middle" dominant-baseline="central"
       style="fill:rgb(206, 203, 246);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono">Model</text>
     <text x="436" y="100" text-anchor="middle" dominant-baseline="central"
-      style="fill:rgb(175, 169, 236);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono">hachi-machi</text>
+      style="fill:rgb(175, 169, 236);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono">hachi machi</text>
   </g>
   <line x1="509" y1="90" x2="554" y2="90" marker-end="url(#arrow)" stroke-width="1.5"
     style="fill:none;stroke:rgb(156, 154, 146);color:rgb(251, 251, 254);stroke-width:1.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono" />

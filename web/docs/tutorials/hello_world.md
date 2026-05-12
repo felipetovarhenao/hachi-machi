@@ -5,7 +5,7 @@ slug: basics
 
 # Basic workflow
 
-This tutorial provides a quick overview of the workflow in **hachi-machi**, by showing how to train and run a basic model for [MIDI](https://en.wikipedia.org/wiki/MIDI) event generation. In this tutoral, you will learn how to:
+This tutorial provides a quick overview of the workflow in **hachi machi**, by showing how to train and run a basic model for [MIDI](https://en.wikipedia.org/wiki/MIDI) event generation. In this tutoral, you will learn how to:
 
 1. Format MIDI data for training.
 2. Train your first model.
@@ -14,7 +14,7 @@ This tutorial provides a quick overview of the workflow in **hachi-machi**, by s
 
 ![workflow](@site/static/img/hachi_machi_workflow.svg)
 
-_A visual representation of a workflow in **hachi-machi**._
+_A visual representation of a workflow in **hachi machi**._
 
 ### Requirements
 
@@ -27,7 +27,7 @@ In addition to [installing](../installation.md) **hachi machi**, you will need t
 
 ## Formatting our data
 
-To train our models, we need to convert our data to a format **hachi-machi** will understand. In this case, we will use the `format` command to convert our MIDI file to JSON. To start, we run the following command from the directory where our MIDI file is located.
+To train our models, we need to convert our data to a format **hachi machi** will understand. In this case, we will use the `format` command to convert our MIDI file to JSON. To start, we run the following command from the directory where our MIDI file is located.
 
 ```bash
 hxmx format file.mid data.json
@@ -49,7 +49,7 @@ We'll discuss later how to better understand each of these blocks. For now, let'
 
 ## Training the model
 
-Once the data is ready, we tell **hachi-machi** to create a new model trained on our JSON-formatted MIDI data, using the `train` command, like so:
+Once the data is ready, we tell **hachi machi** to create a new model trained on our JSON-formatted MIDI data, using the `train` command, like so:
 
 ```bash
 hxmx train data.json model.pt

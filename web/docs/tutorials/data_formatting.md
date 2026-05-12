@@ -90,7 +90,7 @@ If we want the model to also learn the timing of each step, we provide timestamp
 This will determine how temporal vs non-temporal models behave during _streaming_ mode (via the `run` command). If the data is _atemporal_, the prediction will be emitted immediately, while for _temporal_ models, the prediction is scheduled to be emitted at some time in the future based on what the model learned.
 
 :::info
-Note that time values must specified in seconds. For CSV data to be recognized as temporal by **hachi-machi**, it must be the first column and have use the label `time` as the column name.
+Note that time values must specified in seconds. For CSV data to be recognized as temporal by **hachi machi**, it must be the first column and have use the label `time` as the column name.
 :::
 
 ## Feature types
