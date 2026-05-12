@@ -5,7 +5,7 @@ sidebar_position: 1
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 
-# Data formats
+# 3. Data formats
 
 To train a model, our data needs to be provided either as a JSON or CSV file. The exact formatting of the data depends both on the nature of the data, as well as how you expect the model to behave. To use the same case-scenario across different types of formatting, let's continue with MIDI data as an example, where each event or step contains the following features: `(pitch, velocity, duration)`.
 

@@ -142,8 +142,7 @@ const config: Config = {
     },
     prism: {
       theme: prismThemes.nightOwlLight,
-      darkTheme: prismThemes.synthwave84,
-      // darkTheme: prismThemes.okaidia,
+      darkTheme: prismThemes.okaidia,
       additionalLanguages: ["toml", "csv"],
     },
   } satisfies Preset.ThemeConfig,
