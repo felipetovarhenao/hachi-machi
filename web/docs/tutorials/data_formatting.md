@@ -137,6 +137,10 @@ To mark a feature as categorical, add a `"features"` entry to the JSON file, key
 
 In this example, the fourth feature—i.e., the MIDI channel—in each event (index `3`) will be treated as categorical. Any feature not marked as `categorical` is assumed to be continuous.
 
+:::info
+Note the difference in syntax for each file format. In CSV, a categorical feature specified by appending a `#` to the feature's column name.
+:::
+
 :::caution
 Categorical values not present in the data won't be recognized by the model during inference, and will lead to errors.
 :::
@@ -181,5 +185,5 @@ In this case, we can _mask_ a feature, meaning we tell the model that the featur
 </Tabs>
 
 :::info
-Note the difference in syntax for each file format. In CSV, a masked feature is prepended with `~`.
+Note the difference in syntax for each file format. In CSV, a masked feature specified by prepending a `~` to the feature's column name.
 :::
