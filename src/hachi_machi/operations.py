@@ -247,14 +247,14 @@ class Clip(DeterministicOperation):
     Clips values to the range `[min, max]` along the specified dims.
 
     `value` sets the lower bound and `value_max` sets the upper bound.
-    Either may be omitted (`None`) to clip only one side.
+    Either may be omitted (`none`) to clip only one side.
     """
 
     DOCS = {
         'value': ("Lower bound for clipping. Accepts a numeric constant or a data-derived "
-                  "keyword (`mean`, `std`, `min`, `max`). Pass `None` to skip."),
+                  "keyword (`mean`, `std`, `min`, `max`). Pass `none` to skip."),
         'value_max': ("Upper bound for clipping. Accepts a numeric constant or a data-derived "
-                      "keyword (`mean`, `std`, `min`, `max`). Pass `None` to skip."),
+                      "keyword (`mean`, `std`, `min`, `max`). Pass `none` to skip."),
     }
 
     def __init__(self, *dims, value: int | float | str | None = None,

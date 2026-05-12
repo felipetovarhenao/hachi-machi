@@ -293,7 +293,7 @@ class AutoDoc:
                 else:
                     default = param.default
                     sig_parts.append(f"{name}={default}")
-            signature = f"\n\n```rust\n{op_name}({', '.join(sig_parts)})\n```\n"
+            signature = f"\n\n```rust\n{op_name}({', '.join(sig_parts)})\n```\n".lower()
 
             lines.append(f"{signature}\n")
 
