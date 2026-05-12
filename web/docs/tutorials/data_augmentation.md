@@ -113,5 +113,5 @@ randmul(t, 3, a=-0.5, b=0.5, space=log)
 This operation targets both the time axis (`t`) and the duration feature (dim `3`) simultaneously, scaling them by the same random factor drawn from `[-0.5, 0.5]` in log space. Applying the same factor to both ensures that the relative timing between notes remains internally consistent, while the overall tempo varies. This encourages the model to be responsive to tempo changes, which also means its output will be perceived as less _rhythmic_.
 
 :::tip
-By _log space_, we mean that if the random number _r_ is between `-0.5` and `0.5`, the sequence _x_ is multiplied like so: `x * 2 ** `
+By _log space_, we mean that if the random number _r_ is between `-0.5` and `0.5`, the sequence _x_ is multiplied like so: `x * 2 ** r`
 :::
