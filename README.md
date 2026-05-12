@@ -2,7 +2,9 @@
 
 To learn more, please visit: https://felipe-tovar-henao.com/hachi-machi
 
-## Setup
+## Development setup
+
+The following instructions are only needed for setting up a development environment.
 
 1. Install [conda](https://anaconda.org/):
 2. In the terminal, run:
@@ -24,4 +26,10 @@ or to deactivate:
 
 ```sh
 conda deactivate
+```
+
+## Uninstall
+
+```sh
+conda remove --name hxmx --all
 ```
