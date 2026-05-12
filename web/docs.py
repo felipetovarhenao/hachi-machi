@@ -304,7 +304,7 @@ class AutoDoc:
             class_args = op_cls.docs()
 
             if class_args:
-                lines.append("### Arguments\n")
+                lines.append("## Arguments\n")
                 for arg_name, arg_desc in class_args.items():
                     lines.append(f"- `{arg_name}`: {arg_desc}")
                 lines.append("")
