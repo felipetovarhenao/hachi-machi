@@ -27,7 +27,7 @@ class FileIO:
         reader = getattr(cls, f'read_{ext[1:]}')
         tensor, feature_map = reader(path)
         if feature_map.temporal():
-            tensor[..., 0] = tensor[..., 0].diff(0)
+            tensor[1:, 0] = tensor[..., 0].diff(dim=0)
         return tensor.to(device), feature_map
 
     @classmethod
