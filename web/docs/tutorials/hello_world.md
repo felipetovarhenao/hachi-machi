@@ -4,18 +4,25 @@ sidebar_position: 0
 
 # Basic workflow
 
-This tutorial provides a quick-and-dirty overview of the workflow in **hachi-machi**, by training and running a custom model for MIDI sequence generation. This workflow can be summarized as follows:
+This tutorial provides a quick overview of the workflow in **hachi-machi**, by showing how to train and run a basic model for [MIDI](https://en.wikipedia.org/wiki/MIDI) event generation. In this tutoral, you will learn how to:
+
+1. Format MIDI data for training.
+2. Train your first model.
+3. Generate MIDI-style data with the model (_offline_).
+4. Run the model for interactive MIDI generation (_real-time_), via [Open Sound Control](https://en.wikipedia.org/wiki/Open_Sound_Control).
 
 ![workflow](@site/static/img/hachi_machi_workflow.svg)
 
-For this tutorial, you will need:
+### Requirements
+
+In addition to [installing](../installation.md) **hachi machi**, you will need the following for this tutorial:
 
 1. A test MIDI file of your choosing.
 2. Basic understanding of how to run commands in the terminal.
 
 ---
 
-## Creating a dataset
+## Formatting our data
 
 To train our models, we need to convert our data to a format **hachi-machi** will understand. In this case, we will use the `format` command to convert our MIDI file to JSON. To start, we run the following command from the directory where our MIDI file is located.
 
@@ -49,7 +56,7 @@ This will quick-off the training loop. Depending on the length of the MIDI file 
 
 ---
 
-## Sequence generation
+## Generating sequences
 
 To quickly test our model, we can generate a new sequence of MIDI notes _off-line_ (e.g., not in real-time), using the `gen` command.
 
@@ -61,7 +68,7 @@ This will create a CSV file with our model-generated sequence.
 
 ---
 
-## Real-time generation
+## Real-time interaction
 
 To see our model work in real-time, we use the `run` command.
 
@@ -70,3 +77,11 @@ hxmx run model.pt
 ```
 
 This will expose the model to receive input and send output messages via [OSC](https://en.wikipedia.org/wiki/Open_Sound_Control). Input messages are received on the `/input` route, and output messages are sent via the `/output` route. To let the model generate data autoregressively, all we need to do is feed the messages from `/output` back to `/input`.
+
+## A word of advice
+
+> 🙌 Machines ≠ humans 🙌
+
+As obvious as this statement is, it's easy to have unrealistic expectations of what our models can and cannot do. As we'll see in the next tutorials, there are things we can do to improve our models, they will almost always require some degree of "manual" (i.e., rule-based) tweaking on our side.
+
+In the case of our MIDI model, this can mean, for instance, applying quantization to the pitch feature so that it adheres to some harmonic scheme, or clipping velocity values that ocassionally go outside of the `0-127` range. Of course, the type of post-processing we apply will vary based on the use case.

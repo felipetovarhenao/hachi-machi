@@ -19,7 +19,22 @@ from .middleware import ClickMiddleware as M
    device='cpu').wrapper
 def run(**config):
     """Given a path to pre-trained (`.pt`) **MODEL**, starts a sessions for real-time inference, via OSC.
+    The following OSC routes are available:
+
+    ### Input routes
+
+    - `/input`: Receives an event for prediction. 
+    The number of event features must match either the masked or unmasked event size.
+
+    - `/reset`: Resets the model's hidden state (i.e., it's _context_), as well as cancelling any scheduled predictions, if the model is temporal.
+
+    ### Output routes
+
+    - `/output`: Predicted event (_unmasked_). The predicted event can be sent _as is_ back to `/input` for auto-regression, even if the model is trained on masked features.
+
+    :::tip
     Note that, in some cases, running the model on CPU results in lower latency.
+    :::
     """
     model = config['model']
     device = config['device']
