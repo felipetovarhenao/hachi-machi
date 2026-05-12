@@ -132,7 +132,11 @@ Note that categorical values not present in the data won't be recognized by the 
 
 ## Masked features
 
-Often times, we will want (or need) the model to predict features we can't realistically know at the moment we want to predict the next event. A very obvious example of this is not knowing how long a note the moment it starts. In this case, we can _mask_ a feature, meaning we tell the model that the feature should be **output only**. This way the model can predict what that feature will be in the next event, even if it doesn't see what it currently is.
+Often times, we will want (or need) the model to predict features we can't realistically know at the moment we want to predict the next event. A very obvious example of this is not knowing how long a note the moment it starts. The desired behavior being:
+
+![feature masking](@site/static/img/feature_masking.svg)
+
+In this case, we can _mask_ a feature, meaning we tell the model that the feature should be **output only**. This way the model can predict what that feature will be in the next event, even if it doesn't see what it currently is.
 
 <Tabs groupId="config-files">
   <TabItem value="json" label="json">
@@ -165,4 +169,6 @@ Often times, we will want (or need) the model to predict features we can't reali
     </TabItem>
 </Tabs>
 
+:::info
 Note the difference in syntax for each file format. In CSV, a masked feature is prepended with `~`.
+:::

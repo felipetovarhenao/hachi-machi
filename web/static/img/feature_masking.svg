@@ -1,0 +1,146 @@
+<svg width="100%" viewBox="0 0 680 340" role="img" style="" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6"
+      orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round"
+        stroke-linejoin="round" />
+    </marker>
+  </defs>
+
+
+  <text x="160" y="36" text-anchor="middle" dominant-baseline="central"
+    style="fill:rgb(250, 249, 245);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono">Input
+    vector</text>
+  <text x="520" y="36" text-anchor="middle" dominant-baseline="central"
+    style="fill:rgb(250, 249, 245);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono">Output
+    vector</text>
+
+
+  <path d="M88 60 L76 60 L76 264 L88 264" fill="none" stroke="var(--color-border-primary)" stroke-width="1.5"
+    stroke-linecap="round"
+    style="fill:none;stroke:rgba(222, 220, 209, 0.4);color:rgb(251, 251, 254);stroke-width:1.5px;stroke-linecap:round;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono" />
+
+  <path d="M232 60 L244 60 L244 264 L232 264" fill="none" stroke="var(--color-border-primary)" stroke-width="1.5"
+    stroke-linecap="round"
+    style="fill:none;stroke:rgba(222, 220, 209, 0.4);color:rgb(251, 251, 254);stroke-width:1.5px;stroke-linecap:round;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono" />
+
+  <g
+    style="fill:rgb(0, 0, 0);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono">
+    <rect x="90" y="64" width="140" height="44" rx="4" stroke-width="0.5"
+      style="fill:rgb(8, 80, 65);stroke:rgb(93, 202, 165);color:rgb(251, 251, 254);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono" />
+    <text x="160" y="86" text-anchor="middle" dominant-baseline="central"
+      style="fill:rgb(159, 225, 203);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono">pitch</text>
+  </g>
+
+  <g
+    style="fill:rgb(0, 0, 0);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono">
+    <rect x="90" y="116" width="140" height="44" rx="4" stroke-width="0.5"
+      style="fill:rgb(8, 80, 65);stroke:rgb(93, 202, 165);color:rgb(251, 251, 254);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono" />
+    <text x="160" y="138" text-anchor="middle" dominant-baseline="central"
+      style="fill:rgb(159, 225, 203);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono">velocity</text>
+  </g>
+
+  <g
+    style="fill:rgb(0, 0, 0);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono">
+    <rect x="90" y="168" width="140" height="44" rx="4" stroke-width="0.5"
+      style="fill:rgb(60, 52, 137);stroke:rgb(175, 169, 236);color:rgb(251, 251, 254);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono" />
+    <text x="160" y="190" text-anchor="middle" dominant-baseline="central"
+      style="fill:rgb(206, 203, 246);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono">channel</text>
+  </g>
+
+  <rect x="90" y="220" width="140" height="44" rx="4" fill="none" stroke="var(--color-border-secondary)"
+    stroke-width="1" stroke-dasharray="5 4"
+    style="fill:none;stroke:rgba(222, 220, 209, 0.3);color:rgb(251, 251, 254);stroke-width:1px;stroke-dasharray:5px, 4px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono" />
+  <text x="160" y="242" text-anchor="middle" dominant-baseline="central"
+    style="fill:rgb(194, 192, 182);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono">duration</text>
+
+
+  <text x="160" y="285" text-anchor="middle" dominant-baseline="central"
+    style="fill:rgb(194, 192, 182);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono">omitted</text>
+
+
+  <g
+    style="fill:rgb(0, 0, 0);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono">
+    <rect x="290" y="130" width="100" height="64" rx="8" stroke-width="0.5"
+      style="fill:rgb(68, 68, 65);stroke:rgb(180, 178, 169);color:rgb(251, 251, 254);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono" />
+    <text x="340" y="158" text-anchor="middle" dominant-baseline="central"
+      style="fill:rgb(211, 209, 199);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono">model</text>
+  </g>
+
+
+  <line x1="244" y1="162" x2="288" y2="162" marker-end="url(#arrow)"
+    style="fill:none;stroke:rgb(156, 154, 146);color:rgb(251, 251, 254);stroke-width:1.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono" />
+
+  <line x1="390" y1="162" x2="432" y2="162" marker-end="url(#arrow)"
+    style="fill:none;stroke:rgb(156, 154, 146);color:rgb(251, 251, 254);stroke-width:1.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono" />
+
+
+  <path x="436" y="100" d="M436 60 L424 60 L424 264 L436 264" fill="none" stroke="var(--color-border-primary)"
+    stroke-width="1.5" stroke-linecap="round"
+    style="fill:none;stroke:rgba(222, 220, 209, 0.4);color:rgb(251, 251, 254);stroke-width:1.5px;stroke-linecap:round;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono" />
+
+  <path d="M580 60 L592 60 L592 264 L580 264" fill="none" stroke="var(--color-border-primary)" stroke-width="1.5"
+    stroke-linecap="round"
+    style="fill:none;stroke:rgba(222, 220, 209, 0.4);color:rgb(251, 251, 254);stroke-width:1.5px;stroke-linecap:round;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono" />
+
+
+  <g
+    style="fill:rgb(0, 0, 0);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono">
+    <rect x="438" y="64" width="140" height="44" rx="4" stroke-width="0.5"
+      style="fill:rgb(8, 80, 65);stroke:rgb(93, 202, 165);color:rgb(251, 251, 254);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono" />
+    <text x="508" y="86" text-anchor="middle" dominant-baseline="central"
+      style="fill:rgb(159, 225, 203);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono">pitch</text>
+  </g>
+
+  <g
+    style="fill:rgb(0, 0, 0);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono">
+    <rect x="438" y="116" width="140" height="44" rx="4" stroke-width="0.5"
+      style="fill:rgb(8, 80, 65);stroke:rgb(93, 202, 165);color:rgb(251, 251, 254);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono" />
+    <text x="508" y="138" text-anchor="middle" dominant-baseline="central"
+      style="fill:rgb(159, 225, 203);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono">velocity</text>
+  </g>
+
+  <g
+    style="fill:rgb(0, 0, 0);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono">
+    <rect x="438" y="168" width="140" height="44" rx="4" stroke-width="0.5"
+      style="fill:rgb(60, 52, 137);stroke:rgb(175, 169, 236);color:rgb(251, 251, 254);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono" />
+    <text x="508" y="190" text-anchor="middle" dominant-baseline="central"
+      style="fill:rgb(206, 203, 246);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono">channel</text>
+  </g>
+
+  <g
+    style="fill:rgb(0, 0, 0);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono">
+    <rect x="438" y="220" width="140" height="44" rx="4" stroke-width="0.5"
+      style="fill:rgb(113, 43, 19);stroke:rgb(240, 153, 123);color:rgb(251, 251, 254);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono" />
+    <text x="508" y="242" text-anchor="middle" dominant-baseline="central"
+      style="fill:rgb(245, 196, 179);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono">duration</text>
+  </g>
+
+
+  <text x="508" y="285" text-anchor="middle" dominant-baseline="central"
+    style="fill:rgb(194, 192, 182);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono">predicted</text>
+
+
+  <g
+    style="fill:rgb(0, 0, 0);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono">
+    <rect x="90" y="308" width="14" height="14" rx="3" stroke-width="0.5"
+      style="fill:rgb(8, 80, 65);stroke:rgb(93, 202, 165);color:rgb(251, 251, 254);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono" />
+  </g>
+  <text x="110" y="315" dominant-baseline="central"
+    style="fill:rgb(194, 192, 182);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono">Continuous</text>
+  <g
+    style="fill:rgb(0, 0, 0);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono">
+    <rect x="210" y="308" width="14" height="14" rx="3" stroke-width="0.5"
+      style="fill:rgb(60, 52, 137);stroke:rgb(175, 169, 236);color:rgb(251, 251, 254);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono" />
+  </g>
+  <text x="230" y="315" dominant-baseline="central"
+    style="fill:rgb(194, 192, 182);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono">Categorical</text>
+  <g
+    style="fill:rgb(0, 0, 0);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono">
+    <rect x="340" y="308" width="14" height="14" rx="3" stroke-width="0.5"
+      style="fill:rgb(113, 43, 19);stroke:rgb(240, 153, 123);color:rgb(251, 251, 254);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono" />
+  </g>
+  <text x="360" y="315" dominant-baseline="central"
+    style="fill:rgb(194, 192, 182);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono">Masked
+    (output only)</text>
+</svg>
