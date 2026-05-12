@@ -63,10 +63,10 @@ from ..io import FileIO
 @click.option('--seed',
               default=1,
               help='Random seed. Use 0 for non-deterministic training.')
-@click.option('--transforms', '-t',
-              type=click.Choice(T.TransformFactory.options()),
-              help='Optional transform layers.',
-              multiple=True)
+# @click.option('--transforms', '-t',
+#               type=click.Choice(T.TransformFactory.options()),
+#               help='Optional transform layers.',
+#               multiple=True)
 @click.option('--operations', '-op',
               type=str,
               help='Data augmentation operation(s) to stochastically apply during training.',
@@ -96,7 +96,8 @@ def train(**params):
 
     factory = T.TransformFactory(feature_map=feature_map)
     input_layer, output_layer = factory.make(data=data,
-                                             transforms=params['transforms'])
+                                            #  transforms=params['transforms']
+                                             )
     dataset = EventDataset(data=data,
                            input_dims=feature_map.input_dims(),
                            output_dims=feature_map.output_dims(),
