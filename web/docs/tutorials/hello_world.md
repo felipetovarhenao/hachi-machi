@@ -2,7 +2,7 @@
 sidebar_position: 0
 ---
 
-# Workflow
+# Basic workflow
 
 This tutorial provides a quick-and-dirty overview of the workflow in **hachi-machi**, by training and running a custom model for MIDI sequence generation.
 
@@ -25,19 +25,13 @@ This will generate a JSON file in the same directory, called `data.json`. This f
 
 ```json
 {
-	"features": {
-
-	}
-	"time": [
-
-	]
-	"data": [
-
-	]
+  "features": {...},
+  "time": [...],
+  "data": [...]
 }
 ```
 
-We'll discuss later how to better understand each of these blocks. For now, let's move to the next step: training our first model.
+We'll discuss later how to better understand each of these blocks. For now, let's move to the next step: **training our first model**.
 
 ---
 
@@ -49,13 +43,13 @@ Once the data is ready, we tell **hachi-machi** to create a new model trained on
 hxmx train data.json model.pt
 ```
 
-This will quick-off the training loop. Depending on the length of the MIDI file and your computer power, this might take from one to several minutes. We should see our new model in the same directory, with the name `model.pt`.
+This will quick-off the training loop. Depending on the length of the MIDI file we're using, and our computer's capabilities, this might take from one to several minutes (or even hours if you're unlucky!). We should see our new model in the same directory, with the name `model.pt`.
 
 ---
 
-## Offline generation
+## Sequence generation
 
-To quickly test our model, we can generate a new sequence _off-line_ (e.g., not in real-time), using the `gen` command.
+To quickly test our model, we can generate a new sequence of MIDI notes _off-line_ (e.g., not in real-time), using the `gen` command.
 
 ```bash
 hxmx gen model.pt output.csv

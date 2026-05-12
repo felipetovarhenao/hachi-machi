@@ -70,30 +70,7 @@ def main():
 def exec(ctx, input):
     """
     Allows to run commands via YAML or TOML configuration files. 
-    All configuration files must provide values for the command, via the `cmd` key, and any required positional argument. For example:
-
-
-import Tabs from "@theme/Tabs";
-import TabItem from "@theme/TabItem";
-
-<Tabs groupId="config-files">
-  <TabItem value="yaml" label="yaml">
-    ```yaml title="config.yaml" showLineNumbers
-    cmd: gen
-    input: ./mymodel.pt
-    output: seq.txt
-    tokens: 300
-    ```
-  </TabItem>
-  <TabItem value="toml" label="toml" default>
-    ```toml title="config.toml" showLineNumbers
-    cmd = "gen"
-    input = "./mymodel.pt"
-    output = "seq.txt"
-    tokens = 300
-    ```
-  </TabItem>
-</Tabs>
+    All configuration files must provide values for the command, via the `cmd` key, and any required positional argument.
     """
     try:
         params = ClickMiddleware.from_file(input)

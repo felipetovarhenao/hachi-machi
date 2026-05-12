@@ -18,6 +18,7 @@
 web/docs/commands/*.md
 web/docs/commands/operations/*
 !web/docs/commands/operations/index.md
+!web/docs/tutorials/*
 !web/docs/index.md
 !README.md
 !web/*.json
