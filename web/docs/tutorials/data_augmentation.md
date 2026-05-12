@@ -5,7 +5,7 @@ sidebar_position: 3
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 
-# 4. Data augmentation
+# Data augmentation
 
 One of the main challenges for artists to experiment with deep-learning models using their own data, is the quantity requirements relative to what is typically expected in industry standards.
 
@@ -53,6 +53,8 @@ operations:
   - randmul(t, 3, a=-0.5, b=0.5, space=log)
 ```
 
+---
+
 ### Pitch transposition
 
 ```py
@@ -61,6 +63,8 @@ randadd(0, a=-6, b=6)
 
 The first feature (dim `0`) in each sequence contains MIDI pitch values. This operation randomly shifts each pitch by an integer value drawn uniformly from the range `[-6, 6]`, effectively transposing the passage by up to a tritone up or down. This encourages the model to learn melodic contours and intervals that are invariant to pitch transposition.
 
+---
+
 ### Velocity scaling
 
 ```py
@@ -68,6 +72,8 @@ randmul(1, a=-0.5, b=1)
 ```
 
 The second feature (dim `1`) contains MIDI velocity values, which correspond to note loudness. This operation randomly scales each velocity by a value drawn from the range `[0.5, 1]` applying variable dynamic compression. This encourages the model to learn patterns that are robust to differences in overall loudness.
+
+---
 
 ### Time stretching
 

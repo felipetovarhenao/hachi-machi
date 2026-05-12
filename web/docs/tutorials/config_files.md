@@ -5,7 +5,7 @@ sidebar_position: 2
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 
-# 2. Configuration files
+# Configuration files
 
 **hachi-machi** supports executing commands through configuration files instead of passing them directly in the terminal, as either [YAML](https://www.datacamp.com/blog/what-is-yaml) or [TOML](https://toml.io/) files, via the `exec` command. This is particularly useful for model training, which has numerous parameters that can quickly get out of hand and hard to tinker with.
 
