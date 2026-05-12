@@ -173,7 +173,8 @@ class AutoDoc:
                 required = "✓" if p.required else ""
                 default = f"`{p.default}`" if p.default is not None else "—"
                 multiple = " *(multiple)*" if p.multiple else ""
-                type_label = AutoDoc._type_name(p.type) + multiple
+                type_label = AutoDoc._type_name(p.type).replace(
+                    'boolparamtype', 'bool') + multiple
                 help_text = (p.help or "").replace("|", "\\|")
                 rows.append(
                     f"| `{name}` | {type_label} | {required} | {default} | {help_text} |")
