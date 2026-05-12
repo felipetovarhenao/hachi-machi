@@ -1,0 +1,82 @@
+<svg width="100%" viewBox="0 0 680 200" role="img" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6"
+      orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round"
+        stroke-linejoin="round" />
+    </marker>
+  </defs>
+
+  <text x="178" y="52" text-anchor="middle"
+    style="fill:rgb(194, 192, 182);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono">Input
+    sequence</text>
+
+  <text x="30" y="94" text-anchor="middle" dominant-baseline="central"
+    style="fill:rgb(250, 249, 245);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono">···</text>
+
+  <g
+    style="fill:rgb(0, 0, 0);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono">
+    <rect x="50" y="64" width="76" height="52" rx="8" stroke-width="0.5"
+      style="fill:rgb(68, 68, 65);stroke:rgb(180, 178, 169);color:rgb(251, 251, 254);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono" />
+    <text x="88" y="84" text-anchor="middle" dominant-baseline="central"
+      style="fill:rgb(180, 178, 169);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono">event</text>
+    <text x="87" y="100" text-anchor="middle" dominant-baseline="central"
+      style="fill:rgb(180, 178, 169);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono">t-2</text>
+  </g>
+  <g
+    style="fill:rgb(0, 0, 0);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono">
+    <rect x="138" y="64" width="76" height="52" rx="8" stroke-width="0.5"
+      style="fill:rgb(68, 68, 65);stroke:rgb(180, 178, 169);color:rgb(251, 251, 254);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono" />
+    <text x="176" y="84" text-anchor="middle" dominant-baseline="central"
+      style="fill:rgb(180, 178, 169);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono">event</text>
+    <text x="176" y="100" text-anchor="middle" dominant-baseline="central"
+      style="fill:rgb(180, 178, 169);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono">t-1</text>
+  </g>
+  <g
+    style="fill:rgb(0, 0, 0);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono">
+    <rect x="226" y="64" width="76" height="52" rx="8" stroke-width="0.5"
+      style="fill:rgb(68, 68, 65);stroke:rgb(180, 178, 169);color:rgb(251, 251, 254);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono" />
+    <text x="264" y="84" text-anchor="middle" dominant-baseline="central"
+      style="fill:rgb(180, 178, 169);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono">event</text>
+    <text x="264" y="100" text-anchor="middle" dominant-baseline="central"
+      style="fill:rgb(180, 178, 169);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono">t</text>
+  </g>
+
+
+
+
+  <!-- Arrow from sequence to model -->
+  <line x1="310" y1="90" x2="360" y2="90" marker-end="url(#arrow)" stroke-width="1.5"
+    style="fill:none;stroke:rgb(156, 154, 146);color:rgb(251, 251, 254);stroke-width:1.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono" />
+
+  <!-- Model box -->
+  <g
+    style="fill:rgb(0, 0, 0);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono">
+    <rect x="368" y="50" width="136" height="80" rx="12" stroke-width="0.5"
+      style="fill:rgb(60, 52, 137);stroke:rgb(175, 169, 236);color:rgb(251, 251, 254);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono" />
+    <text x="436" y="85" text-anchor="middle" dominant-baseline="central"
+      style="fill:rgb(206, 203, 246);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono">Model</text>
+    <text x="436" y="104" text-anchor="middle" dominant-baseline="central"
+      style="fill:rgb(175, 169, 236);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono">hachi-machi</text>
+  </g>
+
+  <!-- Arrow from model to output -->
+  <line x1="504" y1="90" x2="554" y2="90" marker-end="url(#arrow)" stroke-width="1.5"
+    style="fill:none;stroke:rgb(156, 154, 146);color:rgb(251, 251, 254);stroke-width:1.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono" />
+
+  <!-- Output label -->
+  <text x="612" y="52" text-anchor="middle"
+    style="fill:rgb(194, 192, 182);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono">Next
+    event</text>
+
+  <!-- Output box -->
+  <g
+    style="fill:rgb(0, 0, 0);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono">
+    <rect x="562" y="64" width="96" height="52" rx="8" stroke-width="0.5"
+      style="fill:rgb(8, 80, 65);stroke:rgb(93, 202, 165);color:rgb(251, 251, 254);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono" />
+    <text x="610" y="84" text-anchor="middle" dominant-baseline="central"
+      style="fill:rgb(93, 202, 165);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono">event</text>
+    <text x="610" y="100" text-anchor="middle" dominant-baseline="central"
+      style="fill:rgb(93, 202, 165);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:JetBrains Mono">t+1</text>
+  </g>
+</svg>
