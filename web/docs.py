@@ -129,7 +129,7 @@ class AutoDoc:
                                  sidebar_position=sidebar_position,
                                  description=short_desc),
             "",
-            f"# `{full_name}`"
+            f"# {full_name}"
             "",
         ]
 

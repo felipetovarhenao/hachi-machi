@@ -33,7 +33,7 @@ def run(**config):
     - `/output`: Predicted event (_unmasked_). The predicted event can be sent _as is_ back to `/input` for auto-regression, even if the model is trained on masked features.
 
     :::tip
-    Note that, in some cases, running the model on CPU results in lower latency.
+    Note that, in some cases, running the model on CPU results in lower prediction latency.
     :::
     """
     model = config['model']
