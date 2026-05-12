@@ -1,5 +1,5 @@
 - [] Adjust batch size
-- [] Add support for CSV data files. Consider also h5
+- [x] Add support for CSV data files. Consider also h5
 - [x] Remove scheduled events on reset.
 - [x] Solve unstable channel to track ID assignment.
 - [] Allow multiple files for training data.

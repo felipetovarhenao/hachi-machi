@@ -19,5 +19,5 @@ dependencies = ["torch", "click", "python-osc", "mido", "toml"]
 hxmx = "hachi_machi.__main__:main"
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
