@@ -31,6 +31,9 @@ class FeatureMap:
         self.dims: torch.Tensor = torch.tensor(self.dims, dtype=torch.int)
         self.mask: torch.Tensor = torch.tensor(self.mask, dtype=torch.bool)
         self.types: torch.Tensor = torch.tensor(self.types, dtype=torch.int)
+        if not torch.any(self.mask[int(temporal):]):
+            raise RuntimeError(
+                f"At least one feature must be unmasked: {features!r}")
 
     @staticmethod
     def type_to_int(name: str) -> int:
