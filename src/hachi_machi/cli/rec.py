@@ -8,7 +8,6 @@ from ..session import RecordingSession
 @click.command(context_settings={'show_default': True})
 @click.argument('size',
                 type=int,
-                help='Feature size.',
                 required=True)
 @click.argument('output',
                 default='recording.csv',
