@@ -85,8 +85,8 @@ This will expose the model to receive input and send output messages via [OSC](h
 
 > 🙌 Machines ≠ humans 🙌
 
-As obvious as this statement is, it's easy to have unrealistic expectations of what our models can and cannot do. We might, for instance, expect this model to have learned human-level understanding of concepts such as harmony and rhythm.
+As much of a platitude as this statement is, it's easy to get unrealistic expectations of what our models can and cannot do—especially when we compare them to commercial LLMs. We might, for instance, expect this model to have learned human-level understanding of concepts such as harmony and rhythm.
 
-As we'll see in the next tutorials, while there are things we can do to meaningfully improve our models, they will almost always require some degree of "manual" (i.e., rule-based) tweaking on our side. In the case of our MIDI model, this can mean, for instance, applying quantization to the pitch values so that it adheres to some harmonic scheme, or clipping velocity values that ocassionally go outside of the `0-127` range. Naturally, the type of post-processing we need will vary based on factors such as use case, data quality, and training parameters.
+As we'll see in the next tutorials, while there are things we can do to meaningfully improve our models, they will almost always require some degree of "manual" (i.e., rule-based) tweaking on our side—this is one of the current trade-offs to being able to locally train and run our own deep-learning models. In the case of our MIDI model, this can mean, for instance, applying quantization to the pitch values so that it adheres to some harmonic scheme, or clipping velocity values that ocassionally go outside of the `0-127` range. Naturally, the type of post-processing we need will vary based on factors such as use case, data quality, and training parameters.
 
-Next we'll take a look at how to format our data to improve our models' performance.
+Next we'll take a look at one of the things a **can** do to improve our model's performance: formatting our data.

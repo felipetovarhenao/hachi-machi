@@ -99,47 +99,55 @@ const config: Config = {
     },
     footer: {
       style: "dark",
-      // links: [
-      //   {
-      //     title: 'Docs',
-      //     items: [
-      //       {
-      //         label: 'Tutorial',
-      //         to: '/docs/intro',
-      //       },
-      //     ],
-      //   },
-      //   {
-      //     title: 'Community',
-      //     items: [
-      //       {
-      //         label: 'Stack Overflow',
-      //         href: 'https://stackoverflow.com/questions/tagged/docusaurus',
-      //       },
-      //       {
-      //         label: 'Discord',
-      //         href: 'https://discordapp.com/invite/docusaurus',
-      //       },
-      //       {
-      //         label: 'X',
-      //         href: 'https://x.com/docusaurus',
-      //       },
-      //     ],
-      //   },
-      //   {
-      //     title: 'More',
-      //     items: [
-      //       {
-      //         label: 'Blog',
-      //         to: '/blog',
-      //       },
-      //       {
-      //         label: 'GitHub',
-      //         href: 'https://github.com/facebook/docusaurus',
-      //       },
-      //     ],
-      //   },
-      // ],
+      links: [
+        {
+          title: "Documentation",
+          items: [
+            {
+              label: "Installation",
+              to: "/docs/installation",
+            },
+            {
+              label: "Tutorials",
+              to: "/docs/tutorials/basics",
+            },
+            {
+              label: "CLI Reference",
+              to: "/docs/commands",
+            },
+          ],
+        },
+        // {
+        //   title: "Community",
+        //   items: [
+        //     {
+        //       label: "Stack Overflow",
+        //       href: "https://stackoverflow.com/questions/tagged/docusaurus",
+        //     },
+        //     {
+        //       label: "Discord",
+        //       href: "https://discordapp.com/invite/docusaurus",
+        //     },
+        //     {
+        //       label: "X",
+        //       href: "https://x.com/docusaurus",
+        //     },
+        //   ],
+        // },
+        {
+          title: "More",
+          items: [
+            // {
+            //   label: "Blog",
+            //   to: "/blog",
+            // },
+            {
+              label: "GitHub",
+              href: "https://github.com/felipetovarhenao/hachi-machi",
+            },
+          ],
+        },
+      ],
       copyright: `Copyright © ${new Date().getFullYear()} Felipe Tovar-Henao.`,
     },
     prism: {
