@@ -24,7 +24,7 @@ class ClickMiddleware:
         @click.option('--debug',
                       flag_value=True,
                       default=False,
-                      help="Debug mode")
+                      help="Debug mode. Includes traceback when an error is raised.")
         @functools.wraps(func)
         def _wrapper(**kwargs):
             config = self._parse(**kwargs)
