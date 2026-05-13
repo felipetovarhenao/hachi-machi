@@ -1,6 +1,8 @@
 - [] Adjust batch size
 - [] add `record` command.
 - [] Figure out fix for device listing now that docs are web based.
+- [] Implement wildcard OSC route to let user know when route is invalid.
+- [] Use wheel indicator to show incoming messages.
 - [x] Guardrails against masking all features.
 - [x] Add support for CSV data files. Consider also h5
 - [x] Remove scheduled events on reset.
