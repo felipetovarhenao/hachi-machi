@@ -6,13 +6,16 @@ from ..session import RecordingSession
 
 
 @click.command(context_settings={'show_default': True})
+@click.argument('size',
+                type=int,
+                help='Feature size.',
+                required=True)
 @click.argument('output',
+                default='recording.csv',
                 type=click.Path(exists=False,
                                 file_okay=True,
                                 dir_okay=False,
-                                resolve_path=True,)
-                )
-@click.option('--size', '-s', type=int, help='Feature size.', required=True)
+                                resolve_path=True,))
 @click.option('--temporal', '-t',
               type=bool,
               help='If true, output dataset has temporal information',
