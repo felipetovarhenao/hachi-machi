@@ -7,6 +7,7 @@ from . import (augment, gen,
                format,
                train,
                run,
+               rec,
                info)
 
 __banner__ = f"""
@@ -93,3 +94,4 @@ main.add_command(gen.gen)
 main.add_command(augment.augment)
 main.add_command(info.info)
 main.add_command(format.format)
+main.add_command(rec.rec)

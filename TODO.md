@@ -1,5 +1,5 @@
 - [] Adjust batch size
-- [] add `record` command.
+- [x] add `rec` command.
 - [] Figure out fix for device listing now that docs are web based.
 - [] Implement wildcard OSC route to let user know when route is invalid.
 - [] Use wheel indicator to show incoming messages.
