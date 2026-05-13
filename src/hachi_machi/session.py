@@ -142,6 +142,7 @@ class RecordingSession(BaseSession):
         self.path, _ = FileIO.validate_path(path)
         self._buffer: list[torch.Tensor] = []
         self._start_time: float | None = None
+        self.display = Console.get_display(1)
 
     def handle_input(self, *args) -> None:
         if len(args) != self.feature_size:
@@ -155,6 +156,7 @@ class RecordingSession(BaseSession):
         row = torch.cat([timestamp, torch.tensor(args, dtype=torch.float32)])
         with self._lock:
             self._buffer.append(row)
+            self.display.update(events=len(self._buffer))
 
     def handle_reset(self, *_) -> None:
         with self._lock:

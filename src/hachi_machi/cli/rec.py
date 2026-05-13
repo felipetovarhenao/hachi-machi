@@ -30,7 +30,7 @@ def rec(**params):
 
     - `/input`: Sequence event to record
 
-    - `/stop`: Writes recorded data and stops the recording session 
+    - `/stop`: Writes recorded data to disk, and stops the recording session.
     """
     path = params['output']
     size = params['size']
