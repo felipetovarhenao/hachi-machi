@@ -1,5 +1,6 @@
 - [] Adjust batch size
 - [] add `record` command.
+- [] Figure out fix for device listing now that docs are web based.
 - [x] Guardrails against masking all features.
 - [x] Add support for CSV data files. Consider also h5
 - [x] Remove scheduled events on reset.
