@@ -89,4 +89,4 @@ As much of a platitude as this statement is, it's easy to get unrealistic expect
 
 As we'll see in the next tutorials, while there are things we can do to meaningfully improve our models, they will almost always require some degree of "manual" (i.e., rule-based) tweaking on our side—this is one of the current trade-offs to being able to locally train and run our own deep-learning models. In the case of our MIDI model, this can mean, for instance, applying quantization to the pitch values so that it adheres to some harmonic scheme, or clipping velocity values that ocassionally go outside of the `0-127` range. Naturally, the type of post-processing we need will vary based on factors such as use case, data quality, and training parameters.
 
-Next we'll take a look at one of the things a **can** do to improve our model's performance: formatting our data.
+Next we'll take a look at one of the things we **can** do to improve our model's performance: formatting our data.
