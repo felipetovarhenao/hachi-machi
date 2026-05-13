@@ -48,6 +48,9 @@ class BaseSession(ABC):
             address = func.__name__.replace('handle_', '')
             handler = lambda *args, f=func: self.safe_handler(f)(*args)
             self.dispatcher.map(address=f"/{address}", handler=handler)
+        self.dispatcher.set_default_handler(
+            lambda addr, *_: Console.warning(f"{addr!r} is not a valid route.")
+        )
 
     def send(self, msg) -> None:
         self.client.send_message("/output", msg)
