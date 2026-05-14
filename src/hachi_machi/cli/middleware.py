@@ -63,7 +63,7 @@ class ClickMiddleware:
 
     @staticmethod
     def from_file(file: str):
-        file = validate_path(file, ('.toml', '.yaml'))
+        file = validate_path(file, ('.toml', '.yaml', '.yml'))
         os.chdir(os.path.dirname(file))
         load = toml.load if file.endswith('.toml') else yaml.safe_load
         with open(file, 'r') as f:

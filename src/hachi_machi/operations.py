@@ -443,7 +443,7 @@ class DataAugmenter:
 
     def from_str(self, s: str) -> tuple[str, list, dict]:
         raw = s
-        s = re.sub(r"\bnone\b", 'None')
+        s = re.sub(r"\bnone\b", 'None', s)
         s = re.sub(
             r'\b(t|time|global|feature|both|normal|uniform|linear|log|mean|std|min|max)\b',
             r'"\g<1>"', s)
