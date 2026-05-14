@@ -340,7 +340,8 @@ class Rot2(Operation):
                     f"Invalid scope: {scope!r}. Expected one of {list(_VALUES[angle])}")
             self._angle_fn = _VALUES[angle][scope]
         else:
-            self._angle_fn = lambda _: float(angle)
+            angle = torch.tensor(angle, dtype=torch.float32) * torch.pi
+            self._angle_fn = lambda _: angle
 
     def angle(self, pair: torch.Tensor) -> torch.Tensor:
         return self._angle_fn(pair)
