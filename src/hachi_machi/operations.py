@@ -186,8 +186,8 @@ class RandMul(RandAdd):
     """
 
     DOCS = {
-        'space': ('Use `linear` for `x * r` or `log` for `x * 2**r`.',
-                  "\n\t- `linear`: `x * r`",
+        'space': ('Determines how random number is interpreted.'
+                  "\n\t- `linear`: `x * r`"
                   "\n\t- `log`: `x * 2 ** r`")
     }
 
@@ -304,6 +304,107 @@ class Quantize(Operation):
         return torch.round(x / self.step) * self.step
 
 
+class Rot2(Operation):
+    """
+    Applies a 2D rotation to pairs of feature dimensions.
+
+    Each pair of dims is treated as (x, y) coordinates and rotated by `angle` radians.
+    If a constant numeric angle is given, the same rotation is applied to every step.
+    If a data-derived keyword is used, the angle is computed from the data via `scope`.
+    """
+
+    DOCS = {
+        'angle': ("Rotation angle in radians. Accepts a numeric constant or a data-derived "
+                  "keyword (`mean`, `std`, `min`, `max`)."),
+        'scope': ("Reduction axis when `angle` is data-derived:\n"
+                  "\n\t- `global`: single angle derived from all dims and steps"
+                  "\n\t- `time`: one angle per time step"
+                  "\n\t- `feature`: one angle per feature"),
+    }
+
+    def __init__(self,
+                 *dims,
+                 angle: int | float | str = 0.0,
+                 scope: str = "global",
+                 **kwargs):
+        if len(dims) % 2 != 0:
+            raise ValueError(
+                f"Rot2 requires an even number of dims (paired as x, y), got {len(dims)}")
+        super().__init__(*dims, **kwargs)
+        if isinstance(angle, str):
+            if angle not in _VALUES:
+                raise ValueError(
+                    f"Invalid angle: {angle!r}. Expected one of {list(_VALUES)} or a numeric constant")
+            if scope not in _VALUES[angle]:
+                raise ValueError(
+                    f"Invalid scope: {scope!r}. Expected one of {list(_VALUES[angle])}")
+            self._angle_fn = _VALUES[angle][scope]
+        else:
+            self._angle_fn = lambda _: float(angle)
+
+    def angle(self, pair: torch.Tensor) -> torch.Tensor:
+        return self._angle_fn(pair)
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        out = x.clone()
+        for i in range(0, x.shape[-1], 2):
+            pair = x[..., i:i+2]
+            a = self.angle(pair)
+            cos_a, sin_a = torch.cos(a), torch.sin(a)
+            out[..., i] = pair[..., 0] * cos_a - pair[..., 1] * sin_a
+            out[..., i+1] = pair[..., 0] * sin_a + pair[..., 1] * cos_a
+        return out
+
+
+class RandRot2(Rot2):
+    """
+    Applies a 2D rotation with angle(s) sampled from a specified random distribution.
+    """
+
+    DOCS = {
+        # 'a': "Distribution parameter. Lower bound for `dist=uniform`, mean for `dist=normal`.",
+        # 'b': "Distribution parameter. Upper bound for `dist=uniform`, standard deviation for `dist=normal`.",
+        **RandMul.DOCS,
+        # 'scope': ("Shape of the sampled angle tensor:\n"
+        #           "\n\t- `global`: a single angle applied to all pairs and steps"
+        #           "\n\t- `time`: one angle per time step, constant across feature pairs"
+        #           "\n\t- `both`: one angle per time step per feature pair"),
+        # 'dist': ("Type of random distribution to sample from."
+        #          "\n\t- `uniform`: even distribution."
+        #          "\n\t- `normal`: Gaussian distribution"),
+    }
+
+    def __init__(self,
+                 *dims,
+                 a: int | float = 0,
+                 b: int | float = 1,
+                 scope: str = "global",
+                 dist: str = "uniform",
+                 **kwargs):
+        if dist not in _DISTS:
+            raise ValueError(
+                f"Invalid dist: {dist!r}. Expected one of {list(_DISTS)}")
+        if scope not in ("global", "time", "both"):
+            raise ValueError(
+                f"Invalid scope: {scope!r}. Expected one of ['global', 'time', 'both']")
+        if dist == "uniform" and a >= b:
+            raise ValueError(
+                f"For dist='uniform', a must be less than b, got a={a}, b={b}")
+        # Pass a dummy angle=0 to satisfy Rot2.__init__; angle() is overridden anyway
+        super().__init__(*dims, angle=0.0, **kwargs)
+        self.a = a
+        self.b = b
+        self.scope = scope
+        self.dist = dist
+
+    def angle(self, pair: torch.Tensor) -> torch.Tensor:
+        # pair shape: (..., T, 2) — scope 'feature' is excluded since a pair is
+        # already a single logical unit; 'both' gives one angle per (step, pair)
+        shape = {"global": (1, 1), "time": (
+            pair.shape[-2], 1), "both": pair.shape[-2:]}[self.scope]
+        return _DISTS[self.dist](shape, self.a, self.b).to(pair.device)
+
+
 class DataAugmenter:
 
     OPERATIONS = {
@@ -317,7 +418,9 @@ class DataAugmenter:
                     CumSum,
                     Diff,
                     Clip,
-                    Quantize]
+                    Quantize,
+                    Rot2,
+                    RandRot2]
     }
 
     def __init__(self, operations: list[str], feature_map: FeatureMap):
