@@ -1,7 +1,6 @@
 import click
 from .middleware import ClickMiddleware as M
 from ..io import FileIO
-from ..console import Console
 from ..session import RecordingSession
 
 
@@ -22,6 +21,16 @@ from ..session import RecordingSession
               flag_value=True)
 @click.option('--in-port', default=8000, help='Input OSC port.')
 @click.option('--address', default='127.0.0.1', help='OSC IP address')
+@click.option('--masked', '-m',
+              type=int,
+              default=[],
+              multiple=True,
+              help='Dimensions of masked features.')
+@click.option('--categorical', '-c',
+              type=int,
+              default=[],
+              multiple=True,
+              help='Dimensions of categorical features.')
 @M(path_args=[('output', *FileIO.EXT),],
    device='cpu').wrapper
 def rec(**params):
@@ -40,9 +49,19 @@ def rec(**params):
     in_port = params['in_port']
     device = params['device']
     addr = params['address']
+    cat = params['categorical']
+    masked = params['masked']
+    features = {}
+    for dims, key in zip([cat, masked], ["categorical", "masked"]):
+        for dim in dims:
+            if dim < 0 or dim >= size:
+                raise IndexError(
+                    f"Dimension {dim} outside of specified size range. Should be: 0 <= dim < {size}")
+            features[dim] = {key: True}
 
     s = RecordingSession(path=path,
                          feature_size=size,
+                         features=features,
                          temporal=temporal,
                          in_port=in_port,
                          host=addr,

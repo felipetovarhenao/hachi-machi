@@ -137,10 +137,12 @@ class RecordingSession(BaseSession):
     def __init__(self,
                  path: str,
                  feature_size: int,
+                 features: dict,
                  temporal: bool = True,
                  **kwargs):
         super().__init__(**kwargs)
         self.feature_size = feature_size
+        self.features = features
         self.temporal = temporal
         self.path, _ = FileIO.validate_path(path)
         self._buffer: list[torch.Tensor] = []
@@ -177,6 +179,6 @@ class RecordingSession(BaseSession):
             tensor = tensor[..., 1:]
         else:
             tensor[1:, 0] = tensor[..., 0].diff(dim=0)
-        FileIO.write(tensor, self.path, self.temporal)
+        FileIO.write(tensor, self.path, self.temporal, features=self.features)
         Console.success("DONE")
         exit()
