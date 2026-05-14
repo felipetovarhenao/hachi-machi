@@ -42,11 +42,11 @@ Note that text-like values such as `mean` or `normal` are not in quotes.
 
 In this example, the following series of operations will be applied to feature at dim `0` in each sequence in the training batch:
 
-1. subtract the mean
-2. divide by its standard deviation
-3. randomly multiply it by some uniformly distributed random value between `0.9` and `1.1`.
-4. multiply by standard deviation.
-5. add mean to bring feature back to initial scale.
+1. Subtract the mean
+2. Divide by its standard deviation
+3. Randomly multiply it by some uniformly distributed random value between `0.9` and `1.1`.
+4. Multiply by standard deviation.
+5. Add mean to bring feature back to initial scale.
 
 :::warning
 For any augmentation pipeline, always ensure your data always remains in a realistic range.
