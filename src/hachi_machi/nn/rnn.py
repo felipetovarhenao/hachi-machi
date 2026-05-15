@@ -1,3 +1,4 @@
+from torch.distributions import MultivariateNormal
 import torch
 import torch.nn as nn
 from .mdn import MixtureDensityNetwork
@@ -32,16 +33,14 @@ class RecurrentMDN(nn.Module):
 
     def forward(self, x: torch.Tensor, hidden=None) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         y, hidden = self.lstm(x, hidden)
-        pi, mu, sigma = self.proj(y)
-        return pi, mu, sigma, hidden
+        pi, mu, L = self.proj(y)
+        return pi, mu, L, hidden
 
     def step(self,
              x: torch.Tensor,
              hidden: torch.Tensor | None) -> tuple[torch.Tensor, torch.Tensor]:
-        pi, mu, sigma, hidden = self.forward(x, hidden)
-        log = torch.log(pi.squeeze())
-        k = torch.multinomial(input=torch.exp(log),
-                              num_samples=1).item()
-        y = torch.normal(mean=mu[0, 0, :, k],
-                         std=sigma[0, 0, :, k]).unsqueeze(0).unsqueeze(0)
+        pi, mu, L, hidden = self.forward(x, hidden)
+        k = torch.multinomial(pi.squeeze(0).squeeze(0), num_samples=1).item()
+        dist = MultivariateNormal(loc=mu[0, 0, k], scale_tril=L[0, 0, k])
+        y = dist.rsample().unsqueeze(0).unsqueeze(0)  # (1, 1, D)
         return y, hidden
