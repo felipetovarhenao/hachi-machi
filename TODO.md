@@ -1,6 +1,7 @@
 - MAJOR BUG:
   - operations need to be fit to data, such that mean/max/min can be retrieved from original data. otherwise, normalization doesn't work. These values should be available from parent class, so a parent reference must be added to avoid duplication. The stats must apply to batch, not global data and should be computed before op sequence.
 - [] Adjust batch size
+- [] Add support for multivariate feature groups.
 - [x] add `rec` command.
 - [] Figure out fix for device listing now that docs are web based.
 - [] Implement wildcard OSC route to let user know when route is invalid.
