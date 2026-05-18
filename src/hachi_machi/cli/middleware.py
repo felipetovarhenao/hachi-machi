@@ -5,6 +5,7 @@ from ..utils import validate_path
 from ..console import Console
 import click
 import functools
+import re
 import yaml
 
 
@@ -67,8 +68,12 @@ class ClickMiddleware:
         os.chdir(os.path.dirname(file))
         load = toml.load if file.endswith('.toml') else yaml.safe_load
         with open(file, 'r') as f:
-            config: dict = load(f)
-        return config
+            data: dict = load(f)
+        cfg = {}
+        for k, v in data.items():
+            k = re.sub(r"[ -_]", "_", k)
+            cfg[k] = v
+        return cfg
 
     @staticmethod
     def get_available_devices() -> list[str]:
