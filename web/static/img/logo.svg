@@ -1,6 +1,22 @@
 <svg width="100%" viewBox="170 170 340 340" role="img" xmlns="http://www.w3.org/2000/svg" style="">
+  <defs>
+    <linearGradient id="Gradient1">
+      <stop class="stop1" offset="0%" />
+      <stop class="stop2" offset="100%" />
+    </linearGradient>
+
+  </defs>
+  <style>
+    .stop1 {
+      stop-color: #4d51b5;
+    }
+
+    .stop2 {
+      stop-color: #7375c1;
+    }
+  </style>
   <rect x="190" y="190" width="300" height="300" rx="48" fill="#EEEDFE"
-    style="fill:#4d51b5;stroke:rgb(275, 199, 206);color:rgb(251, 251, 254);stroke-width:10px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1" />
+    style="fill:url('#Gradient1');stroke:rgb(275, 199, 206);color:rgb(251, 251, 254);stroke-width:10px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1" />
 
   <circle cx="272" cy="272" r="18" fill="#4d51b5"
     style="fill:rgb(275, 199, 206);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1" />
@@ -14,12 +30,12 @@
   <circle cx="340" cy="340" r="18" fill="#4d51b5"
     style="fill:rgb(275, 199, 206);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1" />
   <circle cx="408" cy="340" r="18" fill="none" stroke="#4d51b5" stroke-width="4.5"
-    style="fill:#948dd9;stroke:none;color:rgb(251, 251, 254);stroke-width:4.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1" />
+    style="fill:rgb(275, 199, 206);stroke:none;color:rgb(251, 251, 254);stroke-width:4.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.5" />
 
   <circle cx="272" cy="408" r="18" fill="#4d51b5"
     style="fill:rgb(275, 199, 206);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1" />
   <circle cx="340" cy="408" r="18" fill="none" stroke="#4d51b5" stroke-width="4.5"
-    style="fill:#948dd9;stroke:none;color:rgb(251, 251, 254);stroke-width:4.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1" />
+    style="fill:rgb(275, 199, 206);stroke:none;color:rgb(251, 251, 254);stroke-width:4.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.5" />
   <circle cx="408" cy="408" r="18" fill="#948dd9" stroke="#4d51b5" stroke-width="4.5" opacity="1.0"
-    style="fill:#948dd9;stroke:none;color:rgb(251, 251, 254);stroke-width:4.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1.0" />
+    style="fill:rgb(275, 199, 206);stroke:none;color:rgb(251, 251, 254);stroke-width:4.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.25" />
 </svg>
