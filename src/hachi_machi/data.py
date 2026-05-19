@@ -51,6 +51,5 @@ class EventDataset(Dataset):
         item = data[index]
         if self.augmenter is not None:
             item = self.augmenter(item)
-        x, y = item[..., :-1, self._in_dims], item[...,
-                                                   1:, self._out_dims]
+        x, y = item[..., :-1, self._in_dims], item[..., 1:, self._out_dims]
         return x, y
