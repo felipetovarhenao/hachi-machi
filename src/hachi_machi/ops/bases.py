@@ -5,14 +5,9 @@ from typing import Callable
 
 class Operation(abc.ABC):
 
-    def __init__(self, dims: str | int | float | list[int | float | str] | None = None, p: float = 1.0):
+    def __init__(self, dims: list[int] | None = None, p: float = 1.0):
         self.p = max(0.0, min(float(p), 1.0))
-        if dims is None:
-            self.dims = slice(None, None)
-        elif isinstance(dims, float | int):
-            self.dims = [dims]
-        else:
-            self.dims = list(dims)
+        self.dims = dims if dims is not None else slice(None, None)
 
     def __call__(self, x: torch.Tensor) -> torch.Tensor:
         if torch.rand(1).item() > self.p:

@@ -45,7 +45,11 @@ class DataOperator:
         return re.sub(r"\b(t|global|time|feature|all|mean|std|uniform|normal)\b", r"'\g<1>'", literal)
 
     @classmethod
-    def _format_dims(cls, dims: list[int], feature_map: FeatureMap):
+    def _format_dims(cls, dims: str | int | list[int | str], feature_map: FeatureMap):
+        if isinstance(dims, int):
+            dims = [dims]
+        else:
+            dims = list(dims)
         temporal = feature_map.temporal()
         dim_offset = int(temporal)
         dims_post = []
