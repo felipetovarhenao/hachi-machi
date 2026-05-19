@@ -36,8 +36,14 @@ class DataOperator:
         name: str = call.func.id.lower()
         if name not in cls.OPS:
             raise NameError(f"Invalid operation name: {name!r}")
-        kwargs: dict = {kw.arg: ast.literal_eval(
-            kw.value) for kw in call.keywords}
+        kwargs = {}
+        for kw in call.keywords:
+            try:
+                val = ast.literal_eval(kw.value)
+            except:
+                raise SyntaxError(f"Invalid value for {kw.arg!r} in {name!r}: {literal!r}")
+            kwargs[kw.arg] = val
+        
         return name, kwargs
 
     @classmethod
