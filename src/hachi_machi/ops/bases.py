@@ -5,7 +5,7 @@ from typing import Callable
 
 class Operation(abc.ABC):
 
-    def __init__(self, dims: int | list[int] | None = None, p: float = 1.0):
+    def __init__(self, dims: str | int | float | list[int | float | str] | None = None, p: float = 1.0):
         self.p = max(0.0, min(float(p), 1.0))
         if dims is None:
             self.dims = slice(None, None)
