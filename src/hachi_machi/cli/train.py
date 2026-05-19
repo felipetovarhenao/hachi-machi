@@ -5,8 +5,8 @@ from ..data import EventDataset
 from ..nn import transforms as T
 from ..trainer import Trainer
 from .middleware import ClickMiddleware as M
-from ..operations import DataAugmenter
 from ..io import FileIO
+from ..ops.operator import DataOperator
 
 
 @click.command(context_settings={'show_default': True})
@@ -89,8 +89,8 @@ def train(**params):
     data, feature_map = FileIO.read(file_path, device)
 
     if len(operations) > 0:
-        augmenter = DataAugmenter(operations=operations,
-                                  feature_map=feature_map)
+        augmenter = DataOperator.from_callbacks(operations=operations,
+                                                feature_map=feature_map)
 
     factory = T.TransformFactory(feature_map=feature_map)
     input_layer, output_layer = factory.make(data=data,

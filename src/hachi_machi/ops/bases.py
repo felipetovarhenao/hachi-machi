@@ -27,8 +27,8 @@ class Operation(abc.ABC):
 
 _SCOPES = {
     'global': None,
-    'time': 1,
-    'feature': 2,
+    'time': -2,
+    'feature': -1,
 }
 
 
@@ -55,22 +55,20 @@ class BinaryOperation(Operation):
 
 
 _RAND_SCOPE = {
-    'global': lambda x: (x.shape[0], 1, 1),
-    'time': lambda x: (x.shape[0], x.shape[1], 1),
-    'feature': lambda x: (x.shape[0], 1, x.shape[2]),
+    'global': lambda _: (1, 1),
+    'time': lambda x: (x.shape[1], 1),
+    'feature': lambda x: (1, x.shape[2]),
     'all': lambda x: x.shape,
 }
 
 
 class RandomOperation(Operation):
 
-    def __init__(self, *, value: tuple[float | int, float | int], scope: str = 'global', dist: str = 'normal', **kwargs):
+    def __init__(self, *, value: tuple[float | int, float | int], scope: str = 'global', dist: str = 'uniform', **kwargs):
         super().__init__(**kwargs)
-        self.func = self.get_func(value, dist)
-        self.scope = scope
-        self.shape = None
+        self.func = self.get_func(value, dist, scope)
 
-    def get_func(self, value, dist) -> Callable[[torch.Tensor], torch.Tensor]:
+    def get_func(self, value, dist, scope) -> Callable[[torch.Tensor], torch.Tensor]:
         match dist:
             case 'normal':
                 def func(shape): return torch.randn(
@@ -78,4 +76,4 @@ class RandomOperation(Operation):
             case 'uniform':
                 def func(shape): return torch.rand(shape) * \
                     (value[1] - value[0]) + value[0]
-        return lambda x: func(_RAND_SCOPE[self.scope](x))
+        return lambda x: func(_RAND_SCOPE[scope](x)).to(x.device)

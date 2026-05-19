@@ -35,9 +35,8 @@ class CumSum(Operation):
 class Rev(Operation):
 
     def forward(self, x):
-        idx = torch.arange(x.size(1), 0, -1) - 1
-
-        return x[:, idx, :]
+        idx = torch.arange(x.size(0), 0, -1) - 1
+        return x[idx]
 
 
 class Abs(Operation):

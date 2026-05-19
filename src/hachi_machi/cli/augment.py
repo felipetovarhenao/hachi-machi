@@ -1,7 +1,7 @@
 import torch
 import click
 from ..console import Console
-from ..operations import DataAugmenter
+from ..ops.operator import DataOperator
 from .middleware import ClickMiddleware as M
 from ..io import FileIO
 
@@ -43,9 +43,10 @@ def augment(**params):
     data, feature_map = FileIO.read(path=input,
                                     device=device)
 
-    augmenter = DataAugmenter(operations=ops, feature_map=feature_map)
+    augmenter = DataOperator.from_callbacks(callbacks=ops,
+                                            feature_map=feature_map)
 
-    for op in augmenter.operations:
+    for op in augmenter:
         data = op(data)
 
     FileIO.write(tensor=data,

@@ -27,6 +27,9 @@ class DataOperator:
                 y = op(y)
         return y
 
+    def __iter__(self):
+        return iter(self.ops)
+
     @classmethod
     def _parse_literal(cls, literal: str) -> tuple[str, dict]:
         literal = cls._replace_keywords(literal)
