@@ -41,9 +41,10 @@ class DataOperator:
             try:
                 val = ast.literal_eval(kw.value)
             except:
-                raise SyntaxError(f"Invalid value for {kw.arg!r} in {name!r}: {literal!r}")
+                raise SyntaxError(
+                    f"Invalid value for {kw.arg!r} in {name!r}: {literal!r}")
             kwargs[kw.arg] = val
-        
+
         return name, kwargs
 
     @classmethod
