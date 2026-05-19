@@ -5,7 +5,7 @@ from typing import Callable
 
 class Operation(abc.ABC):
 
-    def __init__(self, dims: list[int] | None = None, p: float = 1.0):
+    def __init__(self, *, dims: list[int] | None = None, p: float = 1.0):
         self.p = max(0.0, min(float(p), 1.0))
         self.dims = dims if dims is not None else slice(None, None)
 
@@ -34,7 +34,7 @@ _SCOPES = {
 
 class BinaryOperation(Operation):
 
-    def __init__(self, value: float | int, scope: str = 'global', **kwargs):
+    def __init__(self, *, value: float | int, scope: str = 'global', **kwargs):
         super().__init__(**kwargs)
         if isinstance(value, str) and value not in ['mean', 'std']:
             raise ValueError(f"{self.name()}: Invalid value: {value}")
@@ -64,7 +64,7 @@ _RAND_SCOPE = {
 
 class RandomOperation(Operation):
 
-    def __init__(self, value: tuple[float | int, float | int], scope: str = 'global', dist: str = 'normal', **kwargs):
+    def __init__(self, *, value: tuple[float | int, float | int], scope: str = 'global', dist: str = 'normal', **kwargs):
         super().__init__(**kwargs)
         self.func = self.get_func(value, dist)
         self.scope = scope
