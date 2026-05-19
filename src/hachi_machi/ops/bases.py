@@ -20,9 +20,9 @@ class Operation(abc.ABC):
         x[..., self.dims] = self.forward(x[..., self.dims])
         return x
 
-    @property
-    def name(self):
-        return self.__class__.__name__.lower()
+    @classmethod
+    def name(cls):
+        return cls.__name__.lower()
 
     @abc.abstractmethod
     def forward(self, x: torch.Tensor) -> torch.Tensor: ...
@@ -42,10 +42,10 @@ class BinaryOperation(Operation):
     def __init__(self, value: float | int, scope: str = 'global', **kwargs):
         super().__init__(**kwargs)
         if isinstance(value, str) and value not in ['mean', 'std']:
-            raise ValueError(f"{self.name}: Invalid value: {value}")
+            raise ValueError(f"{self.name()}: Invalid value: {value}")
         self.value = value
         if scope not in _SCOPES:
-            raise ValueError(f"{self.name}: Invalid scope: {scope}")
+            raise ValueError(f"{self.name()}: Invalid scope: {scope}")
         self.dim = _SCOPES[scope]
 
     def fit(self, x: torch.Tensor):
