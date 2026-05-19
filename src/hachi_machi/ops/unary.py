@@ -30,3 +30,11 @@ class CumSum(Operation):
 
     def forward(self, x):
         return x.cumsum(dim=-2)
+
+
+class Rev(Operation):
+
+    def forward(self, x):
+        idx = torch.arange(x.size(1), 0, -1) - 1
+        
+        return x[:, idx, :]

@@ -1,4 +1,4 @@
-from . import BinaryOperation
+from .bases import BinaryOperation
 
 
 class Add(BinaryOperation):
