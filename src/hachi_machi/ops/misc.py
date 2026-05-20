@@ -11,7 +11,7 @@ class Clip(Operation):
         'max': "Maximum clipping value.",
     }
 
-    def __init__(self, *, min: int | float | str | None = 0, axis: str | None = None, max: int | float | None = None, **kwargs):
+    def __init__(self, *, min: int | float | str | None = 0, max: int | float | None = None, axis: str | None = None,  **kwargs):
         super().__init__(**kwargs)
         self.min = None
         self.max = None
