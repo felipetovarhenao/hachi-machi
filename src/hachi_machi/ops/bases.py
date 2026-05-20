@@ -94,8 +94,8 @@ class BinaryOperation(Operation):
 
 _RAND_SCOPE = {
     'global': lambda _: (1, 1),
-    'time': lambda x: (x.shape[1], 1),
-    'feature': lambda x: (1, x.shape[2]),
+    'time': lambda x: (x.shape[-2], 1),
+    'feature': lambda x: (1, x.shape[-1]),
     'all': lambda x: x.shape,
 }
 
