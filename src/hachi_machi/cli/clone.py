@@ -25,10 +25,10 @@ from ..io import FileIO
     ('input', *FileIO.EXT),
     ('output', *FileIO.EXT),
 ]).wrapper
-def augment(**params):
+def clone(**params):
     """
-    Given some **INPUT** data, it generates an **OUTPUT** data file (`.txt` or `.csv`), given any number of optional data augmentation operations.
-    This command is most useful as a playground to test and experiment with data augmentation pipelines before training a model.
+    Given some **INPUT** data, it generates an **OUTPUT** data file (`.txt`, `.csv`, `.json`), given any number of optional data augmentation operations.
+    This command is most useful as a playground to test and experiment with data augmentation pipelines before training a model, and as a shortcut for converting datasets from one file type to another.
     """
 
     device = params['device']

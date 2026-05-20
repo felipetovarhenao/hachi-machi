@@ -104,8 +104,8 @@ class AutoDoc:
         if options:
             sections += [
                 "## Options", "",
-                "|  Name  | Type | Required | Default | Description |",
-                "|--------|------|:--------:|---------|-------------|",
+                "|  Name  | Type | Default | Description |",
+                "|--------|------|---------|-------------|",
                 *AutoDoc._param_rows(options),
                 "",
             ]
@@ -172,7 +172,6 @@ class AutoDoc:
         for p in params:
             if isinstance(p, click.Option):
                 name = ", ".join(p.opts)
-                required = "✓" if p.required else ""
                 default = f"`{p.default}`" if p.default is not None else "—"
                 default = default.replace('Sentinel.UNSET', '[]')
                 multiple = " *(multiple)*" if p.multiple else ""
@@ -180,13 +179,16 @@ class AutoDoc:
                     'boolparamtype', 'boolean') + multiple
                 help_text = (p.help or "").replace("|", "\\|")
                 rows.append(
-                    f"| `{name}` | {type_label} | {required} | {default} | {help_text} |")
+                    f"| `{name}` | {type_label} | {default} | {help_text} |")
             elif isinstance(p, click.Argument):
                 required = "✓" if p.required else ""
                 multiple = " *(multiple)*" if p.nargs == -1 else ""
                 type_label = AutoDoc._type_name(p.type) + multiple
+                default = f"`{p.default}`" if p.default is not None else ""
+                default = default.replace(
+                    'Sentinel.UNSET', '—' if required else '[]')
                 rows.append(
-                    f"| `{p.human_readable_name}` | {type_label} | {required} | — | *(positional argument)* |")
+                    f"| `{p.human_readable_name}` | {type_label} | {required} | {default} | *(positional argument)* |")
         return rows
 
     @staticmethod
