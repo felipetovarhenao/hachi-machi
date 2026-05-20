@@ -31,7 +31,10 @@ function HomepageHeader() {
 export default function Home(): ReactNode {
   const { siteConfig } = useDocusaurusContext();
   return (
-    <Layout title={`Hello from ${siteConfig.title}`} description="hachi machi reference documentation">
+    <Layout
+      title={`${siteConfig.title}: high-level and controllable human interface for machine improvisation`}
+      description="hachi machi reference documentation"
+    >
       <HomepageHeader />
       <main>
         <HomepageFeatures />
