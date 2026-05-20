@@ -105,7 +105,7 @@ _RAND_AXES = {
 class RandomOperation(Operation):
 
     DOCS = {
-        'value': "Range parameter values for random distribution, based on `dist`.",
+        'range': "Range parameter values for random distribution, based on `dist`.",
         'axis': ("Optional axis along which random value should be applied."
                  "\n\t- `none`: a single random value is applied globally to the entire sequence."
                  "\n\t- `time`: random values are applied, one for each time step, but constant for all feature at each time step."
@@ -119,24 +119,24 @@ class RandomOperation(Operation):
 
     def __init__(self,
                  *,
-                 value: tuple[float | int, float | int] = (0, 1),
+                 range: tuple[float | int, float | int] = (0, 1),
                  axis: str | None = None,
                  dist: str = 'uniform',
                  log: bool = False,
                  **kwargs):
         super().__init__(**kwargs)
-        rand = self.get_func(value, dist, axis)
+        rand = self.get_func(range, dist, axis)
         if not log:
             self.func = rand
         else:
             self.func = lambda x: 2 ** rand(x)
 
-    def get_func(self, value, dist, axis) -> Callable[[torch.Tensor], torch.Tensor]:
+    def get_func(self, range, dist, axis) -> Callable[[torch.Tensor], torch.Tensor]:
         match dist:
             case 'normal':
                 def rand(shape): return torch.randn(
-                    shape) * value[1] + value[0]
+                    shape) * range[1] + range[0]
             case 'uniform':
                 def rand(shape): return torch.rand(shape) * \
-                    (value[1] - value[0]) + value[0]
+                    (range[1] - range[0]) + range[0]
         return lambda x: rand(_RAND_AXES[axis](x)).to(x.device)
