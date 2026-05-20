@@ -1,6 +1,6 @@
 # Operations
 
-Some commands, such as `train` or `clone`, support passing a series of optional operations via the `--operations` option.
+Some commands, such as `train` or `fork`, support passing a series of optional operations via the `--operations` option.
 
 Operations provide a flexible way to design data augmentation pipelines, by composing a sequence of primitive data operations to be applied to the data, specified as **case-insensitive**, python-like functions calls.
 For instance, consider a configuration file that specifies the following data augmentation operations:

@@ -3,7 +3,7 @@ import datetime
 import webbrowser
 from .middleware import ClickMiddleware
 from ..console import Console
-from . import (clone, gen,
+from . import (fork, gen,
                format,
                train,
                run,
@@ -90,7 +90,7 @@ def exec(ctx, input):
 main.add_command(train.train)
 main.add_command(run.run)
 main.add_command(gen.gen)
-main.add_command(clone.clone)
+main.add_command(fork.fork)
 main.add_command(info.info)
 main.add_command(format.format)
 main.add_command(rec.rec)

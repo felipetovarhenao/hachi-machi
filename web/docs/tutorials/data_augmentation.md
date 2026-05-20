@@ -14,7 +14,7 @@ One way to get around this is through [data augmentation](https://www.ibm.com/th
 
 To this end, **hachi machi** provides a series of [operations](../commands/operations/index.md) that can be provided during training, and applied in sequence to each sequence example in a batch.
 
-Each operation is specified as a list of python-like function calls, via the `--operations` parameter, which is available in the `train` and `clone` commands.
+Each operation is specified as a list of python-like function calls, via the `--operations` parameter, which is available in the `train` and `fork` commands.
 
 ---
 
