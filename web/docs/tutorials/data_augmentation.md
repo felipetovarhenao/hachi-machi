@@ -59,11 +59,11 @@ Now consider the following series of operations and the likely effects each of t
     output: model.pt
     operations:
     # random MIDI pitch transposition
-    - randadd(0, a=-6, b=6)
+    - addrand(range=(-6, 6), dims=0)
     # random velocity scaling
-    - randmul(1, a=0.5, b=1)
+    - mulrand(range=(0.5, 1), dims=1)
     # random time stretching, applied to time and duration
-    - randmul(t, 3, a=-0.5, b=0.5, space=log)
+    - mulrand(dims=(t, 3), range=(-0.5, 0.5), log=true)
     ```
     </TabItem>
      <TabItem value="toml" label="toml">
@@ -73,11 +73,11 @@ Now consider the following series of operations and the likely effects each of t
     output = 'model.pt'
     operations = [
         # random MIDI pitch transposition
-        'randadd(0, a=-6, b=6)'
+        'addrand(range=(-6, 6), dims=0)',
         # random velocity scaling
-        'randmul(1, a=0.5, b=1)'
+        'mulrand(range=(0.5, 1), dims=1)',
         # random time stretching, applied to time and duration
-        'randmul(t, 3, a=-0.5, b=0.5, space=log)'
+        'mulrand(dims=(t, 3), range=(-0.5, 0.5), log=true)',
     ]
     ```
     </TabItem>
@@ -87,8 +87,8 @@ Now consider the following series of operations and the likely effects each of t
 
 ### Pitch transposition
 
-```py
-randadd(0, a=-6, b=6)
+```rust
+addrand(range=(-6, 6), dims=0)
 ```
 
 The first feature (dim `0`) in each sequence contains MIDI pitch values. This operation randomly shifts each pitch by an integer value drawn uniformly from the range `[-6, 6]`, effectively transposing the passage by up to a tritone up or down. This encourages the model to learn melodic contours and intervals that are invariant to pitch transposition.
@@ -97,8 +97,8 @@ The first feature (dim `0`) in each sequence contains MIDI pitch values. This op
 
 ### Velocity scaling
 
-```py
-randmul(1, a=-0.5, b=1)
+```rust
+mulrand(range=(0.5, 1), dims=1)
 ```
 
 The second feature (dim `1`) contains MIDI velocity values, which correspond to note loudness. This operation randomly scales each velocity by a value drawn from the range `[0.5, 1]` applying variable dynamic compression. This encourages the model to learn patterns that are robust to differences in overall loudness.
@@ -107,12 +107,12 @@ The second feature (dim `1`) contains MIDI velocity values, which correspond to 
 
 ### Time stretching
 
-```py
-randmul(t, 3, a=-0.5, b=0.5, space=log)
+```rust
+mulrand(dims=(t, 3), range=(-0.5, 0.5), log=true)
 ```
 
 This operation targets both the time axis (`t`) and the duration feature (dim `3`) simultaneously, scaling them by the same random factor drawn from `[-0.5, 0.5]` in log space. Applying the same factor to both ensures that the relative timing between notes remains internally consistent, while the overall tempo varies. This encourages the model to be responsive to tempo changes, which also means its output will be perceived as less _rhythmic_.
 
 :::info
-By _log space_, we mean that the random number _r_ is interpreted as existing in a _log base 2_ scale, in the `-0.5` to `0.5` range, such that the features _x_ are multiplied as `x * 2 ** r`, instead of `x * r`.
+By _log space_, we mean that the random number is interpreted in a _log base 2_ space, meaning in the `2 ** -0.5` to `2 ** 0.5` range.
 :::
