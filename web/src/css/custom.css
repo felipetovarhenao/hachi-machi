@@ -19,6 +19,14 @@
   --ifm-font-family-monospace: "JetBrains Mono";
 }
 
+table,
+th,
+td {
+  border-style: none;
+  padding: 15px 5px 15px 2px;
+  text-align: left;
+}
+
 /* For readability concerns, you should choose a lighter palette in dark mode. */
 [data-theme="dark"] {
   --ifm-color-primary: #969af5;
@@ -29,6 +37,7 @@
   --ifm-color-primary-lighter: #32d8b4;
   --ifm-color-primary-lightest: #4fddbf;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+  --ifm-table-stripe-background: none;
   .theme-admonition-tip.alert.alert--success {
     background-color: #1f483b;
   }

@@ -104,7 +104,7 @@ class AutoDoc:
         if options:
             sections += [
                 "## Options", "",
-                "| Option | Type | Required | Default | Description |",
+                "|  Name  | Type | Required | Default | Description |",
                 "|--------|------|:--------:|---------|-------------|",
                 *AutoDoc._param_rows(options),
                 "",
@@ -177,7 +177,7 @@ class AutoDoc:
                 default = default.replace('Sentinel.UNSET', '[]')
                 multiple = " *(multiple)*" if p.multiple else ""
                 type_label = AutoDoc._type_name(p.type).replace(
-                    'boolparamtype', 'bool') + multiple
+                    'boolparamtype', 'boolean') + multiple
                 help_text = (p.help or "").replace("|", "\\|")
                 rows.append(
                     f"| `{name}` | {type_label} | {required} | {default} | {help_text} |")
