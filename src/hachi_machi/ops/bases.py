@@ -125,6 +125,9 @@ class RandomOperation(Operation):
                  log: bool = False,
                  **kwargs):
         super().__init__(**kwargs)
+        if axis not in _RAND_AXES:
+            raise ValueError(
+                f"Invalid axis in {self.name()!r} operation: {axis}. Expected one of the following: {repr(tuple(_RAND_AXES.keys())).lower()}")
         rand = self.get_func(range, dist, axis)
         if not log:
             self.func = rand
