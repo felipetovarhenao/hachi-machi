@@ -37,7 +37,7 @@ import TabItem from "@theme/TabItem";
 </Tabs>
 
 :::info
-Note that text-like values such as `mean` or `normal` are not in quotes.
+Note that text-like values such as `mean` or `std` are not in quotes.
 :::
 
 In this example, the following series of operations will be applied to the input data:
