@@ -55,7 +55,8 @@ class DataOperator:
         literal = literal.lower()
         literal = re.sub(
             r"\b(t|global|time|feature|all|mean|std|uniform|normal)\b", r"'\g<1>'", literal)
-        literal = literal.replace("true", "True").replace("false", "False")
+        literal = literal.replace("true", "True").replace(
+            "false", "False").replace("none", "None")
         return literal
 
     @classmethod

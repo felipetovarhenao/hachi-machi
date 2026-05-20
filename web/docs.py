@@ -1,6 +1,6 @@
 
 from hachi_machi.cli import main
-from hachi_machi.operations import DataAugmenter
+from hachi_machi.ops.operator import DataOperator
 import itertools
 import os
 import re
@@ -250,7 +250,7 @@ class AutoDoc:
         return type(param_type).__name__.lower()
 
     def ops_docs(self) -> str:
-        cls = DataAugmenter
+        cls = DataOperator
 
         def class_description(cls) -> str:
             doc = inspect.getdoc(cls)
@@ -259,13 +259,11 @@ class AutoDoc:
             return doc.strip()
         op_docs = {}
 
-        for op_name, op_cls in cls.OPERATIONS.items():
+        for op_name, op_cls in cls.OPS.items():
             lines = []
-            signature_params = cls.get_signature(op_cls)
+            signature_params = op_cls.get_signature()
             sig_parts = []
             for name, param in signature_params.items():
-                if name == 'dims':
-                    name = f"*{name}"
                 if param.default is inspect.Parameter.empty:
                     sig_parts.append(name)
                 else:

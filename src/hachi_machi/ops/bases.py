@@ -1,9 +1,16 @@
 import abc
 import torch
 from typing import Callable
+import inspect
+from collections import OrderedDict
 
 
 class Operation(abc.ABC):
+
+    DOCS = {
+        'dims': 'Optional feature dimensions to apply operation to. If none are provided, all feature dimensions are used.',
+        'p': 'Probability for operation to be applied to data sequence'
+    }
 
     def __init__(self, *, dims: list[int] | None = None, p: float = 1.0):
         self.p = max(0.0, min(float(p), 1.0))
@@ -24,6 +31,28 @@ class Operation(abc.ABC):
 
     def fit(self, _: torch.Tensor): ...
 
+    @classmethod
+    def docs(cls):
+        docs = OrderedDict()
+        for base in cls.__mro__:
+            if not hasattr(base, 'DOCS'):
+                continue
+            docs.update(**base.DOCS)
+
+        return docs
+
+    @classmethod
+    def get_signature(cls):
+        params = OrderedDict()
+        for klass in cls.__mro__:
+            if klass is object:
+                continue
+            for name, param in inspect.signature(klass.__init__).parameters.items():
+                if name in ("self", "args", "kwargs"):
+                    continue
+                params[name] = param
+        return params
+
 
 _SCOPES = {
     'global': None,
@@ -34,7 +63,16 @@ _SCOPES = {
 
 class BinaryOperation(Operation):
 
-    def __init__(self, *, value: float | int, scope: str = 'global', **kwargs):
+    DOCS = {
+        'value': ("Numeric constant, or one of the following keywords for referencing data-derived properties."
+                  "\n\t- `mean`\n\t- `std`\n"),
+        'scope': ("Reduction axis for data-derived values. Ignored when `value` is a constant:\n"
+                  "\n\t- `global`: data-derived value is based on all dimensions and time steps."
+                  "\n\t- `time`: data-derived value is computed along the time-step dimension."
+                  "\n\t- `feature`: data-derived value is computed for each step along the feature dimension.")
+    }
+
+    def __init__(self, *, value: float | int = 0, scope: str = 'global', **kwargs):
         super().__init__(**kwargs)
         if isinstance(value, str) and value not in ['mean', 'std']:
             raise ValueError(f"{self.name()}: Invalid value: {value}")
@@ -63,6 +101,18 @@ _RAND_SCOPE = {
 
 
 class RandomOperation(Operation):
+
+    DOCS = {
+        'value': "Two values representing the random range, based on `dist`.",
+        'scope': ("Shape of the random tensor"
+                  "\n\t- `global`: a single random value is applied globally"
+                  "\n\t- `time`: random values are applied, one for each time step, but constant for all feature `dims`"
+                  "\n\t- `feature`: random values are applied, one for each feature, but constant for all steps"
+                  "\n\t- `both`: random values are applied, one for each feature and time steps"),
+        'dist': ("Type of random distribution to sample from."
+                 "\n\t- `uniform`: Even distribution. `value` denotes the minimum and maximum value."
+                 "\n\t- `normal`: Gaussian distribution. `value` denotes the mean and standard deviation."),
+    }
 
     def __init__(self,
                  *,
