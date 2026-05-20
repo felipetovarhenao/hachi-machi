@@ -54,7 +54,7 @@ class DataOperator:
     def _replace_keywords(cls, literal: str):
         literal = literal.lower()
         literal = re.sub(
-            r"\b(t|global|time|feature|all|mean|std|uniform|normal)\b", r"'\g<1>'", literal)
+            r"\b(t|time|feature|element|mean|std|uniform|normal)\b", r"'\g<1>'", literal)
         literal = literal.replace("true", "True").replace(
             "false", "False").replace("none", "None")
         return literal
