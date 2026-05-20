@@ -29,7 +29,7 @@ class Clip(Operation):
             attr = getattr(self, param)
             if not isinstance(attr, str):
                 if attr is not None:
-                    setattr(self, param, torch.Tensor(attr).to(x.device))
+                    setattr(self, param, torch.tensor([attr], device=x.device))
                 continue
             attr = getattr(self, param)
             func = getattr(torch, attr)

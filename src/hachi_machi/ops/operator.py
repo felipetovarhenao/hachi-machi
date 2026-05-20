@@ -25,7 +25,7 @@ class DataOperator:
         y = x.clone()
         with torch.no_grad():
             for op in self.ops:
-                op.fit(x)
+                op.fit(x[..., op.dims])
                 y = op(y)
         return y
 
