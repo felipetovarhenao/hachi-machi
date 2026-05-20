@@ -89,7 +89,7 @@ def train(**params):
     data, feature_map = FileIO.read(file_path, device)
 
     if len(operations) > 0:
-        augmenter = DataOperator.from_callbacks(operations=operations,
+        augmenter = DataOperator.from_callbacks(callbacks=operations,
                                                 feature_map=feature_map)
 
     factory = T.TransformFactory(feature_map=feature_map)
