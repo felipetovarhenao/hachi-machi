@@ -71,6 +71,13 @@ class Trainer:
     def benchmark(cls, model: PerformerModel, n_warmup: int = 100, n_runs: int = 500) -> None:
         model.eval()
         device = next(model.parameters()).device
+
+        total = sum(p.numel() for p in model.parameters())
+
+        Console.pretty({
+            'total': f'{total:,}',
+        }, header="Parameters")
+
         with torch.no_grad():
             sample = torch.randn(
                 (1, 1, model.input_layer.output_size)).to(device)
@@ -84,11 +91,6 @@ class Trainer:
                 times.append(time.perf_counter() - t0)
 
         times = torch.tensor(times) * 1000
-        total = sum(p.numel() for p in model.parameters())
-
-        Console.pretty({
-            'total': f'{total:,}',
-        }, header="Parameters")
         Console.pretty({
             'mean': f"{times.mean():.3f}ms",
             'std': f"{times.std():.3f}ms",
