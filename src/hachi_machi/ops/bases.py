@@ -61,6 +61,8 @@ _AXES = {
     'feature': -1,
 }
 
+_STATS = ['mean', 'std']
+
 
 class BinaryOperation(Operation):
     """When `value` is a statistic (e.g., `mean`, `std`), the axis along which it is computed is determined by `axis`, and its always relative to the input data before any operations."""
@@ -78,7 +80,7 @@ class BinaryOperation(Operation):
 
     def __init__(self, *, value: float | int | str = 0, axis: str | None = None, **kwargs):
         super().__init__(**kwargs)
-        if isinstance(value, str) and value not in ['mean', 'std']:
+        if isinstance(value, str) and value not in _STATS:
             raise ValueError(f"{self.name()}: Invalid value: {value}")
         self.value = value
         if axis not in _AXES:
@@ -90,8 +92,7 @@ class BinaryOperation(Operation):
             return
         attr = self.value
         func = getattr(torch, attr)
-        dim = tuple(range(1, x.ndim)) if self.dim is None else self.dim
-        self.value = func(x, dim=dim, keepdim=True)
+        self.value = func(x, dim=self.dim, keepdim=True)
         if attr == 'std':
             self.value += 1e-8
 
