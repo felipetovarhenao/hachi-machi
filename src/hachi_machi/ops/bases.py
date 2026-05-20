@@ -6,10 +6,11 @@ from collections import OrderedDict
 
 
 class Operation(abc.ABC):
+    """A list of one or more indices can be specified via `dims`, to apply the operation to specific features, and the probability of the operation being applied to the data can be set with `p`."""
 
     DOCS = {
         'dims': 'Feature dimensions to apply operation to. If `none`, all feature dimensions are used.',
-        'p': 'Probability for operation to be applied to data sequence.'
+        'p': 'Probability for operation to be applied to data sequence, between 0 and 1.'
     }
 
     def __init__(self, *, dims: int | list[int] | None = None, p: float = 1.0):
@@ -62,9 +63,10 @@ _AXES = {
 
 
 class BinaryOperation(Operation):
+    """When `value` is a statistic (e.g., `mean`, `std`), the axis along which it is computed is determined by `axis`, and its always relative to the input data before any operations."""
 
     DOCS = {
-        'value': ("Numeric constant, or one of the following keywords for referencing data-derived properties."
+        'value': ("A numeric constant, or one of the following input-dependent, statistical properties."
                   "\n\t- `mean`: arithmetic mean along `axis`."
                   "\n\t- `std`: standard deviation along `axis`."
                   ),
@@ -104,6 +106,8 @@ _RAND_AXES = {
 
 class RandomOperation(Operation):
 
+    """The operand is sampled from random distribution, based on `dist`, and applied to the data based on the `axis`."""
+
     DOCS = {
         'range': "Range parameter values for random distribution, based on `dist`.",
         'axis': ("Optional axis along which random value should be applied."
@@ -112,9 +116,9 @@ class RandomOperation(Operation):
                  "\n\t- `feature`: random values are applied, one for each feature, but constant for all time steps at each feature."
                  "\n\t- `element`: random values are applied, one for each element in the data—i.e., element-wise."),
         'dist': ("Random distribution to sample from."
-                 "\n\t- `uniform`: Even distribution. `value` denotes the minimum and maximum value."
-                 "\n\t- `normal`: Gaussian distribution. `value` denotes the mean and standard deviation."),
-        'log': 'Apply operation in _log base 2_ space.'
+                 "\n\t- `uniform`: Even distribution. The `range` values denote the minimum and maximum value, respectively."
+                 "\n\t- `normal`: Gaussian distribution. The `range` values denote the mean and standard deviation, respectively."),
+        'log': 'Apply operation in _log base 2_ space. If `true`, the random operand becomes `2 ** r`, where `r` is the randomly generated value.'
     }
 
     def __init__(self,

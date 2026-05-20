@@ -8,6 +8,7 @@ import textwrap
 from pathlib import Path
 import click
 import inspect
+import abc
 
 
 CLI_CMD = 'hxmx'
@@ -254,10 +255,13 @@ class AutoDoc:
         cls = DataOperator
 
         def class_description(cls) -> str:
-            doc = inspect.getdoc(cls)
-            if not doc:
-                return ""
-            return doc.strip()
+            lines = []
+            for klass in cls.__mro__:
+                if klass in [object, abc.ABC]:
+                    continue
+                lines.append(inspect.getdoc(klass).strip())
+
+            return "\n\n".join(lines)
         op_docs = {}
 
         for op_name, op_cls in cls.OPS.items():
