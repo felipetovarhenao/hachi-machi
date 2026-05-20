@@ -46,8 +46,7 @@ def augment(**params):
     augmenter = DataOperator.from_callbacks(callbacks=ops,
                                             feature_map=feature_map)
 
-    for op in augmenter:
-        data = op(data)
+    data = augmenter(data)
 
     FileIO.write(tensor=data,
                  path=output,
