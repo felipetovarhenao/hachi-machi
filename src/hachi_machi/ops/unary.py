@@ -12,20 +12,8 @@ class Round(Operation):
 class Diff(Operation):
     """Computes the difference between consecutive feature values along the `time` axis."""
 
-    def __init__(self, dims=None, p=1):
-        super().__init__(dims, p)
-        self.prepend = None
-
-    def fit(self, x):
-        self.prepend = torch.full(
-            (*x.shape[:-2], 1, x.shape[-1]),
-            0.0,
-            dtype=x.dtype,
-            device=x.device,
-        )
-
     def forward(self, x):
-        return x.diff(dim=-2, prepend=self.prepend)
+        return x.diff(dim=-2, prepend=x[:1])
 
 
 class CumSum(Operation):

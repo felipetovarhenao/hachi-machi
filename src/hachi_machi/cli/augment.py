@@ -47,6 +47,7 @@ def augment(**params):
                                             feature_map=feature_map)
 
     data = augmenter(data)
+    print(data[..., :1])
 
     FileIO.write(tensor=data,
                  path=output,
