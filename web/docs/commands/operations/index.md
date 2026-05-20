@@ -16,7 +16,7 @@ import TabItem from "@theme/TabItem";
   operations:
     - sub(value=mean)
     - div(value=std)
-    - mulrand(value=(-0.25, 0.25), log=true)
+    - mulrand(value=(-0.1, 0.1), log=true)
     - mul(value=std)
     - add(value=mean)
   ```

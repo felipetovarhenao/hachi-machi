@@ -9,6 +9,7 @@ from pathlib import Path
 import click
 import inspect
 
+
 CLI_CMD = 'hxmx'
 
 
@@ -283,7 +284,16 @@ class AutoDoc:
             if class_args:
                 lines.append("## Arguments\n")
                 for arg_name, arg_desc in class_args.items():
-                    lines.append(f"- `{arg_name}`: {arg_desc}")
+                    param = signature_params[arg_name]
+                    param_type = repr(param.annotation).lower()
+                    param_type = re.sub(
+                        r"(<class ')([^>]+)('>)", r"\g<2>", param_type).replace(" ", "")
+                    param_default = repr(
+                        param.default).lower().replace('\'', '')
+                    arg_str = f"""- **{arg_name}** (`{param_type}`): {arg_desc}
+
+    _Default_: `{param_default}`"""
+                    lines.append(arg_str)
                 lines.append("")
             op_docs[op_name] = lines
 

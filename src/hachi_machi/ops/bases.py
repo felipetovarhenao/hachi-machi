@@ -8,11 +8,11 @@ from collections import OrderedDict
 class Operation(abc.ABC):
 
     DOCS = {
-        'dims': 'Optional feature dimensions to apply operation to. If none are provided, all feature dimensions are used.',
-        'p': 'Probability for operation to be applied to data sequence'
+        'dims': 'Feature dimensions to apply operation to. If `none`, all feature dimensions are used.',
+        'p': 'Probability for operation to be applied to data sequence.'
     }
 
-    def __init__(self, *, dims: list[int] | None = None, p: float = 1.0):
+    def __init__(self, *, dims: int | list[int] | None = None, p: float = 1.0):
         self.p = max(0.0, min(float(p), 1.0))
         self.dims = dims if dims is not None else slice(None, None)
 
@@ -54,8 +54,8 @@ class Operation(abc.ABC):
         return params
 
 
-_SCOPES = {
-    'global': None,
+_AXES = {
+    None: None,
     'time': -2,
     'feature': -1,
 }
@@ -65,21 +65,23 @@ class BinaryOperation(Operation):
 
     DOCS = {
         'value': ("Numeric constant, or one of the following keywords for referencing data-derived properties."
-                  "\n\t- `mean`\n\t- `std`\n"),
-        'scope': ("Reduction axis for data-derived values. Ignored when `value` is a constant:\n"
-                  "\n\t- `global`: data-derived value is based on all dimensions and time steps."
-                  "\n\t- `time`: data-derived value is computed along the time-step dimension."
-                  "\n\t- `feature`: data-derived value is computed for each step along the feature dimension.")
+                  "\n\t- `mean`: arithmetic mean along `axis`."
+                  "\n\t- `std`: standard deviation along `axis`."
+                  ),
+        'axis': ("Reduction axis for data-derived values. Ignored when `value` is a constant:\n"
+                 "\n\t- `none`: data-derived value is based on all dimensions and time steps."
+                 "\n\t- `time`: data-derived value is computed along the time-step dimension."
+                 "\n\t- `feature`: data-derived value is computed for each step along the feature dimension.")
     }
 
-    def __init__(self, *, value: float | int = 0, scope: str = 'global', **kwargs):
+    def __init__(self, *, value: float | int | str = 0, axis: str | None = None, **kwargs):
         super().__init__(**kwargs)
         if isinstance(value, str) and value not in ['mean', 'std']:
             raise ValueError(f"{self.name()}: Invalid value: {value}")
         self.value = value
-        if scope not in _SCOPES:
-            raise ValueError(f"{self.name()}: Invalid scope: {scope}")
-        self.dim = _SCOPES[scope]
+        if axis not in _AXES:
+            raise ValueError(f"{self.name()}: Invalid axis: {axis}")
+        self.dim = _AXES[axis]
 
     def fit(self, x: torch.Tensor):
         if not isinstance(self.value, str):
@@ -92,43 +94,44 @@ class BinaryOperation(Operation):
             self.value += 1e-8
 
 
-_RAND_SCOPE = {
-    'global': lambda _: (1, 1),
+_RAND_AXES = {
+    None: lambda _: (1, 1),
     'time': lambda x: (x.shape[-2], 1),
     'feature': lambda x: (1, x.shape[-1]),
-    'all': lambda x: x.shape,
+    'element': lambda x: x.shape,
 }
 
 
 class RandomOperation(Operation):
 
     DOCS = {
-        'value': "Two values representing the random range, based on `dist`.",
-        'scope': ("Shape of the random tensor"
-                  "\n\t- `global`: a single random value is applied globally"
-                  "\n\t- `time`: random values are applied, one for each time step, but constant for all feature `dims`"
-                  "\n\t- `feature`: random values are applied, one for each feature, but constant for all steps"
-                  "\n\t- `both`: random values are applied, one for each feature and time steps"),
-        'dist': ("Type of random distribution to sample from."
+        'value': "Range parameter values for random distribution, based on `dist`.",
+        'axis': ("Optional axis along which random value should be applied."
+                 "\n\t- `none`: a single random value is applied globally to the entire sequence."
+                 "\n\t- `time`: random values are applied, one for each time step, but constant for all feature at each time step."
+                 "\n\t- `feature`: random values are applied, one for each feature, but constant for all time steps at each feature."
+                 "\n\t- `element`: random values are applied, one for each element in the data—i.e., element-wise."),
+        'dist': ("Random distribution to sample from."
                  "\n\t- `uniform`: Even distribution. `value` denotes the minimum and maximum value."
                  "\n\t- `normal`: Gaussian distribution. `value` denotes the mean and standard deviation."),
+        'log': 'Apply operation in _log base 2_ space.'
     }
 
     def __init__(self,
                  *,
                  value: tuple[float | int, float | int] = (0, 1),
-                 scope: str = 'global',
+                 axis: str | None = None,
                  dist: str = 'uniform',
                  log: bool = False,
                  **kwargs):
         super().__init__(**kwargs)
-        rand = self.get_func(value, dist, scope)
+        rand = self.get_func(value, dist, axis)
         if not log:
             self.func = rand
         else:
             self.func = lambda x: 2 ** rand(x)
 
-    def get_func(self, value, dist, scope) -> Callable[[torch.Tensor], torch.Tensor]:
+    def get_func(self, value, dist, axis) -> Callable[[torch.Tensor], torch.Tensor]:
         match dist:
             case 'normal':
                 def rand(shape): return torch.randn(
@@ -136,4 +139,4 @@ class RandomOperation(Operation):
             case 'uniform':
                 def rand(shape): return torch.rand(shape) * \
                     (value[1] - value[0]) + value[0]
-        return lambda x: rand(_RAND_SCOPE[scope](x)).to(x.device)
+        return lambda x: rand(_RAND_AXES[axis](x)).to(x.device)
