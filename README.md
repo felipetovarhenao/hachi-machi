@@ -1,3 +1,5 @@
+<img src="web/static/img/logo.svg" height="160px" />
+
 # hachi machi
 
 To learn more, please visit: https://felipe-tovar-henao.com/hachi-machi
