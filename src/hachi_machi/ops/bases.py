@@ -64,16 +64,26 @@ _RAND_SCOPE = {
 
 class RandomOperation(Operation):
 
-    def __init__(self, *, value: tuple[float | int, float | int], scope: str = 'global', dist: str = 'uniform', **kwargs):
+    def __init__(self,
+                 *,
+                 value: tuple[float | int, float | int] = (0, 1),
+                 scope: str = 'global',
+                 dist: str = 'uniform',
+                 log: bool = False,
+                 **kwargs):
         super().__init__(**kwargs)
-        self.func = self.get_func(value, dist, scope)
+        rand = self.get_func(value, dist, scope)
+        if not log:
+            self.func = rand
+        else:
+            self.func = lambda x: 2 ** rand(x)
 
     def get_func(self, value, dist, scope) -> Callable[[torch.Tensor], torch.Tensor]:
         match dist:
             case 'normal':
-                def func(shape): return torch.randn(
+                def rand(shape): return torch.randn(
                     shape) * value[1] + value[0]
             case 'uniform':
-                def func(shape): return torch.rand(shape) * \
+                def rand(shape): return torch.rand(shape) * \
                     (value[1] - value[0]) + value[0]
-        return lambda x: func(_RAND_SCOPE[scope](x)).to(x.device)
+        return lambda x: rand(_RAND_SCOPE[scope](x)).to(x.device)
