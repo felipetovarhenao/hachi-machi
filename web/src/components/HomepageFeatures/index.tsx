@@ -31,7 +31,7 @@ const FeatureList: FeatureItem[] = [
     ),
   },
   {
-    title: "Minimal coding",
+    title: "Minimal programming",
     Svg: require("@site/static/img/undraw_dev-environment.svg").default,
     description: <>The entire workflow—from preparing data to training and running a model—is handled through a friendly command-line interface.</>,
   },
