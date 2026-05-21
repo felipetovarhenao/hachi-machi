@@ -95,8 +95,8 @@ class AutoDoc:
         if arguments:
             sections += [
                 "## Arguments", "",
-                "| Name | Type | Required | Default | Description |",
-                "|------|------|:--------:|---------|-------------|",
+                "| Name | Type | Required | Default |",
+                "|------|------|:--------:|---------|",
                 *AutoDoc._param_rows(arguments),
                 "",
             ]
@@ -186,11 +186,10 @@ class AutoDoc:
                 required = "✓" if p.required else ""
                 multiple = " *(multiple)*" if p.nargs == -1 else ""
                 type_label = AutoDoc._type_name(p.type) + multiple
-                default = f"`{p.default}`" if p.default is not None else ""
-                default = default.replace(
-                    'Sentinel.UNSET', '—' if required else '[]')
+                default = f"`{p.default}`" if 'Sentinel' not in str(
+                    p.default) else "—"
                 rows.append(
-                    f"| `{p.human_readable_name}` | {type_label} | {required} | {default} | *(positional argument)* |")
+                    f"| `{p.human_readable_name}` | {type_label} | {required} | {default} |")
         return rows
 
     @staticmethod
