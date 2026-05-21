@@ -8,7 +8,7 @@
   text-align: center;
   position: relative;
   overflow: hidden;
-  background: linear-gradient(-60deg, var(--ifm-color-primary-darkest), var(--ifm-color-primary-dark), #5c60d3, #4d51b5);
+  background: linear-gradient(-60deg, var(--ifm-color-primary-darkest), var(--ifm-color-primary-dark), #5e76d9, #af68ea);
 }
 
 @media screen and (max-width: 996px) {

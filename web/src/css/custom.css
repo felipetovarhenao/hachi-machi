@@ -30,7 +30,7 @@ td {
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
 [data-theme="dark"] {
-  --ifm-color-primary: #969af5;
+  --ifm-color-primary: #5e64cd;
   --ifm-color-primary-dark: #737bd8;
   --ifm-color-primary-darker: #5771b7;
   --ifm-color-primary-darkest: #3f5d95;
