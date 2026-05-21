@@ -1,7 +1,7 @@
 - [] Adjust batch size
 - [] Add support for pre-trained models
 - [] Add support for multi-model hosting.
-- [] Add sort operation.
+- [x] Add sort operation.
 - [] Add support for multivariate feature groups.
 - [x] add `rec` command.
 - [] Figure out fix for device listing now that docs are web based.

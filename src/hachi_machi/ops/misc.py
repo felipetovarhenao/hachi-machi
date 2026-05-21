@@ -40,3 +40,22 @@ class Clip(Operation):
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         return torch.clip(x, min=self.min, max=self.max)
+
+
+class Sort(Operation):
+    """Sorts input sequence data by the feature index `by`. If `dims` are provided, `by` must be an index relative to `dims`."""
+
+    def __init__(self, *, by: int = 0, descending: bool = False, **kwargs):
+        super().__init__(**kwargs)
+        if isinstance(self.dims, slice):
+            self.by = by
+        elif not 0 <= by < len(self.dims):
+            raise IndexError(
+                f"Outside of range index in {self.name()}: When 'dims' is not 'none', 'by' must be an index relative to 'dims'.")
+        else:
+            self.by = self.dims[by]
+        self.desc = descending
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        order = torch.argsort(x[..., self.by], descending=self.desc)
+        return x[order]
