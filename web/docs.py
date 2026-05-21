@@ -116,8 +116,8 @@ class AutoDoc:
 
         return "\n".join(sections)
 
-    @staticmethod
-    def _render_group_index(group: click.Group,
+    def _render_group_index(self,
+                            group: click.Group,
                             name: str,
                             parents: list[str],
                             sidebar_position: int,
@@ -137,14 +137,16 @@ class AutoDoc:
 
         if description:
             sections += [description, ""]
-
+        base_dir = str(self.output_dir).replace('docs/', '')
+        print(base_dir)
         if subcommand_names:
             sections += ["## Commands", ""]
             for sub in sorted(subcommand_names):
                 sub_cmd = group.commands.get(sub)
                 sub_help = (sub_cmd.help.strip() or "").split(
                     "\n")[0] if sub_cmd else ""
-                entry = f"- [`{sub}`](./{sub}) — {sub_help}" if sub_help else f"- [`{sub}`](./{sub})"
+
+                entry = f"- [`{sub}`]({base_dir}/{sub}) — {sub_help}" if sub_help else f"- [`{sub}`]({base_dir}/{sub})"
                 sections.append(entry)
             sections.append("")
 
