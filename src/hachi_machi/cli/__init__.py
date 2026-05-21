@@ -30,7 +30,7 @@ class CustomGroup(click.Group):
     def open_docs(ctx, param, value):
         if not value or ctx.resilient_parsing:
             return
-        webbrowser.open("http://localhost:3000/docs/")
+        webbrowser.open("http://felipetovarhenao.github.io/hachi-machi")
         ctx.exit()
 
     @classmethod
