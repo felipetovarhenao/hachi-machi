@@ -10,7 +10,7 @@ import TabItem from "@theme/TabItem";
 
 One of the main challenges for artists to experiment with deep-learning models using their own data, is the quantity requirements relative to what is typically expected in industry standards.
 
-One way to get around this is through [data augmentation](https://www.ibm.com/think/topics/data-augmentation), which is to say, applying random variations to our data during training, so as to artificially increment. However, the particular approach we take will necessarily vary, not just on the kind of data we're using, but also on we want the model learn about the data.
+One way to get around this is through [data augmentation](https://www.ibm.com/think/topics/data-augmentation), which is to say, applying random variations to our data during training, so as to artificially increment its size. However, the particular approach we take will necessarily vary, not just on the kind of data we're using, but also on we want the model learn about the data.
 
 To this end, **hachi machi** provides a series of [operations](../commands/operations/index.md) that can be provided during training, and applied in sequence to each sequence example in a batch.
 
