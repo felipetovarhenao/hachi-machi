@@ -49,7 +49,7 @@ To continue with the MIDI data example, let's remember how our data is formatted
     </TabItem>
 </Tabs>
 
-Now consider the following series of operations and the likely effects each of them will have on the model.
+Where each event, in addition to having a time position, consists of the following features: MIDI pitch, velocity, duration (_seconds_), and channel. Now consider the following series of operations and the likely effects each of them will have on the model.
 
 <Tabs groupId="config">
     <TabItem value="yaml" label="yaml">
@@ -91,7 +91,7 @@ Now consider the following series of operations and the likely effects each of t
 addrand(range=(-6, 6), dims=0)
 ```
 
-The first feature (dim `0`) in each sequence contains MIDI pitch values. This operation randomly shifts each pitch by an integer value drawn uniformly from the range `[-6, 6]`, effectively transposing the passage by up to a tritone up or down. This encourages the model to learn melodic contours and intervals that are invariant to pitch transposition.
+The first feature (dim `0`) in each sequence contains MIDI pitch values. This operation randomly shifts each pitch by an integer value drawn uniformly from the range `[-6, 6]`, effectively transposing the passage by up to a tritone up or down. Ostensibly, this encourages the model to learn melodic contours and intervals more robustly, making it less susceptible to pitch transpositions.
 
 ---
 
@@ -111,7 +111,7 @@ The second feature (dim `1`) contains MIDI velocity values, which correspond to 
 mulrand(dims=(t, 3), range=(-0.5, 0.5), log=true)
 ```
 
-This operation targets both the time axis (`t`) and the duration feature (dim `3`) simultaneously, scaling them by the same random factor drawn from `[-0.5, 0.5]` in log space. Applying the same factor to both ensures that the relative timing between notes remains internally consistent, while the overall tempo varies. This encourages the model to be responsive to tempo changes, which also means its output will be perceived as less _rhythmic_.
+This operation targets both the time axis (`t`) and the duration feature (dim `3`) simultaneously, scaling them by the same random factor drawn from `[-0.5, 0.5]` in log space. Applying the same factor to both ensures that the relative timing between notes remains internally consistent, while the overall tempo varies. This encourages the model to be more responsive to tempo changes, though it also means its output will be perceived as less _rhythmic_.
 
 :::info
 By _log space_, we mean that the random number is interpreted in a _log base 2_ space, meaning in the `2 ** -0.5` to `2 ** 0.5` range.
