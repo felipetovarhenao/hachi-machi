@@ -24,7 +24,7 @@ class MidiParser:
             onset += msg.time
             if not msg.type.startswith('note_'):
                 continue
-            channel = msg.channel
+            channel = msg.channel + 1
             channels.add(channel)
             pitch = msg.note
             key = (channel, pitch)
