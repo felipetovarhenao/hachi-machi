@@ -8,7 +8,7 @@
   text-align: center;
   position: relative;
   overflow: hidden;
-  background: linear-gradient(-60deg, var(--ifm-color-primary-darkest), var(--ifm-color-primary-dark), #5e76d9, #af68ea);
+  background: linear-gradient(-70deg, #7464d9, #9aabf9, #c892f4, #814ec9);
 }
 
 @media screen and (max-width: 996px) {
@@ -25,10 +25,10 @@
 
 [data-theme="dark"] {
   .title {
-    color: #eaeaea;
+    color: white;
   }
   .subtitle {
-    color: #eaeaea;
+    color: white;
   }
 }
 
