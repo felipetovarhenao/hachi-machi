@@ -57,5 +57,7 @@ class Sort(Operation):
         self.desc = descending
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        order = torch.argsort(x[..., self.by], descending=self.desc)
+        order = torch.argsort(input=x[..., self.by],
+                              descending=self.desc,
+                              stable=True)
         return x[order]
