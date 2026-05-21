@@ -10,7 +10,7 @@ sidebar_position: -2
 
 ### How it works
 
-**hachi machi** works as a command-line interface (CLI) written in [Python](<(https://www.python.org/)>), with [PyTorch](https://pytorch.org/) as the back-end for deep learning. It's designed to provide the most control to artists and technologists in the data-to-model pipeline while minimizing the amount of expertise required.
+**hachi machi** works as a command-line interface (CLI) written in [Python](https://www.python.org/), with [PyTorch](https://pytorch.org/) as the back-end for deep learning. It's designed to provide the most control to artists and technologists in the data-to-model pipeline while minimizing the amount of expertise required.
 
 To train a model with **hachi machi**, all you need is a set of sequential data—that is, data that can be represented as a series of steps, each step consisting of set of numerical features or values. The role of a **hachi machi** model is to learn how to predict the next event, like so:
 

@@ -8,7 +8,6 @@ const config: Config = {
   title: "hachi machi",
   tagline: "high-level and controllable human interface for machine improvisation",
   favicon: "img/favicon.ico",
-
   stylesheets: [
     "https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap",
   ],
@@ -19,10 +18,11 @@ const config: Config = {
   },
 
   // Set the production url of your site here
-  url: "https://your-docusaurus-site.example.com",
+  url: "https://felipetovarhenao.github.io/",
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: "/",
+  baseUrl: "/hachi-machi/",
+  deploymentBranch: "gh-pages",
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
