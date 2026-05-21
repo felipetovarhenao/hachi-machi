@@ -48,7 +48,7 @@ class CustomGroup(click.Group):
         super().add_command(cmd, name)
 
 
-@click.version_option(message=Console.style(__banner__, 'success'))
+@click.version_option(message=Console.style(__banner__, 'primary'))
 @click.group(cls=CustomGroup)
 @click.option('-h', '--help', **CustomGroup.help_params())
 def main():

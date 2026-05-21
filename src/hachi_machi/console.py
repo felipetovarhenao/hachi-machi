@@ -33,6 +33,7 @@ class Console:
     INFO = (160, 200, 240)
     WARNING = (233, 222, 117)
     ACTION = (242, 199, 149)
+    PRIMARY = (168, 161, 237)
 
     @classmethod
     def get_display(cls, n_rows: int = 1):
