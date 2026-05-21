@@ -21,7 +21,7 @@ _A visual representation of a workflow in **hachi machi**._
 In addition to [installing](../installation.md) **hachi machi**, you will need the following for this tutorial:
 
 1. A test MIDI file of your choosing.
-2. Basic understanding of how to run commands in the terminal.
+2. Basic understanding and familiarity of how to run commands in the [terminal](https://www.terminaltutor.com/).
 
 ---
 
