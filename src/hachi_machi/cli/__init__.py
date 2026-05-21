@@ -21,7 +21,7 @@ __banner__ = f"""
   ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚═╝
               m a c h i  
 
-© {datetime.datetime.now().year} https://felipe-tovar-henao.com"""
+© {datetime.datetime.now().year} Felipe Tovar-Henao"""
 
 
 class CustomGroup(click.Group):
