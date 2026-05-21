@@ -21,7 +21,7 @@ class Trainer:
         self.model = model
         self.dataset = dataset
         self.file = None
-        batch_size = min(batch_size, self.dataset.size // 2)
+        batch_size = max(1, min(batch_size, self.dataset.size // 2))
         self.loader = EventLoader(dataset=dataset,
                                   batch_size=batch_size,
                                   shuffle=True,

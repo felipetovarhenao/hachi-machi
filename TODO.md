@@ -1,4 +1,4 @@
-- [] Adjust batch size
+- [x] Adjust batch size
 - [] Add support for pre-trained models
 - [] Add support for multi-model hosting.
 - [x] Add sort operation.
