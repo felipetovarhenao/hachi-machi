@@ -18,17 +18,17 @@ const config: Config = {
   },
 
   // Set the production url of your site here
-  url: "https://felipetovarhenao.github.io/",
+  url: "https://felipetovarhenao.github.io",
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: "/hachi-machi/",
+  organizationName: "felipetovarhenao", // Usually your GitHub org/user name.
+  projectName: "hachi-machi", // Usually your repo name.
   deploymentBranch: "gh-pages",
   trailingSlash: false,
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: "felipetovarhenao", // Usually your GitHub org/user name.
-  projectName: "hachi-machi", // Usually your repo name.
 
   onBrokenLinks: "throw",
 
