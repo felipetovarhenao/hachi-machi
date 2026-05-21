@@ -1,3 +1,4 @@
+- [] Test on Windows.
 - [x] Adjust batch size
 - [] Add support for pre-trained models
 - [] Add support for multi-model hosting.
