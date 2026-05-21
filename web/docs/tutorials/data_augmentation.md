@@ -116,3 +116,7 @@ This operation targets both the time axis (`t`) and the duration feature (dim `3
 :::info
 By _log space_, we mean that the random number is interpreted in a _log base 2_ space, meaning in the `2 ** -0.5` to `2 ** 0.5` range.
 :::
+
+:::tip
+Even though temporal datasets include the absolute time position of each step in the sequence, **hachi machi** replaces it with the time difference between the current and previous step. As such, operations of the `t` dimension are not applied not to absolute time position but to these differences.
+:::
