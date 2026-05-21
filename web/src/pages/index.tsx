@@ -14,10 +14,10 @@ function HomepageHeader() {
     <header className={clsx("hero hero--primary", styles.heroBanner)}>
       <div className="container">
         <img className={styles.logo} src="img/logo.svg" alt="" />
-        <Heading as="h1" className="hero__title">
+        <Heading as="h1" className={styles.title}>
           {siteConfig.title}
         </Heading>
-        <p className="hero__subtitle">{siteConfig.tagline}</p>
+        <p className={styles.subtitle}>{siteConfig.tagline}</p>
         <div className={styles.buttons}>
           <Link className="button button--secondary button--lg" to="/docs/">
             Get Started
