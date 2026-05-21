@@ -35,3 +35,7 @@ conda deactivate
 ```sh
 conda remove --name hxmx --all
 ```
+
+## License
+
+**hachi machi** is distributed under the terms of the GNU General Public License version 3 ([GPL-v3.0](https://www.gnu.org/licenses/gpl-3.0.en.html)).
