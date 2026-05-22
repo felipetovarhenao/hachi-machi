@@ -8,7 +8,7 @@ sidebar_position: -1
 2. In the terminal, run:
 
 ```zsh
-pip install hachi-machi
+pip install hachi-machi --pre
 ```
 
 3. Then run:
