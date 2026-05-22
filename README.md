@@ -6,14 +6,15 @@ To learn more, please visit: https://felipe-tovar-henao.com/hachi-machi
 
 ## Development setup
 
-The following instructions are only needed for setting up a development environment.
+Follow these steps if you intend to run and/or build **hachi machi** from source.
 
-1. Install [conda](https://anaconda.org/):
+1. Install [Miniconda](https://www.anaconda.com/download/success?reg=skipped).
 2. In the terminal, run:
 
 ```sh
 conda env create -f environment.yml
 conda activate hxmx
+python -m pip install hatch
 ```
 
 ## On each session
@@ -34,6 +35,18 @@ conda deactivate
 
 ```sh
 conda remove --name hxmx --all
+```
+
+## Build
+
+```sh
+hatch build
+```
+
+## Publish
+
+```sh
+hatch publish
 ```
 
 ## License
