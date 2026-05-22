@@ -18,8 +18,7 @@ class AutoDoc:
     def __init__(self,
                  cli: click.Command,
                  output_dir: str | os.PathLike,
-                 cli_name: str,
-                 ) -> None:
+                 cli_name: str,) -> None:
         self.cli = cli
         self.output_dir = Path(output_dir)
         self.cli_name = cli_name or cli.name or "cli"
