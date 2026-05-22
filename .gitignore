@@ -3,6 +3,7 @@
 **/Icon?
 !.gitignore
 !.github
+dist
 
 **/*.wav
 **/__pycache__
