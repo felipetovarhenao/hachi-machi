@@ -12,7 +12,7 @@ type FeatureItem = {
 const FeatureList: FeatureItem[] = [
   {
     title: "Train and run locally",
-    Svg: require("@site/static/img/undraw_personal-settings.svg").default,
+    Svg: require("@site/static/img/undraw_data-processing.svg").default,
     description: (
       <>
         <b>hachi machi</b> runs entirely on your own machine, with no cloud dependency or external service required. Your training data and models
@@ -22,7 +22,7 @@ const FeatureList: FeatureItem[] = [
   },
   {
     title: "Data agnostic",
-    Svg: require("@site/static/img/undraw_data-at-work.svg").default,
+    Svg: require("@site/static/img/undraw_ai-slop.svg").default,
     description: (
       <>
         <b>hachi machi</b> is data-agnostic. Anything that can be represented as a sequence of events — musical or otherwise — can be used as training
@@ -32,7 +32,7 @@ const FeatureList: FeatureItem[] = [
   },
   {
     title: "Minimal programming",
-    Svg: require("@site/static/img/undraw_dev-environment.svg").default,
+    Svg: require("@site/static/img/undraw_in-the-zone.svg").default,
     description: <>The entire workflow—from preparing data to training and running a model—is handled through a friendly command-line interface.</>,
   },
 ];

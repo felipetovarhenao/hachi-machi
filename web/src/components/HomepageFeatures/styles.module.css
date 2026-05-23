@@ -8,4 +8,9 @@
 .featureSvg {
   height: 200px;
   width: 200px;
+  background-color: #daadffcc;
+  border-radius: 25%;
+  border: 10px solid;
+  border-color: #7b72b364;
+  box-sizing: content-box;
 }
