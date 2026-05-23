@@ -18,6 +18,10 @@ As we saw in the previous tutorial, we need our data to be formatted as a JSON o
 | 1.0  | 64    | 70       | 0.25     | 2       |
 | 2.0  | 60    | 90       | 0.5      | 1       |
 
+This table represents the following:
+
+<img height="200px" style={{ 'margin': '10px', 'border-radius': '10px', 'opacity': '90%', 'border': '2px solid' }} src={require('@site/static/img/midi-notes.jpg').default} alt="MIDI notes"/>
+
 To keep things simple, we'll stick to this very simple sequence of 5 MIDI notes.
 
 ## Temporality
@@ -103,8 +107,6 @@ By default, all features are treated as **continuous**—that is, they can take 
 
 Features can also be declared **categorical**, which is appropriate for discrete identifiers such as MIDI channels. Doing so improves model training by changing how those features are encoded internally.
 
-To mark a feature as categorical, add a `"features"` entry to the JSON file, keyed by the feature's zero-based index:
-
 <Tabs groupId="config-files">
   <TabItem value="json" label="json">
     ```json
@@ -138,7 +140,7 @@ To mark a feature as categorical, add a `"features"` entry to the JSON file, key
 In this example, the fourth feature—i.e., the MIDI channel—in each event (index `3`) will be treated as categorical. Any feature not marked as `categorical` is assumed to be continuous.
 
 :::info
-Note the difference in syntax for each file format. In CSV, a categorical feature specified by appending a `#` to the feature's column name.
+Note the difference in syntax for each file format. In CSV, a categorical feature specified by appending a `#` to the feature's column name. In `JSON`, an additional `"features"` key is added and the categorical, and `"categorical"` is set to true for that feature.
 :::
 
 :::caution
