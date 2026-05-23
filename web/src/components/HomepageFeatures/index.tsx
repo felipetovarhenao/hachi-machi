@@ -33,7 +33,12 @@ const FeatureList: FeatureItem[] = [
   {
     title: "Minimal programming",
     Svg: require("@site/static/img/undraw_in-the-zone.svg").default,
-    description: <>The entire workflow—from preparing data to training and running a model—is handled through a friendly command-line interface.</>,
+    description: (
+      <>
+        The entire process—from preparing data to training and running a model—is handled through a friendly{" "}
+        <a target="_blank" href="https://youtu.be/w9u0d4C95Zs">command-line interface</a>.
+      </>
+    ),
   },
 ];
 
