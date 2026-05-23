@@ -62,7 +62,7 @@ Note that all events must have the same number of elements—i.e., the sequence 
 
 ### Temporal data
 
-If we want the model to also learn the timing of each step, we provide timestamps for each event in the sequence. In other words, cases in which not only the order of events matters, but also _when_ they happen.
+However, with MIDI data, we most certainly want the model to also learn the timing of each step, so we provide timestamps for each event in the sequence, in seconds. In other words, cases in which not only the order of events matters, but also _when_ they happen.
 
 <Tabs groupId="config-files">
   <TabItem value="json" label="json">
@@ -91,21 +91,21 @@ If we want the model to also learn the timing of each step, we provide timestamp
     </TabItem>
 </Tabs>
 
-This will determine how temporal vs non-temporal models behave during _streaming_ mode (via the `run` command). If the data is _atemporal_, the prediction will be emitted immediately, while for _temporal_ models, the prediction is scheduled to be emitted at some time in the future based on what the model learned.
+Why does **hachi machi** consider time as separate from other any features? This is because models trained on temporal vs. non-temporal data will behave differently during _streaming_ mode (i.e., via the `run` command). If the data is _atemporal_, the prediction will be emitted immediately, while for _temporal_ models, the prediction is scheduled to be emitted at some time in the future based on what the model learned.
 
 :::info
-Note that time values must specified in seconds. For CSV data to be recognized as temporal by **hachi machi**, it must be the first column and have use the label `time` as the column name.
+Note that time values must specified in seconds and, for CSV data to be recognized as temporal by **hachi machi**, it must be the first column and have `time` as the column name.
 :::
 
 ## Feature types
 
 ### Continuous
 
-By default, all features are treated as **continuous**—that is, they can take any numeric value within a range (e.g., pitch, amplitude, duration).
+By default, all features are treated as **continuous**—that is, they can take any numeric value within some unspecified range (e.g., pitch, amplitude, duration).
 
 ### Categorical
 
-Features can also be declared **categorical**, which is appropriate for discrete identifiers such as MIDI channels. Doing so improves model training by changing how those features are encoded internally.
+Features can also be declared **categorical**, which is appropriate for discrete identifiers such as MIDI channels or ON/OFF states. Doing so improves model training by changing how those features are encoded internally.
 
 <Tabs groupId="config-files">
   <TabItem value="json" label="json">
@@ -149,11 +149,11 @@ Categorical values not present in the data won't be recognized by the model duri
 
 ## Masked features
 
-Often times, we will want (or need) the model to predict features we can't realistically know at the moment we want to predict the next event. A very obvious example of this is not knowing how long a note the moment it starts. The desired behavior being:
+During real-time interaction, we will often want (or need) the model to predict features we can't realistically know at the moment we want to predict the next event. In the case of our MIDI data, a very obvious example of this is not knowing how long the current note will be at the moment it starts. The desired behavior can be represented as follows:
 
 ![feature masking](@site/static/img/feature_masking.svg)
 
-In this case, we can _mask_ a feature, meaning we tell the model that the feature should be **output only**. This way the model can predict what that feature will be in the next event, even if it doesn't see what it currently is.
+We refer to this behavior as _feature masking_, meaning we tell the model that the feature should be **output only**. This way the model can predict what that feature will be in the next event, without knowing what it currently is. Here's how masked features are specified in our data:
 
 <Tabs groupId="config-files">
   <TabItem value="json" label="json">
@@ -187,5 +187,5 @@ In this case, we can _mask_ a feature, meaning we tell the model that the featur
 </Tabs>
 
 :::info
-Note the difference in syntax for each file format. In CSV, a masked feature specified by prepending a `~` to the feature's column name.
+Note the difference in syntax for each file format. In CSV, a masked feature specified by prepending a `~` to the feature's column name, while in JSON we set `masked` to `true` for that feature.
 :::
