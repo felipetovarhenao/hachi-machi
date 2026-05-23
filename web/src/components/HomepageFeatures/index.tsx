@@ -26,7 +26,7 @@ const FeatureList: FeatureItem[] = [
     description: (
       <>
         <b>hachi machi</b> is data-agnostic. Anything that can be represented as a sequence of events — musical or otherwise — can be used as training
-        data via a straightforward JSON format.
+        data via straightforward data formats, such as CSV or JSON.
       </>
     ),
   },
