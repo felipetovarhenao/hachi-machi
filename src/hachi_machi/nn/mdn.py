@@ -15,11 +15,6 @@ class MixtureDensityNetwork(nn.Module):
         super().__init__(*args, **kwargs)
         self.out_features = out_features
         self.tril_size = out_features * (out_features + 1) // 2
-        self.proj = nn.Sequential(
-            nn.Linear(num_features, num_features),
-            nn.Dropout(p=dropout, inplace=True),
-            nn.LeakyReLU(negative_slope=slope, inplace=True),
-        )
         self.net = nn.ModuleList([
             self.block(num_features,
                        out_features,
