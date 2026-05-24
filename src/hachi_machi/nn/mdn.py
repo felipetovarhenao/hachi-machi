@@ -47,8 +47,7 @@ class MixtureDensityNetwork(nn.Module):
         )
 
     def forward(self, x: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
-        y = self.proj(x)
-        y = torch.stack([layer(y) for layer in self.net], dim=-1)
+        y = torch.stack([layer(x) for layer in self.net], dim=-1)
         pi = F.softmax(y[..., 0, :], dim=-1)
         mu = y[..., 1:self.out_features + 1, :]
         tril_vals = y[..., self.out_features + 1:, :]
