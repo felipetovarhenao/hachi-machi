@@ -6,9 +6,23 @@
 .heroBanner {
   padding: 4rem 0;
   text-align: center;
+  justify-content: center;
   position: relative;
   overflow: hidden;
-  background: linear-gradient(-90deg, #504595, #8d85db, #b693d3);
+  background: none;
+}
+
+.container {
+  
+  video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+  }
 }
 
 @media screen and (max-width: 996px) {

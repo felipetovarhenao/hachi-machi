@@ -12,7 +12,10 @@ function HomepageHeader() {
   const { siteConfig } = useDocusaurusContext();
   return (
     <header className={clsx("hero hero--primary", styles.heroBanner)}>
-      <div className="container">
+      <div className={styles.container}>
+        <video autoPlay muted loop playsInline>
+          <source src="img/bg.mp4" type="video/mp4" />
+        </video>
         <img className={styles.logo} src="img/logo.svg" alt="" />
         <Heading as="h1" className={styles.title}>
           {siteConfig.title}
