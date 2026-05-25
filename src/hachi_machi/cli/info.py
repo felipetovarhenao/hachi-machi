@@ -26,7 +26,8 @@ def info(**params):
 
     info = {"input_size": model.input_layer.input_size - dim_offset,
             "output_size": model.output_layer.input_size - dim_offset,
-            "mask":  mask}
+            "mask":  mask,
+            'temporal': model.temporal}
 
     Console.pretty(info, "Info")
 

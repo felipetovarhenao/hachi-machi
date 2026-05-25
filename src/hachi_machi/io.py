@@ -74,7 +74,7 @@ class FileIO:
         with open(path, newline="") as f:
             reader = csv.reader(f)
             header = next(reader)
-            temporal = header[0] == 'time'
+            temporal = header[0].strip() == 'time'
             data = [[float(v) for v in row] for row in reader]
         try:
             data = cls.to_tensor(data)
