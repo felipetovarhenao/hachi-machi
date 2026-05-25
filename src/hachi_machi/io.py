@@ -82,6 +82,7 @@ class FileIO:
             ImportError(f"Invalid CSV formatting in {path!r}")
         features = {}
         for (i, k) in enumerate(header[int(temporal):]):
+            k = k.strip()
             ft = {}
             if k.startswith(MASKED_CHAR):
                 ft['masked'] = True
