@@ -121,7 +121,9 @@ class Session(BaseSession):
             [0.0, *args],
             dtype=torch.float32
         )
-        if nargs == self.output_size:
+        if nargs == self.input_size:
+            x = x[..., -self.input_size:]
+        else:
             x = x[self.model.input_mask]
         self.predict(x)
 
