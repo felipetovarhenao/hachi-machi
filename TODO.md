@@ -1,4 +1,5 @@
 - [] Test on Windows.
+- [] Fix spacing keys in config files.
 - [x] Adjust batch size
 - [] Add support for pre-trained models
 - [] Add support for multi-model hosting.
