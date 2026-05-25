@@ -32,7 +32,7 @@ const FeatureList: FeatureItem[] = [
   },
   {
     title: "Minimal programming",
-    Svg: require("@site/static/img/undraw_in-the-zone.svg").default,
+    Svg: require("@site/static/img/undraw_programming.svg").default,
     description: (
       <>
         The entire process—from preparing data to training and running a model—is handled through a friendly{" "}
