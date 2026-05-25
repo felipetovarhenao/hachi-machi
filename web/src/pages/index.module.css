@@ -15,7 +15,7 @@
 .container {
   video {
     position: absolute;
-    filter: hue-rotate(30deg);
+    filter: hue-rotate(100deg);
     top: 0;
     left: 0;
     width: 100%;
