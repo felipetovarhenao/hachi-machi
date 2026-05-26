@@ -137,7 +137,6 @@ class AutoDoc:
         if description:
             sections += [description, ""]
         base_dir = str(self.output_dir).replace('docs/', '')
-        print(base_dir)
         if subcommand_names:
             sections += ["## Commands", ""]
             for sub in sorted(subcommand_names):

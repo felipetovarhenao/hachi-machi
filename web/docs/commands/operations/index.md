@@ -3,6 +3,9 @@
 Some commands, such as `train` or `fork`, support passing a series of optional operations via the `--operations` option.
 
 Operations provide a flexible way to design data augmentation pipelines, by composing a sequence of primitive data operations to be applied to the data, specified as **case-insensitive**, python-like functions calls.
+
+![operations](@site/static/img/hachi_machi_ops.svg)
+
 For instance, consider a configuration file that specifies the following data augmentation operations:
 
 import Tabs from "@theme/Tabs";
