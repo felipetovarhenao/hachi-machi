@@ -6,7 +6,7 @@ sidebar_position: -2
 
 ## Description
 
-**hachi machi** (_**H**igh-level **A**nd **C**ontrollable **H**uman **I**nterface for **MACH**ine **I**mprovisation_) is an open-source tool for performing artists to easily prototype, train, and run their own improvisational models, with their own data, in their own computers.
+**hachi machi** (_**H**igh-level **A**nd **C**ontrollable **H**uman **I**nterface for **MACH**ine **I**mprovisation_) is an open-source tool for performing artists to quickly and easily prototype, train, and run their own improvisational models, with their own data, in their own computers.
 
 ### How it works
 
