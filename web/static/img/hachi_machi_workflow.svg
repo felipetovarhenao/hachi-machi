@@ -12,9 +12,9 @@
   <g
     style="fill:rgb(0, 0, 0);stroke:none;color:rgb(240, 240, 240);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif">
     <rect x="30" y="100" width="140" height="80" rx="8" stroke-width="0.5"
-      style="fill:rgb(88, 48, 205);stroke:rgb(180, 178, 169);color:rgb(240, 240, 240);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif" />
+      style="fill:rgb(88, 68, 165);stroke:rgb(180, 178, 169);color:rgb(240, 240, 240);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif" />
     <text x="100" y="132" text-anchor="middle" dominant-baseline="central"
-      style="fill:rgb(211, 209, 199);stroke:none;color:rgb(240, 240, 240);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif">Raw
+      style="fill:rgb(240, 240, 240);stroke:none;color:rgb(240, 240, 240);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif">Raw
       data</text>
     <text x="100" y="154" text-anchor="middle" dominant-baseline="central"
       style="fill:rgb(180, 178, 169);stroke:none;color:rgb(240, 240, 240);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif">e.g.,
@@ -89,9 +89,9 @@
   <g
     style="fill:rgb(0, 0, 0);stroke:none;color:rgb(240, 240, 240);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif">
     <rect x="392" y="20" width="140" height="34" rx="8" stroke-width="0.5"
-      style="fill:rgb(88, 48, 205);stroke:rgb(180, 178, 169);color:rgb(240, 240, 240);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif" />
+      style="fill:rgb(88, 68, 165);stroke:rgb(180, 178, 169);color:rgb(240, 240, 240);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif" />
     <text x="462" y="37" text-anchor="middle" dominant-baseline="central"
-      style="fill:rgb(211, 209, 199);stroke:none;color:rgb(240, 240, 240);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif">New
+      style="fill:rgb(240, 240, 240);stroke:none;color:rgb(240, 240, 240);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif">New
       sequence</text>
   </g>
   <text x="480" y="76" text-anchor="start"

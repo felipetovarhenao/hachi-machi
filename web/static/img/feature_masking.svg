@@ -62,9 +62,9 @@
   <g
     style="fill:rgb(0, 0, 0);stroke:none;color:rgb(240, 240, 240);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif">
     <rect x="280" y="130" width="110" height="64" rx="8" stroke-width="0.5"
-      style="fill:rgb(88, 48, 205);stroke:rgb(180, 178, 169);color:rgb(240, 240, 240);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif" />
+      style="fill:rgb(88, 68, 165);stroke:rgb(180, 178, 169);color:rgb(240, 240, 240);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif" />
     <text x="335" y="162" text-anchor="middle" dominant-baseline="central"
-      style="fill:rgb(211, 209, 199);stroke:none;color:rgb(240, 240, 240);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif">Model</text>
+      style="fill:rgb(240, 240, 240);stroke:none;color:rgb(240, 240, 240);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif">Model</text>
   </g>
 
 
