@@ -121,10 +121,10 @@ class Session(BaseSession):
             [0.0, *args],
             dtype=torch.float32
         )
-        if nargs == self.input_size:
-            x = x[..., -self.input_size:]
-        else:
+        if nargs == self.output_size:
             x = x[self.model.input_mask]
+        else:
+            x = x[-self.input_size:]
         self.predict(x)
 
     def handle_reset(self, *_):
