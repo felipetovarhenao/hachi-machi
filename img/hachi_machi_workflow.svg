@@ -10,91 +10,91 @@
 
 
   <g
-    style="fill:rgb(0, 0, 0);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;JetBrains Mono&quot;">
+    style="fill:rgb(0, 0, 0);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif">
     <rect x="30" y="100" width="140" height="80" rx="8" stroke-width="0.5"
-      style="fill:rgb(98, 98, 95);stroke:rgb(180, 178, 169);color:rgb(251, 251, 254);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;JetBrains Mono&quot;" />
+      style="fill:rgb(98, 98, 95);stroke:rgb(180, 178, 169);color:rgb(251, 251, 254);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif" />
     <text x="100" y="132" text-anchor="middle" dominant-baseline="central"
-      style="fill:rgb(211, 209, 199);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;JetBrains Mono&quot;">Raw
+      style="fill:rgb(211, 209, 199);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif">Raw
       data</text>
     <text x="100" y="154" text-anchor="middle" dominant-baseline="central"
-      style="fill:rgb(180, 178, 169);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;JetBrains Mono&quot;">e.g.,
+      style="fill:rgb(180, 178, 169);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif">e.g.,
       MIDI</text>
   </g>
 
 
   <line x1="170" y1="140" x2="224" y2="140" marker-end="url(#arrow)"
-    style="fill:none;stroke:rgb(156, 154, 146);color:rgb(251, 251, 254);stroke-width:1.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;JetBrains Mono&quot;" />
+    style="fill:none;stroke:rgb(156, 154, 146);color:rgb(251, 251, 254);stroke-width:1.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif" />
   <text x="198" y="130" text-anchor="middle"
-    style="fill:rgb(120, 120, 120);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;JetBrains Mono&quot;;font-size:10px">format</text>
+    style="fill:rgb(120, 120, 120);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:14px">format</text>
 
 
   <g
-    style="fill:rgb(0, 0, 0);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;JetBrains Mono&quot;">
+    style="fill:rgb(0, 0, 0);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif">
     <rect x="226" y="100" width="130" height="80" rx="8" stroke-width="0.5"
-      style="fill:rgb(8, 80, 65);stroke:rgb(93, 202, 165);color:rgb(251, 251, 254);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;JetBrains Mono&quot;" />
+      style="fill:rgb(115, 123, 216);stroke:rgb(215, 223, 216);color:rgb(251, 251, 254);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif" />
     <text x="291" y="132" text-anchor="middle" dominant-baseline="central"
-      style="fill:rgb(159, 225, 203);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;JetBrains Mono&quot;">
+      style="fill:rgb(215, 223, 216);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif">
       Formatted</text>
     <text x="291" y="154" text-anchor="middle" dominant-baseline="central"
-      style="fill:rgb(93, 202, 165);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;JetBrains Mono&quot;">e.g.,
+      style="fill:rgb(215, 223, 216);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif">e.g.,
       JSON</text>
   </g>
 
 
   <line x1="356" y1="140" x2="400" y2="140" marker-end="url(#arrow)"
-    style="fill:none;stroke:rgb(156, 154, 146);color:rgb(251, 251, 254);stroke-width:1.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;JetBrains Mono&quot;" />
+    style="fill:none;stroke:rgb(156, 154, 146);color:rgb(251, 251, 254);stroke-width:1.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif" />
   <text x="378" y="130" text-anchor="middle"
-    style="fill:rgb(120, 120, 120);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;JetBrains Mono&quot;;font-size:10px">train</text>
+    style="fill:rgb(120, 120, 120);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:14px">train</text>
 
 
   <g
-    style="fill:rgb(0, 0, 0);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;JetBrains Mono&quot;">
+    style="fill:rgb(0, 0, 0);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif">
     <rect x="402" y="100" width="120" height="80" rx="8" stroke-width="0.5"
-      style="fill:rgb(60, 52, 137);stroke:rgb(175, 169, 236);color:rgb(251, 251, 254);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;JetBrains Mono&quot;" />
+      style="fill:rgb(108, 86, 197);stroke:rgb(175, 169, 236);color:rgb(251, 251, 254);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif" />
     <text x="462" y="132" text-anchor="middle" dominant-baseline="central"
-      style="fill:rgb(206, 203, 246);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;JetBrains Mono&quot;">Model</text>
+      style="fill:rgb(206, 203, 246);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif">Model</text>
     <text x="462" y="154" text-anchor="middle" dominant-baseline="central"
-      style="fill:rgb(175, 169, 236);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;JetBrains Mono&quot;">PyTorch</text>
+      style="fill:rgb(175, 169, 236);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif">PyTorch</text>
   </g>
 
 
   <line x1="522" y1="140" x2="566" y2="140" marker-end="url(#arrow)"
-    style="fill:none;stroke:rgb(156, 154, 146);color:rgb(251, 251, 254);stroke-width:1.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;JetBrains Mono&quot;" />
+    style="fill:none;stroke:rgb(156, 154, 146);color:rgb(251, 251, 254);stroke-width:1.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif" />
   <text x="544" y="130" text-anchor="middle"
-    style="fill:rgb(120, 120, 120);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;JetBrains Mono&quot;;font-size:10px">run</text>
+    style="fill:rgb(120, 120, 120);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:14px">run</text>
 
 
   <g
-    style="fill:rgb(0, 0, 0);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;JetBrains Mono&quot;">
+    style="fill:rgb(0, 0, 0);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif">
     <rect x="568" y="100" width="92" height="80" rx="8" stroke-width="0.5"
-      style="fill:rgb(183, 63, 39);stroke:rgb(240, 153, 123);color:rgb(251, 251, 254);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;JetBrains Mono&quot;" />
+      style="fill:rgb(157, 110, 239);stroke:rgb(215, 223, 216);color:rgb(251, 251, 254);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif" />
     <text x="614" y="128" text-anchor="middle" dominant-baseline="central"
-      style="fill:rgb(245, 196, 179);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;JetBrains Mono&quot;">Live</text>
+      style="fill:rgb(215, 223, 216);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif">Live</text>
     <text x="614" y="156" text-anchor="middle" dominant-baseline="central"
-      style="fill:rgb(240, 153, 123);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;JetBrains Mono&quot;">OSC</text>
+      style="fill:rgb(215, 223, 216);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif">OSC</text>
 
   </g>
 
 
   <path d="M660 180 L660 230 L568 230 L568 180" fill="none" stroke="var(--color-border-primary)" stroke-width="1"
     marker-end="url(#arrow)"
-    style="fill:none;stroke:rgba(122, 120, 109, 0.7);color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;JetBrains Mono&quot;" />
+    style="fill:none;stroke:rgba(122, 120, 109, 0.7);color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif" />
   <text x="614" y="252" text-anchor="middle"
-    style="fill:rgb(120, 120, 120);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;JetBrains Mono&quot;">feed
-    back</text>
+    style="fill:rgb(120, 120, 120);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif">feedback
+    loop</text>
 
 
   <line x1="462" y1="100" x2="462" y2="56" marker-end="url(#arrow)"
-    style="fill:none;stroke:rgb(156, 154, 146);color:rgb(251, 251, 254);stroke-width:1.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;JetBrains Mono&quot;" />
+    style="fill:none;stroke:rgb(156, 154, 146);color:rgb(251, 251, 254);stroke-width:1.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif" />
   <g
-    style="fill:rgb(0, 0, 0);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;JetBrains Mono&quot;">
+    style="fill:rgb(0, 0, 0);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif">
     <rect x="392" y="20" width="140" height="34" rx="8" stroke-width="0.5"
-      style="fill:rgb(98, 98, 95);stroke:rgb(180, 178, 169);color:rgb(251, 251, 254);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;JetBrains Mono&quot;" />
+      style="fill:rgb(98, 98, 95);stroke:rgb(180, 178, 169);color:rgb(251, 251, 254);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif" />
     <text x="462" y="37" text-anchor="middle" dominant-baseline="central"
-      style="fill:rgb(211, 209, 199);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;JetBrains Mono&quot;">New
+      style="fill:rgb(211, 209, 199);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif">New
       sequence</text>
   </g>
   <text x="480" y="76" text-anchor="start"
-    style="fill:rgb(120, 120, 120);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;JetBrains Mono&quot;;font-size:10px">gen</text>
+    style="fill:rgb(120, 120, 120);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:14px">gen</text>
 
 </svg>
