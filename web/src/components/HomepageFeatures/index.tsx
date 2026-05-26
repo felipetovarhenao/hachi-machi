@@ -15,7 +15,7 @@ const FeatureList: FeatureItem[] = [
     Svg: require("@site/static/img/undraw_making-art.svg").default,
     description: (
       <>
-        <b>hachi machi</b> is primarily designed for artistic applications. Easily train, prototype, and experiment with steerable models with small,
+        <b>hachi machi</b> is primarily designed for artistic applications. Easily train, prototype, and experiment with custom models with small,
         bespoke datasets.
       </>
     ),
