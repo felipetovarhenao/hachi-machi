@@ -11,12 +11,22 @@ type FeatureItem = {
 
 const FeatureList: FeatureItem[] = [
   {
+    title: "Made for artists",
+    Svg: require("@site/static/img/undraw_making-art.svg").default,
+    description: (
+      <>
+        <b>hachi machi</b> is primarily designed for artistic applications. Easily train, prototype, and experiment with steerable models with small,
+        bespoke datasets.
+      </>
+    ),
+  },
+  {
     title: "Train and run locally",
     Svg: require("@site/static/img/undraw_data-processing.svg").default,
     description: (
       <>
-        <b>hachi machi</b> runs entirely on your own machine, with no cloud dependency or external service required. Your training data and models
-        stay on your computer.
+        <b>hachi machi</b> runs entirely on your own machine—no API keys, cloud services, or subscriptions. Your data and models stay in your
+        computer.
       </>
     ),
   },
@@ -25,8 +35,8 @@ const FeatureList: FeatureItem[] = [
     Svg: require("@site/static/img/undraw_ai-slop.svg").default,
     description: (
       <>
-        <b>hachi machi</b> is data-agnostic. Anything that can be represented as a sequence of events — musical or otherwise — can be used as training
-        data via straightforward data formats, such as CSV or JSON.
+        <b>hachi machi</b> models can be trained on any data that can be represented as a sequence of events—e.g., music, sensor, motion data, etc.
+        You decide its application.
       </>
     ),
   },
@@ -36,7 +46,10 @@ const FeatureList: FeatureItem[] = [
     description: (
       <>
         The entire process—from preparing data to training and running a model—is handled through a friendly{" "}
-        <a target="_blank" href="https://youtu.be/w9u0d4C95Zs">command-line interface</a>.
+        <a target="_blank" href="https://youtu.be/w9u0d4C95Zs">
+          command-line interface
+        </a>
+        .
       </>
     ),
   },
@@ -60,7 +73,7 @@ export default function HomepageFeatures(): ReactNode {
   return (
     <section className={styles.features}>
       <div className="container">
-        <div className="row">
+        <div className={styles.row}>
           {FeatureList.map((props, idx) => (
             <Feature key={idx} {...props} />
           ))}

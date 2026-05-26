@@ -4,6 +4,13 @@
   padding: 2rem 0;
   width: 100%;
 }
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  div {
+    margin: auto;
+  }
+}
 
 .featureSvg {
   height: 200px;
