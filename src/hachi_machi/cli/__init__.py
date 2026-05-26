@@ -97,6 +97,10 @@ def exec(ctx, input):
             raise ValueError(
                 f"Invalid command: {cmd_name!r}. Expected: {options}")
         cmd = main.commands[cmd_name]
+        valid_params = [p.name for p in cmd.get_params(ctx)]
+        for p in params:
+            if p not in valid_params:
+                raise ValueError(f"Invalid argument name for {cmd_name!r} command: {p!r}")
     except Exception as e:
         Console.error(e.args[0])
         exit()
