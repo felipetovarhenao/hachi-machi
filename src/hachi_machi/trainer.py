@@ -72,11 +72,20 @@ class Trainer:
         model.eval()
         device = next(model.parameters()).device
 
-        total = sum(p.numel() for p in model.parameters())
+        num_params = sum(p.numel() for p in model.parameters())
 
-        Console.pretty({
-            'total': f'{total:,}',
-        }, header="Parameters")
+        out_size = model.output_layer.input_size
+        dim_offset = int(model.temporal)
+        mask = "".join(
+            ["1" if i in model.input_mask else "0" for i in range(out_size)][dim_offset:])
+
+        info = {"input_size": model.input_layer.input_size - dim_offset,
+                "output_size": model.output_layer.input_size - dim_offset,
+                "mask":  mask,
+                'temporal': ['no', 'yes'][model.temporal],
+                'parameters': f'{num_params:,}', }
+
+        Console.pretty(info, "General")
 
         with torch.no_grad():
             sample = torch.randn(

@@ -18,23 +18,3 @@ def info(**params):
                                        weights_only=False)
     model = model.to(device)
     Trainer.benchmark(model)
-
-    out_size = model.output_layer.input_size
-    dim_offset = int(model.temporal)
-    mask = "".join(
-        ["1" if i in model.input_mask else "0" for i in range(out_size)][dim_offset:])
-
-    info = {"input_size": model.input_layer.input_size - dim_offset,
-            "output_size": model.output_layer.input_size - dim_offset,
-            "mask":  mask,
-            'temporal': model.temporal}
-
-    Console.pretty(info, "Info")
-
-    # graph = f"{model}"
-    # graph = re.sub(pattern=r"([A-Z][A-Za-z]*)(?=\()",
-    #                repl=Console.style(r"\g<1>", 'info', bold=True),
-    #                string=graph,
-    #                flags=re.DOTALL)
-    # Console.print("\nGraph", bold=True)
-    # Console.print(graph)
