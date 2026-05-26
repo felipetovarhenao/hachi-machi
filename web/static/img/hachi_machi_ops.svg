@@ -56,7 +56,7 @@
   <g
     style="fill:rgb(0, 0, 0);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">
     <rect x="166" y="72" width="72" height="56" rx="8" stroke-width="0.5"
-      style="fill:rgb(60, 52, 137);stroke:rgb(175, 169, 236);color:rgb(251, 251, 254);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto" />
+      style="fill:rgb(108, 86, 197);stroke:rgb(175, 169, 236);color:rgb(251, 251, 254);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto" />
     <text x="202" y="97" text-anchor="middle" dominant-baseline="central"
       style="fill:rgb(206, 203, 246);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:14px;font-weight:500;text-anchor:middle;dominant-baseline:central">op₁</text>
     <text x="202" y="115" text-anchor="middle" dominant-baseline="central"
@@ -69,7 +69,7 @@
   <g
     style="fill:rgb(0, 0, 0);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">
     <rect x="258" y="72" width="72" height="56" rx="8" stroke-width="0.5"
-      style="fill:rgb(60, 52, 137);stroke:rgb(175, 169, 236);color:rgb(251, 251, 254);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto" />
+      style="fill:rgb(108, 86, 197);stroke:rgb(175, 169, 236);color:rgb(251, 251, 254);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto" />
     <text x="294" y="97" text-anchor="middle" dominant-baseline="central"
       style="fill:rgb(206, 203, 246);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:14px;font-weight:500;text-anchor:middle;dominant-baseline:central">op₂</text>
     <text x="294" y="115" text-anchor="middle" dominant-baseline="central"
@@ -82,7 +82,7 @@
   <g
     style="fill:rgb(0, 0, 0);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">
     <rect x="368" y="72" width="72" height="56" rx="8" stroke-width="0.5"
-      style="fill:rgb(60, 52, 137);stroke:rgb(175, 169, 236);color:rgb(251, 251, 254);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto" />
+      style="fill:rgb(108, 86, 197);stroke:rgb(175, 169, 236);color:rgb(251, 251, 254);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto" />
     <text x="404" y="97" text-anchor="middle" dominant-baseline="central"
       style="fill:rgb(206, 203, 246);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:14px;font-weight:500;text-anchor:middle;dominant-baseline:central">opₙ</text>
     <text x="404" y="115" text-anchor="middle" dominant-baseline="central"
@@ -97,11 +97,11 @@
   <g
     style="fill:rgb(0, 0, 0);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">
     <rect x="520" y="60" width="120" height="80" rx="8" stroke-width="0.5"
-      style="fill:rgb(8, 80, 65);stroke:rgb(93, 202, 165);color:rgb(251, 251, 254);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto" />
+      style="fill:rgb(115, 123, 216);stroke:rgb(215, 223, 216);color:rgb(251, 251, 254);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto" />
     <text x="580" y="93" text-anchor="middle" dominant-baseline="central"
-      style="fill:rgb(159, 225, 203);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:14px;font-weight:500;text-anchor:middle;dominant-baseline:central">Augmented</text>
+      style="fill:rgb(215, 223, 216);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:14px;font-weight:500;text-anchor:middle;dominant-baseline:central">Augmented</text>
     <text x="580" y="111" text-anchor="middle" dominant-baseline="central"
-      style="fill:rgb(159, 225, 203);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:14px;font-weight:500;text-anchor:middle;dominant-baseline:central">data</text>
+      style="fill:rgb(215, 223, 216);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:14px;font-weight:500;text-anchor:middle;dominant-baseline:central">data</text>
   </g>
   <circle cx="537" cy="130" r="3" fill="var(--t)" opacity="0.25"
     style="fill:rgb(156, 154, 146);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.25;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto" />
