@@ -45,3 +45,11 @@ Then, we can run:
     ```
   </TabItem>
 </Tabs>
+
+:::info
+Note that relative paths are relative to the location of the configuration file itself, not to the current working directory from which `exec` is run.
+:::
+
+## Parameter syntax
+
+When providing parameter names that consist of more than one word, spaces, underscores, and hyphens are interchangeable. For instance, the following parameter names are equivalent and equally valid: `batch-size`, `batch size`, `batch_size`,
