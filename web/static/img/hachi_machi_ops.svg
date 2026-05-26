@@ -18,7 +18,7 @@
   <g
     style="fill:rgb(0, 0, 0);stroke:none;color:rgb(240, 240, 240);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">
     <rect x="40" y="60" width="80" height="80" rx="8" stroke-width="0.5"
-      style="fill:rgb(88, 68, 165);stroke:rgb(180, 178, 169);color:rgb(240, 240, 240);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto" />
+      style="fill:rgb(88, 68, 165);stroke:rgb(240, 240, 240);color:rgb(240, 240, 240);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto" />
     <text x="80" y="93" text-anchor="middle" dominant-baseline="central"
       style="fill:rgb(240, 240, 240);stroke:none;color:rgb(240, 240, 240);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:14px;font-weight:500;text-anchor:middle;dominant-baseline:central">Raw</text>
     <text x="80" y="111" text-anchor="middle" dominant-baseline="central"
@@ -126,7 +126,7 @@
   <g
     style="fill:rgb(0, 0, 0);stroke:none;color:rgb(240, 240, 240);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">
     <rect x="510" y="202" width="140" height="44" rx="8" stroke-width="0.5"
-      style="fill:rgb(88, 68, 165);stroke:rgb(180, 178, 169);color:rgb(240, 240, 240);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto" />
+      style="fill:rgb(88, 68, 165);stroke:rgb(240, 240, 240);color:rgb(240, 240, 240);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto" />
     <text x="580" y="224" text-anchor="middle" dominant-baseline="central"
       style="fill:rgb(240, 240, 240);stroke:none;color:rgb(240, 240, 240);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:14px;font-weight:500;text-anchor:middle;dominant-baseline:central">Model
       training</text>
