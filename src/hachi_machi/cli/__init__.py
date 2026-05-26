@@ -3,7 +3,8 @@ import datetime
 import webbrowser
 from .middleware import ClickMiddleware
 from ..console import Console
-from . import (fork, gen,
+from . import (fork,
+               gen,
                format,
                train,
                run,
@@ -25,12 +26,27 @@ __banner__ = f"""
 
 
 class CustomGroup(click.Group):
+    CMDS = [
+        'fork',
+        'gen',
+        'format',
+        'train',
+        'run',
+        'rec',
+        'exec',
+        'info',
+    ]
 
     @staticmethod
-    def open_docs(ctx, param, value):
+    def open_docs(ctx: click.Context, param, value):
         if not value or ctx.resilient_parsing:
             return
-        webbrowser.open("http://felipetovarhenao.github.io/hachi-machi")
+        subcmd = str(ctx.info_name)
+        route = ''
+        if subcmd in CustomGroup.CMDS:
+            route = f'docs/commands/{subcmd}'
+        webbrowser.open(
+            f"http://felipetovarhenao.github.io/hachi-machi/{route}")
         ctx.exit()
 
     @classmethod
