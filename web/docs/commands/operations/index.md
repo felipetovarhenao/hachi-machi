@@ -17,11 +17,11 @@ import TabItem from "@theme/TabItem";
   cmd: train
   input: data.json
   operations:
-    - sub(value=mean)
-    - div(value=std)
+    - sub(value=mean, axis=feature)
+    - div(value=std, axis=feature)
     - mulrand(range=(-0.1, 0.1), log=true)
-    - mul(value=std)
-    - add(value=mean)
+    - mul(value=std, axis=feature)
+    - add(value=mean, axis=feature)
   ```
   </TabItem>
   <TabItem value="toml" label="toml" default>
@@ -29,11 +29,11 @@ import TabItem from "@theme/TabItem";
     cmd = "train"
     input = "data.json"
     operations = [
-      "sub(value=mean)",
-      "div(value=std)",
+      "sub(value=mean, axis=feature)",
+      "div(value=std, axis=feature)",
       "mulrand(range=(-0.1, 0.1), log=true)",
-      "mul(value=std)",
-      "add(value=mean)",
+      "mul(value=std, axis=feature)",
+      "add(value=mean, axis=feature)",
     ]
     ```
   </TabItem>
@@ -45,12 +45,12 @@ Note that text-like values such as `mean` or `std` are not in quotes.
 
 In this example, the following series of operations will be applied to the input data:
 
-1. Subtract the mean
-2. Divide by its standard deviation
-3. Multiply by some normally distributed random value between `2 ** -0.1` and `2 ** 0.1`.
-4. Multiply by its standard deviation.
-5. Add mean to bring feature back to initial scale.
+1. Subtract the feature-wise mean
+2. Divide by its feature-wise standard deviation
+3. Multiply (i.e., scale) by some normally distributed random value between `2 ** -0.1` and `2 ** 0.1`.
+4. Multiply by its feature-wise standard deviation.
+5. Add feature-wise mean to bring feature back to initial scale.
 
-:::warning
-For any augmentation pipeline, make ensure your data always remains in a realistic range.
+:::caution
+For any augmentation pipeline, make ensure your data always remains in a realistic range. Poorly designed data augmentation pipelines might result in worse training outcomes.
 :::
