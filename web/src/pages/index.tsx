@@ -13,7 +13,7 @@ function HomepageHeader() {
   const { siteConfig } = useDocusaurusContext();
   const ref = useAnimation(
     "--hue-rot",
-    useCallback((t) => Math.sin(t / 1000) * 20, []),
+    useCallback((t) => -Math.cos(t / 1500) * 15, []),
     "deg",
   );
 
