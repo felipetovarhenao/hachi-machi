@@ -81,6 +81,7 @@ class Trainer:
 
         info = {"input_size": model.input_layer.input_size - dim_offset,
                 "output_size": model.output_layer.input_size - dim_offset,
+                "mixtures": len(model.rnn.mdn.net),
                 "mask":  mask,
                 'temporal': ['no', 'yes'][model.temporal],
                 'parameters': f'{num_params:,}', }
