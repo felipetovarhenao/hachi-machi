@@ -1,4 +1,4 @@
-- [] Test on Windows.
+- [x] Test on Windows.
 - [x] Fix spacing keys in config files.
 - [x] Adjust batch size
 - [] Send 1/0 status via OSC for session start/end.
