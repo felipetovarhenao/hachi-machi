@@ -24,7 +24,6 @@ class EventDataset(Dataset):
                                step=1)
             self.size = len(data)
             data = data.transpose(2, 1)
-            data = data[torch.randperm(n=self.size)]
 
         self.data = data
 
