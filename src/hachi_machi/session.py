@@ -84,12 +84,17 @@ class Session(BaseSession):
             self.output_size -= 1
         self.model.eval()
         self._last_time: float | None = None
-        self._timers: list[threading.Timer] = []
+        self._timers: set[threading.Timer] = set()
 
     def schedule(self, event: list, delay: float) -> None:
-        t = threading.Timer(delay, lambda: self.send(event[1:]))
+        def _fire():
+            self.send(event[1:])
+            with self._lock:
+                self._timers.discard(t)
+
+        t = threading.Timer(delay, _fire)
         t.daemon = True
-        self._timers.append(t)
+        self._timers.add(t)
         t.start()
 
     def predict(self, x: torch.Tensor) -> None:
@@ -129,9 +134,9 @@ class Session(BaseSession):
 
     def handle_reset(self, *_):
         with self._lock:
-            self.model.reset()
             [t.cancel() for t in self._timers]
             self._timers.clear()
+            self.model.reset()
             self._last_time = None
 
 
