@@ -15,6 +15,8 @@ A **Long Short-Term Memory** (LSTM) is a type of [recurrent neural network](http
 
 **Mixture Density Networks** are models that learn to output the parameters of a Gaussian mixture model—a weighted combination of normal distributions—such that the probability of the target output is high
 
+![Gaussian mixture](@site/static/img/gaussian_mixture.svg)
+
 One of the parameters we get to specify in our models is the number of Gaussians the model can learn. In the context of our **LSTM-MDN** architecture, a somewhat simplistic way to think about it is that it determines how many possible paths the model can take given some input to make the next prediction. Intuitively, more mixtures allow the model to approximate more complex distributions, capturing a wider variety of patterns in the training data.
 
 As such, the main parameters we can provide during training, via the `train` command, that directly affect the number of parameters or weights are:
