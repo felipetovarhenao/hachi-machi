@@ -43,6 +43,7 @@ const config: Config = {
   presets: [
     [
       "classic",
+
       {
         docs: {
           sidebarPath: "./sidebars.ts",
@@ -67,6 +68,10 @@ const config: Config = {
         // },
         theme: {
           customCss: "./src/css/custom.css",
+        },
+        gtag: {
+          trackingID: "G-GZLSJXLEFZ",
+          anonymizeIP: true,
         },
       } satisfies Preset.Options,
     ],
