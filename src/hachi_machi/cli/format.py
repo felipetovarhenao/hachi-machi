@@ -31,4 +31,5 @@ def format(**params):
             "categorical": True
         },
     }
-    FileIO.write(tensor, output_file, True, features=features)
+    FileIO.write(tensor, output_file, True, features=features, feature_names=[
+                 '0_pitch', '1_velocity', '2_duration', '3_channel'])

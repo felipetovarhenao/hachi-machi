@@ -51,7 +51,8 @@ class FileIO:
     def write_csv(cls, tensor: torch.Tensor, path: str, temporal: bool = False, **kwargs) -> None:
         n_features = tensor.shape[1]
         header = ["time"]
-        cols = [f"{i}" for i in range(n_features - int(temporal))]
+        cols = kwargs.get('feature_names', [
+                          f"{i}" for i in range(n_features - int(temporal))])
         features: dict = kwargs.get("features", {})
         if len(features) > 0:
             for (k, v) in features.items():
