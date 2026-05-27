@@ -1,3 +1,8 @@
+![version](https://img.shields.io/pypi/v/hachi-machi)
+![downloads](https://img.shields.io/pypi/dm/hachi-machi)
+![last_commit](https://img.shields.io/github/last-commit/felipetovarhenao/hachi-machi)
+![license](https://img.shields.io/pypi/l/hachi-machi)
+
 <img src="web/static/img/logo.svg" height="160px" />
 
 # hachi machi
