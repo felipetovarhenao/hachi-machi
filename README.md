@@ -1,7 +1,7 @@
-![version](https://img.shields.io/pypi/v/hachi-machi)
-![downloads](https://img.shields.io/pypi/dm/hachi-machi)
-![last_commit](https://img.shields.io/github/last-commit/felipetovarhenao/hachi-machi)
-![license](https://img.shields.io/pypi/l/hachi-machi)
+![version](https://img.shields.io/pypi/v/hachi-machi?style=for-the-badge)
+![downloads](https://img.shields.io/pypi/dm/hachi-machi?style=for-the-badge)
+![last_commit](https://img.shields.io/github/last-commit/felipetovarhenao/hachi-machi?style=for-the-badge)
+![license](https://img.shields.io/github/license/felipetovarhenao/hachi-machi?label=license&style=for-the-badge)
 
 <img src="web/static/img/logo.svg" height="160px" />
 
