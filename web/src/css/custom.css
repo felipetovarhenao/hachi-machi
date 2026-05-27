@@ -20,6 +20,9 @@
   --ifm-table-stripe-background: none;
 }
 
+.footer {
+  background-color: #373743;
+}
 table,
 th,
 td {
