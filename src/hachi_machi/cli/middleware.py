@@ -21,7 +21,7 @@ class ClickMiddleware:
         @click.option('--device', '-d',
                       type=click.Choice(self.get_available_devices()),
                       default=self.device,
-                      help='Compute device')
+                      help='Computing device. To list all available devices, run `hxmx devices`.')
         @click.option('--debug',
                       flag_value=True,
                       default=False,
@@ -86,7 +86,8 @@ class ClickMiddleware:
                 [f"cuda:{i}" for i in range(torch.cuda.device_count())])
 
         if torch.backends.mps.is_available():
-            devices.append("mps")
+            devices.extend(
+                [f"mps:{i}" for i in range(torch.mps.device_count())])
 
         if hasattr(torch, "xpu") and torch.xpu.is_available():
             devices.extend(

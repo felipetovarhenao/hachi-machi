@@ -8,7 +8,7 @@
 - [x] Add sort operation.
 - [] Add support for multivariate feature groups.
 - [x] add `rec` command.
-- [] Figure out fix for device listing now that docs are web based.
+- [x] Figure out fix for device listing now that docs are web based.
 - [x] Implement wildcard OSC route to let user know when route is invalid.
 - [x] Guardrails against masking all features.
 - [x] Add support for CSV data files. Consider also h5

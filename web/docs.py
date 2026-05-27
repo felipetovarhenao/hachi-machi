@@ -175,8 +175,11 @@ class AutoDoc:
                 default = f"`{p.default}`" if p.default is not None else "—"
                 default = default.replace('Sentinel.UNSET', '[]')
                 multiple = " *(multiple)*" if p.multiple else ""
-                type_label = AutoDoc._type_name(p.type).replace(
-                    'boolparamtype', 'boolean') + multiple
+                if p.name == 'device':
+                    type_label = 'choice (`auto`\|`cpu`\| ...)'
+                else:
+                    type_label = AutoDoc._type_name(p.type).replace(
+                        'boolparamtype', 'boolean') + multiple
                 help_text = (p.help or "").replace("|", "\\|")
                 rows.append(
                     f"| `{name}` | {type_label} | {default} | {help_text} |")

@@ -9,6 +9,7 @@ from . import (fork,
                train,
                run,
                rec,
+               devices,
                info)
 
 __banner__ = f"""
@@ -35,6 +36,7 @@ class CustomGroup(click.Group):
         'rec',
         'exec',
         'info',
+        'devices',
     ]
 
     @staticmethod
@@ -100,7 +102,8 @@ def exec(ctx, input):
         valid_params = [p.name for p in cmd.get_params(ctx)]
         for p in params:
             if p not in valid_params:
-                raise ValueError(f"Invalid argument name for {cmd_name!r} command: {p!r}")
+                raise ValueError(
+                    f"Invalid argument name for {cmd_name!r} command: {p!r}")
     except Exception as e:
         Console.error(e.args[0])
         exit()
@@ -114,3 +117,4 @@ main.add_command(fork.fork)
 main.add_command(info.info)
 main.add_command(format.format)
 main.add_command(rec.rec)
+main.add_command(devices.devices)
