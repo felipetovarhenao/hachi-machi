@@ -1,3 +1,8 @@
+---
+sidebar_position: 4
+slug: recording
+---
+
 # Recording data
 
 More often than not, we will want to train our models on bespoke data, instead of standardized and readily available formats such as MIDI—e.g., motion or sensor data. To this end, **hachi machi** supports recording sequential data via the `rec` command, which makes it easier to generate custom sequential datasets, in either CSV, or JSON format, ready for model training.
