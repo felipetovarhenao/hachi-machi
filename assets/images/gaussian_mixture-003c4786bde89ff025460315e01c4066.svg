@@ -1,0 +1,106 @@
+<svg width="100%" viewBox="0 0 680 300" role="img" xmlns="http://www.w3.org/2000/svg" style="">
+
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6"
+      orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round"
+        stroke-linejoin="round" />
+    </marker>
+    <mask id="imagine-text-gaps-dh70v5" maskUnits="userSpaceOnUse">
+      <rect x="0" y="0" width="680" height="320" fill="white" />
+      <rect x="151.3333282470703" y="254.89999389648438" width="21.333333015441895" height="19.399999618530273"
+        fill="black" rx="2" />
+      <rect x="335.01666259765625" y="254.89999389648438" width="21.966666221618652" height="19.399999618530273"
+        fill="black" rx="2" />
+      <rect x="447.0916748046875" y="254.89999389648438" width="21.81666660308838" height="19.399999618530273"
+        fill="black" rx="2" />
+      <rect x="34.900001525878906" y="269.8999938964844" width="99.96666717529297" height="19.399999618530273"
+        fill="black" rx="2" />
+      <rect x="38.900001525878906" y="185.89999389648438" width="71.78333282470703" height="19.399999618530273"
+        fill="black" rx="2" />
+      <rect x="24.899999618530273" y="-14.100000381469727" width="66.5" height="19.399999618530273" fill="black"
+        rx="2" />
+      <rect x="134.89999389648438" y="-14.100000381469727" width="69.01666641235352" height="19.399999618530273"
+        fill="black" rx="2" />
+      <rect x="244.89999389648438" y="-14.100000381469727" width="68.73333358764648" height="19.399999618530273"
+        fill="black" rx="2" />
+      <rect x="354.8999938964844" y="-14.100000381469727" width="54.16666793823242" height="19.399999618530273"
+        fill="black" rx="2" />
+    </mask>
+  </defs>
+
+
+
+
+  <line x1="40" y1="248" x2="640" y2="248" stroke="var(--color-border-secondary)" stroke-width="0.5"
+    style="fill:rgb(0, 0, 0);stroke:rgba(222, 220, 209, 0.5);color:rgb(251, 251, 254);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto" />
+
+
+
+  <!-- G1: mu=0.22, sigma=0.07, w=0.35 — blue dashed -->
+  <path
+    d="M50,247.9 L57,247.7 L64,247.1 L71,245.6 L78,242.4 L85,236.9 L92,228.5 L99,217.3 L106,204.0 L113,189.5 L120,175.0 L127,161.7 L134,150.5 L141,142.1 L148,136.6 L155,133.8 L162,133.5 L169,135.7 L176,140.0 L183,146.2 L190,153.8 L197,162.2 L204,171.0 L211,179.8 L218,188.2 L225,196.0 L232,203.0 L239,209.1 L246,214.4 L253,218.9 L260,222.7 L267,225.9 L274,228.5 L281,230.7 L288,232.5 L295,234.0 L302,235.2 L309,236.2 L316,237.1 L323,237.8 L330,238.4 L337,238.9 L344,239.3 L351,239.7 L358,240.0 L365,240.2 L372,240.5 L379,240.7 L386,240.8 L393,241.0 L400,241.1 L430,241.5 L480,242.5 L530,244.0 L580,246.0 L630,247.8"
+    fill="none" stroke="#684ab5" stroke-width="1.5" stroke-dasharray="6 3" opacity="0.85"
+    mask="url(#imagine-text-gaps-dh70v5)"
+    style="fill:none;stroke:rgb(157, 110, 239);color:rgb(251, 251, 254);stroke-width:2px;stroke-dasharray:6px, 3px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.85;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto" />
+
+
+  <path
+    d="M50,247.9 L71,247.6 L92,246.6 L106,245.2 L113,244.1 L120,242.5 L127,240.3 L134,237.3 L141,233.3 L148,228.2 L155,222.0 L162,214.8 L169,206.6 L176,197.8 L183,188.6 L190,179.2 L197,170.0 L204,161.2 L211,153.2 L218,146.2 L225,140.5 L232,136.2 L239,133.5 L246,132.5 L253,133.2 L260,135.5 L267,139.4 L274,144.7 L281,151.1 L288,158.4 L295,166.4 L302,174.8 L309,183.3 L316,191.6 L323,199.5 L330,206.9 L337,213.6 L344,219.5 L351,224.6 L358,228.9 L365,232.5 L372,235.4 L379,237.7 L386,239.5 L393,240.8 L400,241.8 L407,242.5 L414,243.1 L421,243.6 L428,244.0 L435,244.3 L450,244.9 L480,245.9 L530,247.0 L580,247.7 L630,248.0"
+    fill="none" stroke="#d788cb" stroke-width="1.5" stroke-dasharray="6 3" opacity="0.85"
+    style="fill:none;stroke:rgb(197, 130, 199);color:rgb(251, 251, 254);stroke-width:2px;stroke-dasharray:6px, 3px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.85;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto" />
+
+
+  <path
+    d="M50,248.0 L150,247.9 L200,247.5 L240,246.5 L260,245.4 L270,244.4 L280,242.8 L290,240.4 L300,237.0 L310,232.5 L320,226.7 L330,219.6 L340,211.4 L350,202.5 L360,193.2 L370,184.0 L375,179.5 L380,175.2 L385,171.3 L390,168.0 L395,165.5 L400,164.0 L405,163.5 L410,164.1 L415,165.8 L420,168.5 L425,172.2 L430,176.8 L440,187.8 L450,199.8 L460,211.6 L470,222.3 L480,231.5 L490,238.6 L500,243.2 L510,245.8 L520,247.1 L540,247.8 L580,248.0 L630,248.0"
+    fill="none" stroke="#686cde" stroke-width="1.5" stroke-dasharray="6 3" opacity="0.85"
+    style="fill:none;stroke:rgb(115, 123, 216);color:rgb(251, 251, 254);stroke-width:2px;stroke-dasharray:6px, 3px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.85;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto" />
+
+
+
+  <line x1="162" y1="128" x2="162" y2="256" stroke="var(--color-border-tertiary)" stroke-width="0.5"
+    stroke-dasharray="3 3" mask="url(#imagine-text-gaps-dh70v5)"
+    style="fill:rgb(0, 0, 0);stroke:rgba(222, 220, 209, 0.5);color:rgb(251, 251, 254);stroke-width:0.5px;stroke-dasharray:3px, 3px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto" />
+  <line x1="246" y1="132" x2="246" y2="256" stroke="var(--color-border-tertiary)" stroke-width="0.5"
+    stroke-dasharray="3 3" mask="url(#imagine-text-gaps-dh70v5)"
+    style="fill:rgb(0, 0, 0);stroke:rgba(222, 220, 209, 0.5);color:rgb(251, 251, 254);stroke-width:0.5px;stroke-dasharray:3px, 3px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto" />
+  <line x1="408" y1="122" x2="408" y2="256" stroke="var(--color-border-tertiary)" stroke-width="0.5"
+    stroke-dasharray="3 3" mask="url(#imagine-text-gaps-dh70v5)"
+    style="fill:rgb(0, 0, 0);stroke:rgba(222, 220, 209, 0.5);color:rgb(251, 251, 254);stroke-width:0.5px;stroke-dasharray:3px, 3px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto" />
+
+  <text x="162" y="269" text-anchor="middle" fill="var(--color-text-secondary)"
+    style="fill:rgb(194, 192, 182);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:12px;font-weight:400;text-anchor:middle;dominant-baseline:auto">μ₁</text>
+  <text x="246" y="269" text-anchor="middle" fill="var(--color-text-secondary)"
+    style="fill:rgb(194, 192, 182);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:12px;font-weight:400;text-anchor:middle;dominant-baseline:auto">μ₂</text>
+  <text x="408" y="269" text-anchor="middle" fill="var(--color-text-secondary)"
+    style="fill:rgb(194, 192, 182);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:12px;font-weight:400;text-anchor:middle;dominant-baseline:auto">μ₃</text>
+
+
+  <text x="40" y="284" fill="var(--color-text-tertiary)"
+    style="fill:rgb(194, 192, 182);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:12px;font-weight:400;text-anchor:start;dominant-baseline:auto">output
+    values →</text>
+  <text x="44" y="200" text-anchor="start" fill="var(--color-text-tertiary)" transform="rotate(-90,44,200)"
+    style="fill:rgb(194, 192, 182);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:12px;font-weight:400;text-anchor:start;dominant-baseline:auto">probability</text>
+
+
+  <g transform="translate(40, 55)"
+    style="fill:rgb(0, 0, 0);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">
+    <line x1="0" y1="-3" x2="24" y2="-3" stroke="#684ab5" stroke-width="1.5" stroke-dasharray="5 2"
+      style="fill:rgb(0, 0, 0);stroke:rgb(157, 110, 239);color:rgb(251, 251, 254);stroke-width:2px;stroke-dasharray:5px, 2px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto" />
+    <text x="30" y="0" fill="var(--color-text-secondary)"
+      style="fill:rgb(194, 192, 182);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:12px;font-weight:400;text-anchor:start;dominant-baseline:auto">gaussian
+      1</text>
+    <line x1="110" y1="-3" x2="134" y2="-3" stroke="#d788cb" stroke-width="1.5" stroke-dasharray="5 2"
+      style="fill:rgb(0, 0, 0);stroke:rgb(197, 130, 199);color:rgb(251, 251, 254);stroke-width:2px;stroke-dasharray:5px, 2px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto" />
+    <text x="140" y="0" fill="var(--color-text-secondary)"
+      style="fill:rgb(194, 192, 182);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:12px;font-weight:400;text-anchor:start;dominant-baseline:auto">gaussian
+      2</text>
+    <line x1="220" y1="-3" x2="244" y2="-3" stroke="#686cde" stroke-width="1.5" stroke-dasharray="5 2"
+      style="fill:rgb(0, 0, 0);stroke:rgb(115, 123, 216);color:rgb(251, 251, 254);stroke-width:2px;stroke-dasharray:5px, 2px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto" />
+    <text x="250" y="0" fill="var(--color-text-secondary)"
+      style="fill:rgb(194, 192, 182);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:12px;font-weight:400;text-anchor:start;dominant-baseline:auto">gaussian
+      3</text>
+
+
+  </g>
+</svg>
