@@ -4,6 +4,7 @@
 - [] Send 1/0 status via OSC for session start/end.
 - [] Add support for pre-trained models
 - [] Add support for multi-model hosting.
+- [] Try implementing truncated backpropagation through time.
 - [x] Add sort operation.
 - [] Add support for multivariate feature groups.
 - [x] add `rec` command.
