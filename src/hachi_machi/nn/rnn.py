@@ -39,8 +39,7 @@ class RecurrentMDN(nn.Module):
              x: torch.Tensor,
              hidden: torch.Tensor | None) -> tuple[torch.Tensor, torch.Tensor]:
         pi, mu, sigma, hidden = self.forward(x, hidden)
-        log = torch.log(pi.squeeze())
-        k = torch.multinomial(input=torch.exp(log),
+        k = torch.multinomial(input=pi,
                               num_samples=1).item()
         y = torch.normal(mean=mu[0, 0, :, k],
                          std=sigma[0, 0, :, k]).unsqueeze(0).unsqueeze(0)
