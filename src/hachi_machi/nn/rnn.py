@@ -30,7 +30,9 @@ class RecurrentMDN(nn.Module):
                                          dropout=dropout,
                                          slope=slope).to(device)
 
-    def forward(self, x: torch.Tensor, hidden=None) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+    def forward(self,
+                x: torch.Tensor,
+                hidden: None | torch.Tensor = None) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         y, hidden = self.lstm(x, hidden)
         pi, mu, sigma = self.mdn(y)
         return pi, mu, sigma, hidden
