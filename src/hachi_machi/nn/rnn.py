@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 from .mdn import MixtureDensityNetwork
+from .lstm import StackedLSTM
 
 
 class RecurrentMDN(nn.Module):
@@ -19,11 +20,14 @@ class RecurrentMDN(nn.Module):
         super().__init__(*args, **kwargs)
         self.input_size = input_size
         self.output_size = output_size
-        self.lstm = nn.LSTM(input_size=self.input_size,
-                            hidden_size=hidden_size,
-                            num_layers=num_layers,
-                            dropout=0 if num_layers == 1 else dropout,
-                            batch_first=True).to(device)
+        lstm_kwargs = {
+            'input_size': self.input_size,
+            'hidden_size': hidden_size,
+            'num_layers': num_layers,
+            'dropout': 0 if num_layers == 1 else dropout
+        }
+        self.lstm = (nn.LSTM(**lstm_kwargs,
+                             batch_first=True) if num_layers == 1 else StackedLSTM(**lstm_kwargs)).to(device)
         self.mdn = MixtureDensityNetwork(k=k,
                                          num_features=hidden_size,
                                          out_features=self.output_size,
