@@ -58,15 +58,15 @@
 
 
 
-  <line x1="162" y1="128" x2="162" y2="256" stroke="var(--color-border-tertiary)" stroke-width="0.5"
+  <line x1="162" y1="135" x2="162" y2="250" stroke="var(--color-border-tertiary)" stroke-width="0.5"
     stroke-dasharray="3 3" mask="url(#imagine-text-gaps-dh70v5)"
-    style="fill:rgb(0, 0, 0);stroke:rgba(222, 220, 209, 0.5);color:rgb(251, 251, 254);stroke-width:0.5px;stroke-dasharray:3px, 3px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto" />
-  <line x1="246" y1="132" x2="246" y2="256" stroke="var(--color-border-tertiary)" stroke-width="0.5"
+    style="fill:rgb(0, 0, 0);stroke:rgba(222, 220, 209, 0.5);color:rgb(251, 251, 254);stroke-width:1px;stroke-dasharray:3px, 3px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto" />
+  <line x1="246" y1="132" x2="246" y2="250" stroke="var(--color-border-tertiary)" stroke-width="0.5"
     stroke-dasharray="3 3" mask="url(#imagine-text-gaps-dh70v5)"
-    style="fill:rgb(0, 0, 0);stroke:rgba(222, 220, 209, 0.5);color:rgb(251, 251, 254);stroke-width:0.5px;stroke-dasharray:3px, 3px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto" />
-  <line x1="408" y1="122" x2="408" y2="256" stroke="var(--color-border-tertiary)" stroke-width="0.5"
+    style="fill:rgb(0, 0, 0);stroke:rgba(222, 220, 209, 0.5);color:rgb(251, 251, 254);stroke-width:1px;stroke-dasharray:3px, 3px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto" />
+  <line x1="408" y1="162" x2="408" y2="250" stroke="var(--color-border-tertiary)" stroke-width="0.5"
     stroke-dasharray="3 3" mask="url(#imagine-text-gaps-dh70v5)"
-    style="fill:rgb(0, 0, 0);stroke:rgba(222, 220, 209, 0.5);color:rgb(251, 251, 254);stroke-width:0.5px;stroke-dasharray:3px, 3px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto" />
+    style="fill:rgb(0, 0, 0);stroke:rgba(222, 220, 209, 0.5);color:rgb(251, 251, 254);stroke-width:1px;stroke-dasharray:3px, 3px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto" />
 
   <text x="162" y="269" text-anchor="middle" fill="var(--color-text-secondary)"
     style="fill:rgb(194, 192, 182);stroke:none;color:rgb(251, 251, 254);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:12px;font-weight:400;text-anchor:middle;dominant-baseline:auto">μ₁</text>
