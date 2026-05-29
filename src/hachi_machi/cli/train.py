@@ -21,7 +21,7 @@ from ..ops.operator import DataOperator
 @click.option('--mixtures', '-m',
               default=10,
               type=int,
-              help='Number of Gaussian mixtures in the model.')
+              help='Number of Gaussian mixture components.')
 @click.option('--layers', '-l',
               default=1,
               help='Number of recurrent layers.',
@@ -48,10 +48,10 @@ from ..ops.operator import DataOperator
               help='Number of iterations the model is allowed to not improve before stopping training.')
 @click.option('--dropout',
               default=0.25,
-              help='Dropout rate.')
+              help='Dropout rate. During training, randomly zero some of the elements of the input data. Useful to prevent over-fitting.')
 @click.option('--betas',
               default=[0.9, 0.99],
-              help='Betas for AdamW (Adaptive Moment Estimation) optimizer.',
+              help='Coefficients used for computing running averages of gradient and its square, via _Adaptive Moment Estimation_ (Adam) optimizer.',
               type=click.FloatRange(0.1, 0.995),
               nargs=2)
 @click.option('--slope',
@@ -70,7 +70,7 @@ from ..ops.operator import DataOperator
 #               multiple=True)
 @click.option('--operations', '-op',
               type=str,
-              help='Data augmentation operation(s) to stochastically apply during training.',
+              help='Data augmentation operation(s) to stochastically apply during training. See [operations](operations)',
               multiple=True)
 @M([
     ('input', *FileIO.EXT),

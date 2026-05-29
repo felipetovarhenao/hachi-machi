@@ -17,7 +17,7 @@ from ..io import FileIO
                                 dir_okay=False,
                                 resolve_path=True,))
 @click.option('--operations', '-op',
-              help='Data augmentation operation(s) to stochastically apply during training.',
+              help='Data augmentation operation(s) to stochastically apply during training. See [operations](operations).',
               type=str,
               multiple=True)
 @M.seed()
