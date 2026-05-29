@@ -129,7 +129,7 @@ class Session(BaseSession):
         if nargs == self.output_size:
             x = x[self.model.input_mask]
         else:
-            x = x[-self.input_size:]
+            x = x[-(self.input_size + self.model.temporal):]
         self.predict(x)
 
     def handle_reset(self, *_):
