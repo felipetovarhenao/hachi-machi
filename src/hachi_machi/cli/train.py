@@ -58,11 +58,11 @@ from ..ops.operator import DataOperator
               default=1e-5,
               type=click.FloatRange(0, max_open=True),
               help='Negative slope for Leaky ReLU activations.')
-@click.option('--regularization', '-r',
+@click.option('--noise', '-n',
               default=[0, 0],
               type=click.FloatRange(0, 1),
               nargs=2,
-              help='Adaptive noise regularization, as a pair of _standard deviation_ and _decay factor_ values, respectively.  Use `[0, *]` for no regularization.')
+              help='Adaptive weight noise parameters, as a pair of _standard deviation_ and _decay factor_ values, respectively. Adds Gaussian noise to the model weights during training, to prevent overfitting.')
 @M.seed(1)
 # @click.option('--transforms', '-t',
 #               type=click.Choice(T.TransformFactory.options()),
@@ -125,7 +125,7 @@ def train(**params):
                       batch_size=params['batch_size'],
                       lr=params['lr'],
                       betas=tuple(params['betas']),
-                      adaptive_noise=tuple(params['regularization']))
+                      adaptive_noise=tuple(params['noise']))
     trainer.run(file=params['output'],
                 epochs=params['epochs'],
                 patience=params['patience'])
