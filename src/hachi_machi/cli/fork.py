@@ -20,7 +20,7 @@ from ..io import FileIO
               help='Data augmentation operation(s) to stochastically apply during training.',
               type=str,
               multiple=True)
-@click.option('--seed', '-s', default=0)
+@M.seed()
 @M([
     ('input', *FileIO.EXT),
     ('output', *FileIO.EXT),

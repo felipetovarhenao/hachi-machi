@@ -17,6 +17,13 @@ class ClickMiddleware:
         self.path_args = path_args
         self.device = device
 
+    @staticmethod
+    def seed(default: int = 0):
+        return click.option('--seed', '-s',
+                            type=int,
+                            default=default,
+                            help='Random seed. Use `0` for non-deterministic results.')
+
     def wrapper(self, func):
         @click.option('--device', '-d',
                       type=click.Choice(self.get_available_devices()),

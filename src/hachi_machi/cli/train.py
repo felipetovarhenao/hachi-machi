@@ -63,9 +63,7 @@ from ..ops.operator import DataOperator
               type=click.FloatRange(0, 1),
               nargs=2,
               help='Adaptive noise regularization, as a pair of _standard deviation_ and _decay factor_ values, respectively.  Use `[0, *]` for no regularization.')
-@click.option('--seed', '-s',
-              default=1,
-              help='Random seed. Use 0 for non-deterministic training.')
+@M.seed(1)
 # @click.option('--transforms', '-t',
 #               type=click.Choice(T.TransformFactory.options()),
 #               help='Optional transform layers.',
