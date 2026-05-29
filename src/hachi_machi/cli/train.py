@@ -18,32 +18,32 @@ from ..ops.operator import DataOperator
 @click.argument('output',
                 default='model.pt',
                 type=click.Path(file_okay=True, dir_okay=False))
-@click.option('--mixtures',
+@click.option('--mixtures', '-m',
               default=10,
               type=int,
               help='Number of Gaussian mixtures in the model.')
-@click.option('--layers',
+@click.option('--layers', '-l',
               default=1,
               help='Number of recurrent layers.',
               type=int)
-@click.option('--hidden-size',
+@click.option('--hidden-size', '-hs',
               default=120,
               type=int,
               help='Number of dimensions to use for hidden representation.')
-@click.option('--context',
+@click.option('--context', '-c',
               default=200,
               type=int,
               help='Length of sequence segments to use during training.')
-@click.option('--epochs',
+@click.option('--epochs', '-e',
               default=1000,
               help='Maximum number of epochs.')
-@click.option('--batch-size',
+@click.option('--batch-size', '-bs',
               default=32,
               help='Batch size.')
 @click.option('--lr',
               default=0.0025,
               help='Learning rate.')
-@click.option('--patience',
+@click.option('--patience', '-p',
               default=15,
               help='Number of iterations the model is allowed to not improve before stopping training.')
 @click.option('--dropout',
@@ -58,7 +58,12 @@ from ..ops.operator import DataOperator
               default=1e-5,
               type=click.FloatRange(0, max_open=True),
               help='Negative slope for Leaky ReLU activations.')
-@click.option('--seed',
+@click.option('--regularization', '-r',
+              default=[0, 0],
+              type=click.FloatRange(0, 1),
+              nargs=2,
+              help='Adaptive noise regularization, as a pair of _standard deviation_ and _decay factor_ values, respectively.  Use `[0, *]` for no regularization.')
+@click.option('--seed', '-s',
               default=1,
               help='Random seed. Use 0 for non-deterministic training.')
 # @click.option('--transforms', '-t',
@@ -121,7 +126,8 @@ def train(**params):
                       dataset=dataset,
                       batch_size=params['batch_size'],
                       lr=params['lr'],
-                      betas=tuple(params['betas']),)
+                      betas=tuple(params['betas']),
+                      adaptive_noise=tuple(params['regularization']))
     trainer.run(file=params['output'],
                 epochs=params['epochs'],
                 patience=params['patience'])

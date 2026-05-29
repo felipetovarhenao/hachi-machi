@@ -7,6 +7,7 @@ from .console import Console
 from .nn import PerformerModel
 from .loss import NLLLoss
 from .data import EventDataset, EventLoader
+from .contexts import AdaptiveNoise, NullContext
 from .utils import validate_path, progress
 
 
@@ -17,7 +18,8 @@ class Trainer:
                  dataset: EventDataset,
                  batch_size: int = 32,
                  lr: float = 0.001,
-                 betas: tuple[float, float] = (0.9, 0.99)):
+                 betas: tuple[float, float] = (0.9, 0.99),
+                 adaptive_noise: tuple[float, float] = (0, 0)):
         self.model = model
         self.dataset = dataset
         self.file = None
@@ -35,6 +37,10 @@ class Trainer:
         self.min_loss = float('inf')
         self.loss = NLLLoss()
         self.display = None
+        std, decay = adaptive_noise
+        self.regularization = AdaptiveNoise(self.model,
+                                            std=std,
+                                            decay=decay) if std > 0 else NullContext()
 
     def _loss(self, x) -> float:
         return 1 / (1 + math.exp(-min(x, 709)))
@@ -123,8 +129,9 @@ class Trainer:
             train_loss = 0
             train_batches = 0
             for (x, y) in self.loader:
-                y = self.model.output_layer(y)
-                pi, mu, sigma, _ = self.model(x)
+                with self.regularization(epoch):
+                    y = self.model.output_layer(y)
+                    pi, mu, sigma, _ = self.model(x)
                 loss: torch.Tensor = self.loss(pi, mu, sigma, y)
                 self.optim.zero_grad()
                 loss.backward()
