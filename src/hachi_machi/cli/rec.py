@@ -39,9 +39,11 @@ def rec(**params):
 
     ### Input routes
 
-    - `/input`: Sequence event to record
+    - `/input <list>`: Event to record. The number of event elements must match the pre-defined feature size.
 
     - `/stop`: Writes recorded data to disk, and stops the recording session.
+
+    - `/reset`: Clears recorded events.
     """
     path = params['output']
     size = params['size']

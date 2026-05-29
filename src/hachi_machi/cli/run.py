@@ -23,8 +23,10 @@ def run(**config):
 
     ### Input routes
 
-    - `/input`: Receives an event for prediction. 
+    - `/input <list>`: Triggers a new prediction, given an list of event features. 
     The number of event features must match either the masked or unmasked event size.
+
+    - `/sample`: Generates a random sample from the learned distribution. Useful for kicking off an auto-regressive loop. 
 
     - `/reset`: Resets the model's hidden state (i.e., it's _context_), as well as cancelling any scheduled predictions, if the model is temporal.
 
