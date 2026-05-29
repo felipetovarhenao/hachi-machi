@@ -56,7 +56,7 @@ class AutoDoc:
 
             new_parents = parents + [name] if parents else [name]
             child_counter = itertools.count(1)
-            for sub_name, sub_cmd in (getattr(cmd, "commands", {}) or {}).items():
+            for sub_name, sub_cmd in sorted((getattr(cmd, "commands", {}) or {}).items(), key=lambda x: x[0]):
                 self._walk(sub_cmd, sub_name, new_parents,
                            subdir, child_counter)
         else:
