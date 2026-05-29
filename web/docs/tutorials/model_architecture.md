@@ -19,8 +19,8 @@ A **Long Short-Term Memory** (LSTM) is a type of [recurrent neural network](http
 
 One of the parameters we get to specify in our models is the number of Gaussians the model can learn. In the context of our **LSTM-MDN** architecture, a somewhat simplistic way to think about it is that it determines how many possible paths the model can take given some input to make the next prediction. Intuitively, more mixtures allow the model to approximate more complex distributions, capturing a wider variety of patterns in the training data.
 
-As such, the main parameters we can provide during training, via the `train` command, that directly affect the number of parameters or weights are:
+As such, the main parameters we can provide during training, via the `train` command, that directly affect the number of model parameters or weights, are:
 
 - `--mixtures`: The number of Gaussian mixtures in the MDN—i.e., how many _fuzzy_ decision branches should the model learn.
 - `--hidden-size`: The dimensionality of the LSTM's hidden state vector at each timestep—i.e., the capacity of the model's learned representation at each step in the sequence.
-- `--layers`: The number of sequential layers for the LSTM. More layers allow the model to learn sequences hierarchically, though it also increase the risk of overfitting and training instability, with diminishing returns beyond a certain depth. In many cases, a single layer is enough.
+- `--layers`: The number of sequential layers for the LSTM. More layers allow the model to learn sequences hierarchically, though it may also increase the risk of overfitting and training instability, with diminishing returns beyond a certain depth.
