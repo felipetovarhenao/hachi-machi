@@ -116,6 +116,11 @@ class Session(BaseSession):
         else:
             self.send(event)
 
+    def handle_sample(self, *_):
+        size = self.model.output_layer.output_size
+        y = self.model.output_layer(torch.randn(size), True)
+        self.send(y[-self.output_size:].tolist())
+
     def handle_input(self, *args):
         nargs = len(args)
         if nargs not in [self.input_size, self.output_size]:
@@ -129,7 +134,7 @@ class Session(BaseSession):
         if nargs == self.output_size:
             x = x[self.model.input_mask]
         else:
-            x = x[-(self.input_size + self.model.temporal):]
+            x = x[-self.model.input_size:]
         self.predict(x)
 
     def handle_reset(self, *_):
