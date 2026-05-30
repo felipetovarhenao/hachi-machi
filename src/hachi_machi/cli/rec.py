@@ -59,7 +59,9 @@ def rec(**params):
             if dim < 0 or dim >= size:
                 raise IndexError(
                     f"Dimension {dim} outside of specified size range. Should be: 0 <= dim < {size}")
-            features[dim] = {key: True}
+            if dim not in features:
+                features[dim] = {}
+            features[dim][key] = True
 
     s = RecordingSession(path=path,
                          feature_size=size,
