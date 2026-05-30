@@ -21,7 +21,7 @@ const config: Config = {
   url: "https://hachi-machi.com/",
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: "/hachi-machi/",
+  baseUrl: "/",
   organizationName: "felipetovarhenao", // Usually your GitHub org/user name.
   projectName: "hachi-machi", // Usually your repo name.
   deploymentBranch: "gh-pages",
