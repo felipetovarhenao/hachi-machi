@@ -83,6 +83,14 @@ const config: Config = {
     colorMode: {
       respectPrefersColorScheme: true,
     },
+    announcementBar: {
+      id: "alpha-banner",
+      content:
+        '<span class="alpha-banner">🧪 <b>hachi machi</b> is currently in alpha testing. If you would like to participate, please <a href="mailto:felipe.tovar.henao@gmail.com">reach out</a> 🧪</span>',
+      backgroundColor: "#409458",
+      textColor: "#ffffff",
+      isCloseable: true,
+    },
     navbar: {
       title: "hachi machi",
       logo: {
