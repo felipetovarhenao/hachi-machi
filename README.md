@@ -7,7 +7,7 @@
 
 # hachi machi
 
-To learn more, please visit: https://felipe-tovar-henao.com/hachi-machi
+To learn more, please visit: https://hachi-machi.com
 
 ## Development setup
 
