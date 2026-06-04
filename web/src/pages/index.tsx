@@ -54,17 +54,17 @@ export default function Home(): ReactNode {
         <YouTubePlaylist
           title="video tutorials"
           videoIds={[
-            "ElBlmAvMCvE",
-            "hxFFCmgm2-k",
-            "DJUsaROo3aE",
-            "33-_O9Di9NU",
-            "qLPtbkkQy-k",
-            "pVFOOMo0DdM",
-            "WEJU1VT5rWw",
-            "oqUp-1yn5Sw",
-            "vhm7w7jyBfY",
-            "tl9ZJbkkHGg",
-            "4xwhu5K04hY",
+            "Kvzl3Y3ZbwM",
+            "R9vMuaHQfB0",
+            "_Z8_9FDcG4Y",
+            "tvDuF94ZP7Y",
+            "FwfK8vLKG6M",
+            "Oug-8zPH12c",
+            "9GdPr2y0w0o",
+            "Z5IFn4GuJdY",
+            "OXQnHzj2yeU",
+            "GBqf0pKYgzs",
+            "10Jjl0_FBeI",
           ]}
         />
       </main>

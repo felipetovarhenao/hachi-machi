@@ -1,23 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import styles from "./styles.module.css";
 
-/**
- * YoutubePlaylist
- *
- * Props:
- *   videoIds: string[]   — ordered list of YouTube video IDs
- *   title?: string       — optional section heading
- *
- * Example usage in your landing page (index.tsx):
- *
- *   import YoutubePlaylist from "@site/src/components/YoutubePlaylist";
- *
- *   <YoutubePlaylist
- *     title="Video Tutorials"
- *     videoIds={["dQw4w9WgXcQ", "9bZkp7q19f0", "..."]}
- *   />
- */
-
 interface VideoCardProps {
   videoId: string;
 }
@@ -34,7 +17,6 @@ interface OEmbedResponse {
 function VideoCard({ videoId }: VideoCardProps): React.ReactElement {
   const [title, setTitle] = useState<string | null>(null);
 
-  // oEmbed gives us the title without an API key
   useEffect(() => {
     fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`)
       .then((r) => r.json() as Promise<OEmbedResponse>)
