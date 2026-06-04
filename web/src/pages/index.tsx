@@ -4,6 +4,7 @@ import Link from "@docusaurus/Link";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import Layout from "@theme/Layout";
 import HomepageFeatures from "@site/src/components/HomepageFeatures";
+import YouTubePlaylist from "@site/src/components/YouTubePlaylist";
 import Heading from "@theme/Heading";
 import useAnimation from "../hooks/useAnimation";
 
@@ -50,6 +51,22 @@ export default function Home(): ReactNode {
       <HomepageHeader />
       <main>
         <HomepageFeatures />
+        <YouTubePlaylist
+          title="video tutorials"
+          videoIds={[
+            "ElBlmAvMCvE",
+            "hxFFCmgm2-k",
+            "DJUsaROo3aE",
+            "33-_O9Di9NU",
+            "qLPtbkkQy-k",
+            "pVFOOMo0DdM",
+            "WEJU1VT5rWw",
+            "oqUp-1yn5Sw",
+            "vhm7w7jyBfY",
+            "tl9ZJbkkHGg",
+            "4xwhu5K04hY",
+          ]}
+        />
       </main>
     </Layout>
   );
