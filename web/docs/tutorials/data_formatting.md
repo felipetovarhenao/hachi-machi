@@ -5,6 +5,7 @@ slug: data-format
 
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
+import VideoCard from "@site/src/components/VideoCard";
 
 # Data format
 
@@ -105,6 +106,8 @@ By default, all features are treated as **continuous**—that is, they can take 
 
 ### Categorical
 
+<VideoCard videoId="GBqf0pKYgzs" />
+
 Features can also be declared **categorical**, which is appropriate for discrete identifiers such as MIDI channels or ON/OFF states. Doing so improves model training by changing how those features are encoded internally.
 
 <Tabs groupId="config-files">
@@ -148,6 +151,8 @@ Categorical values not present in the data won't be recognized by the model duri
 :::
 
 ## Masked features
+
+<VideoCard videoId="OXQnHzj2yeU" />
 
 During real-time interaction, we will often want (or need) the model to predict features we can't realistically know at the moment we want to predict the next event. In the case of our MIDI data, a very obvious example of this is not knowing how long the current note will be at the moment it starts. The desired behavior can be represented as follows:
 

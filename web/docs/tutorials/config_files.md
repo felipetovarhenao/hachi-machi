@@ -5,10 +5,13 @@ slug: config-files
 
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
+import VideoCard from "@site/src/components/VideoCard";
 
 # Configuration files
 
 **hachi machi** supports executing commands through configuration files instead of passing them directly in the terminal, as either [YAML](https://www.datacamp.com/blog/what-is-yaml) or [TOML](https://toml.io/) files, via the `exec` command. This is particularly useful for model training, which has numerous parameters that can quickly get out of hand and hard to tinker with directly from the terminal.
+
+<VideoCard videoId="10Jjl0_FBeI" />
 
 All configuration files require specifying the command to execute via the `cmd` key along with any required arguments for that command. Below is an example of a basic configuration file for the `gen` command:
 
@@ -53,3 +56,5 @@ Note that relative paths are relative to the location of the configuration file 
 ## Parameter syntax
 
 When providing parameter names that consist of more than one word, spaces, underscores, and hyphens are interchangeable. For instance, the following parameter names are equivalent and equally valid: `batch-size`, `batch size`, `batch_size`,
+
+
