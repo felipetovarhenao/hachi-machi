@@ -1,10 +1,11 @@
 - [x] Test on Windows.
 - [x] Fix spacing keys in config files.
 - [x] Adjust batch size
-- [] Send 1/0 status via OSC for session start/end.
-- [] Add support for pre-trained models
-- [] Add support for multi-model hosting.
-- [] Try implementing truncated backpropagation through time.
+- [ ] Improve error messages
+- [ ] Send 1/0 status via OSC for session start/end.
+- [ ] Add support for pre-trained models
+- [ ] Add support for multi-model hosting.
+- [ ] Try implementing truncated backpropagation through time.
 - [x] Add sort operation.
 - [] Add support for multivariate feature groups.
 - [x] add `rec` command.
@@ -14,7 +15,7 @@
 - [x] Add support for CSV data files. Consider also h5
 - [x] Remove scheduled events on reset.
 - [x] Solve unstable channel to track ID assignment.
-- [] Allow multiple files for training data.
+- [ ] Allow multiple files for training data.
 - [x] Skip data split.
 - [x] Implement custom data API
 - [x] Midi augmentation:
