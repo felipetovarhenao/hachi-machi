@@ -36,7 +36,7 @@
 }
 
 .card:hover .thumbnail {
-  transform: scale(1.04);
+  transform: scale(1.06);
 }
 
 .playOverlay {
