@@ -3,6 +3,8 @@ sidebar_position: 0
 slug: basics
 ---
 
+import VideoCard from "@site/src/components/VideoCard";
+
 # Basic workflow
 
 This tutorial provides a quick overview of the workflow in **hachi machi**, by showing how to train and run a basic model for [MIDI](https://en.wikipedia.org/wiki/MIDI) event generation. In this tutoral, you will learn how to:
@@ -57,6 +59,8 @@ hxmx train data.json model.pt
 
 This will quick-off the training loop. Depending on the length of the MIDI file we're using, and our computer's capabilities, this might take from one to several minutes (or even hours if you're unlucky!). We should see our new model in the same directory, with the name `model.pt`.
 
+<VideoCard videoId="tvDuF94ZP7Y" />
+
 ---
 
 ## Generating sequences
@@ -69,6 +73,8 @@ hxmx gen model.pt output.csv
 
 This will create a CSV file with our model-generated sequence.
 
+<VideoCard videoId="FwfK8vLKG6M" />
+
 ---
 
 ## Real-time interaction
@@ -79,7 +85,9 @@ To see our model work in real-time, we use the `run` command.
 hxmx run model.pt
 ```
 
-This will expose the model to receive input and send output messages via [OSC](https://en.wikipedia.org/wiki/Open_Sound_Control). Input messages are received on the `/input` route, and output messages are sent via the `/output` route. To let the model generate data autoregressively, all we need to do is feed the messages from `/output` back to `/input`.
+This will expose the model to receive input and send output messages via [OSC](https://en.wikipedia.org/wiki/Open_Sound_Control). Input messages are received on the `/input` route, and output messages are sent via the `/output` route. To let the model generate data autoregressively, all we need to do is feed the messages from `/output` back to `/input`. Watch the following video for more details:
+
+<VideoCard videoId="Oug-8zPH12c" />
 
 ## A word of advice
 
