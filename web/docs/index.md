@@ -2,6 +2,8 @@
 sidebar_position: -2
 ---
 
+import VideoCard from "@site/src/components/VideoCard";
+
 # Getting started
 
 ## Description
@@ -17,3 +19,5 @@ To train a model with **hachi machi**, all you need is a set of sequential dataâ
 ![training](@site/static/img/hachi_machi_training.svg)
 
 **hachi machi**'s model architecture is, in principle, data agnostic. This means models can be trained on any kind of sequential dataâ€”such as musical data, sensor data, or any other type of data where the order of events is semantically meaningful.
+
+<VideoCard videoId="R9vMuaHQfB0" />
