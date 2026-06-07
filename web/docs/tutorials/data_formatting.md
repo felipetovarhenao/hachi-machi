@@ -9,7 +9,7 @@ import VideoCard from "@site/src/components/VideoCard";
 
 # Data format
 
-As we saw in the previous tutorial, we need our data to be formatted as a JSON or CSV file, to train our model. The exact formatting of the data depends both on the nature of the data, as well as how you expect or want the model to behave. To use the same case-scenario across different types of formatting, let's continue with MIDI data as an example, where we can understand MIDI events as a 2D matrix or table with each event as a row and each feature as a column:
+As we saw in the previous tutorial, we need our data to be formatted as a _hachi machi_ compatible file—e.g., `.json`, `.csv`, `.txt`, or `.llll`—to train our model. Beyond choosing the file format, we can stucture the data differently based on what we want the model to do or learn. To use the same case-scenario across different types of formatting, let's continue with MIDI data as an example, where we can understand MIDI events as a 2D matrix or table with each event as a row and each feature as a column:
 
 | time | pitch | velocity | duration | channel |
 | ---- | ----- | -------- | -------- | ------- |
