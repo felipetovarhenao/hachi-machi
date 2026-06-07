@@ -7,4 +7,4 @@ dependencies:
   - pytorch
   - pip
   - pip:
-      - -e .
+      - -e .[dev] .

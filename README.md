@@ -19,7 +19,6 @@ Follow these steps if you intend to run and/or build **hachi machi** from source
 ```sh
 conda env create -f environment.yml
 conda activate hxmx
-python -m pip install hatch
 ```
 
 ## On each session
