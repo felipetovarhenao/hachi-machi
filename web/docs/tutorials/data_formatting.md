@@ -92,7 +92,7 @@ However, with MIDI data, we most certainly want the model to also learn the timi
     </TabItem>
 </Tabs>
 
-Why does **hachi machi** consider time as separate from other any features? This is because models trained on temporal vs. non-temporal data will behave differently during _streaming_ mode (i.e., via the `run` command). If the data is _atemporal_, the prediction will be emitted immediately, while for _temporal_ models, the prediction is scheduled to be emitted at some time in the future based on what the model learned.
+Why does **hachi machi** consider time as separate from other any features? This is because models trained on temporal vs. non-temporal data will behave differently during _streaming_ mode (i.e., via the `run` command). If the data is _atemporal_, the prediction will be emitted immediately, while for _temporal_ models, the prediction is scheduled to be emitted at some time in the future based on what the model learned. In other words, temporal models learn by how much a predicted event should be delayed.
 
 :::info
 Note that time values must specified in seconds and, for CSV data to be recognized as temporal by **hachi machi**, it must be the first column and have `time` as the column name.
