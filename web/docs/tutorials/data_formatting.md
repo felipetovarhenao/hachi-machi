@@ -110,6 +110,10 @@ By default, all features are treated as **continuous**—that is, they can take 
 
 Features can also be declared **categorical**, which is appropriate for discrete identifiers such as MIDI channels or ON/OFF states. Doing so improves model training by changing how those features are encoded internally.
 
+:::caution
+The number of classes represented by the feature matters. For instance, a categorical feature for a binary state requires less training parameters than, say, a categorical feature that can take ten different possible values.
+:::
+
 <Tabs groupId="config-files">
   <TabItem value="json" label="json">
     ```json
