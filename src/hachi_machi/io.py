@@ -2,6 +2,7 @@ import os
 import json
 import torch
 import csv
+from llll import llll
 from .features import FeatureMap
 
 CAT_CHAR = '#'
@@ -10,7 +11,7 @@ MASKED_CHAR = '~'
 
 class FileIO:
 
-    EXT = ('.txt', '.csv', '.json')
+    EXT = ('.txt', '.csv', '.json', '.llll')
 
     @classmethod
     def validate_path(cls, file: str) -> tuple[str, str]:
@@ -110,6 +111,47 @@ class FileIO:
             data = [[float(x) for x in l.split()] for l in f.readlines()]
         tensor = cls.to_tensor(data)
         return tensor, FeatureMap(tensor, {})
+
+    @classmethod
+    def read_llll(cls, path: str) -> tuple[torch.Tensor, FeatureMap]:
+        temporal = False
+        l = llll.read(file=path)
+
+        data = cls.to_tensor(l['data'].to_python())
+        feature_list: list = l['features'].to_python()
+        features = dict()
+        if feature_list:
+            for feature in feature_list:
+                idx, props = feature[0], feature[1:]
+                idx = str(idx)
+                features[idx] = {}
+                for prop in props:
+                    key, value = prop
+                    features[idx][key] = bool(value)
+        if l['time']:
+            temporal = True
+            time = cls.to_tensor(l['time'].to_python()).reshape(-1, 1)
+            data = torch.cat([time, data], dim=-1)
+
+        return data, FeatureMap(data, features, temporal)
+
+    @classmethod
+    def write_llll(cls, tensor: torch.Tensor, output: str, temporal: bool = False, **kwargs) -> None:
+        l = llll()
+        if temporal:
+            l.append(llll('time', *tensor[..., 0].tolist()))
+            l.append(llll('data', *tensor[..., 1:].tolist()))
+        else:
+            l.append(llll('data', *tensor.tolist()))
+
+        features: dict = kwargs.pop('features', {})
+        if len(features) > 0:
+            ft = llll('features')
+            for k, v in features.items():
+                if len(v) > 0:
+                    ft.append(llll(k, *list(v.items())))
+            l.append(ft)
+        l.write(output)
 
     @classmethod
     def read_json(cls, path: str) -> tuple[torch.Tensor, FeatureMap]:
