@@ -35,7 +35,7 @@ from ..session import RecordingSession
    device='cpu').wrapper
 def rec(**params):
     """Given a pre-defined feature size, records incoming data via OSC to create datasets in real-time. 
-    **OUTPUT** file can be `.csv`, `.txt`, or `.json`.
+    **OUTPUT** file can be `.csv`, `.txt`, `.llll`, or `.json`.
 
     ### Input routes
 

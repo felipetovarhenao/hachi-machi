@@ -77,7 +77,7 @@ from ..ops.operator import DataOperator
     ('output', '.pt')
 ]).wrapper
 def train(**params):
-    """Given a path to an **INPUT** sequential dataset (`.csv`, `.json`, `.txt`), generates an pre-trained `.pt` **OUTPUT** model, trained on that dataset. 
+    """Given a path to an **INPUT** sequential dataset (`.csv`, `.json`, `.txt`, `.llll`), generates an pre-trained `.pt` **OUTPUT** model, trained on that dataset. 
 
     Along with all other training parameters, an optional set of data augmentation [operations](operations) can be provided to be applied in series during training to the input data.
     """
