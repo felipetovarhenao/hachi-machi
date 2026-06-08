@@ -64,8 +64,9 @@ class TestCli:
         model: PerformerModel = torch.load(f=out_path,
                                            weights_only=False,
                                            map_location='cpu')
-        assert bool(model.temporal) is True
         x = torch.randn((1, 1, model.input_size))
         y = model.step(x)
+
+        assert bool(model.temporal) is True
         assert y.size(-1) == model.output_layer.output_size
         assert y.size(-1) != x.size(-1)
