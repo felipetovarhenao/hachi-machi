@@ -6,6 +6,7 @@ torch.manual_seed(1)
 
 
 class TestFileIO:
+
     def _test_io(self, path, ext: str):
         fs = FileIO()
         device = 'cpu'
