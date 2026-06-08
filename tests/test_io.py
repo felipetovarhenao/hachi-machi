@@ -1,4 +1,3 @@
-from click.testing import CliRunner
 from hachi_machi.io import FileIO
 import torch
 
