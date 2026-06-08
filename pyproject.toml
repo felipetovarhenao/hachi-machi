@@ -28,7 +28,7 @@ dependencies = [
 hxmx = "hachi_machi.__main__:main"
 
 [project.optional-dependencies]
-dev = ['hatch']
+dev = ['hatch', 'pytest']
 
 [build-system]
 requires = ["hatchling"]
