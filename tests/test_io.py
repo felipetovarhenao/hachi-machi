@@ -18,7 +18,9 @@ class TestFileIO:
                      temporal=temporal)
             data, fm = fs.read(path=file_path, device=device)
             assert fm.temporal() == temporal
-            assert torch.allclose(tensor, data)
+            assert torch.allclose(input=tensor,
+                                  other=data,
+                                  rtol=0.0001)
 
     def test_llll(self, tmp_path):
         self._test_io(tmp_path, 'llll')

@@ -2,6 +2,8 @@ from hachi_machi.features import FeatureMap
 from hachi_machi.ops import DataOperator
 import torch
 
+torch.manual_seed(1)
+
 
 class TestOp:
 

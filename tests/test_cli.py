@@ -5,11 +5,13 @@ from hachi_machi.cli import main
 from click.testing import CliRunner, Result
 from pathlib import Path
 
+torch.manual_seed(1)
+
 
 @pytest.fixture(scope='class')
 def sample_files(tmp_path_factory):
     tmp: Path = tmp_path_factory.mktemp("data")
-    x = torch.randn(10, 4)
+    x = torch.randn(20, 3)
     data = {}
     for i, name in enumerate(['temporal', 'atemporal']):
         path = tmp / f"{name}.csv"
