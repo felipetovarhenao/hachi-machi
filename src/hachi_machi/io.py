@@ -96,8 +96,25 @@ class FileIO:
         return data, FeatureMap(data, features, temporal)
 
     @classmethod
-    def write_txt(cls, tensor: torch.Tensor, output: str, temporal: bool = False, **_) -> None:
-        rows = [[repr(x) for x in row] for row in tensor.tolist()]
+    def write_txt(cls, tensor: torch.Tensor, output: str, temporal: bool = False, **kwargs) -> None:
+        cols = tensor.size(-1)
+        features = kwargs.get('features', {})
+
+        header = kwargs.get('feature_names', [
+            f"{i}" for i in range(cols - int(temporal))])
+        features: dict = kwargs.get("features", {})
+        if len(features) > 0:
+            for (k, v) in features.items():
+                i = int(k)
+                col = header[i]
+                if v.get('categorical', False):
+                    col += CAT_CHAR
+                if v.get('masked', False):
+                    col = f"{MASKED_CHAR}{col}"
+                header[i] = col
+        if temporal:
+            header = ['time', *header]
+        rows = [header, *[[repr(x) for x in row] for row in tensor.tolist()]]
         col_len = [max(len(row[c]) for row in rows) +
                    2 for c in range(len(rows[0]))]
 
@@ -109,9 +126,22 @@ class FileIO:
     @classmethod
     def read_txt(cls, path: str) -> tuple[torch.Tensor, FeatureMap]:
         with open(path, 'r') as f:
-            data = [[float(x) for x in l.split()] for l in f.readlines()]
+            lines = f.readlines()
+            header = lines[0].split()
+            temporal = header[0].strip() == 'time'
+            data = [[float(x) for x in l.split()] for l in lines[1:]]
+        features = {}
+        for (i, k) in enumerate(header[int(temporal):]):
+            k = k.strip()
+            ft = {}
+            if k.startswith(MASKED_CHAR):
+                ft['masked'] = True
+            if k.endswith(CAT_CHAR):
+                ft['categorical'] = True
+            if len(ft) > 0:
+                features[str(i)] = ft
         tensor = cls.to_tensor(data)
-        return tensor, FeatureMap(tensor, {})
+        return tensor, FeatureMap(tensor, features, temporal)
 
     @classmethod
     def read_llll(cls, path: str) -> tuple[torch.Tensor, FeatureMap]:

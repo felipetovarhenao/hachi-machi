@@ -29,5 +29,5 @@ class TestFileIO:
     def test_json(self, tmp_path):
         self._test_io(tmp_path, 'json')
 
-    # def test_txt(self, tmp_path):
-    #     self._test_io(tmp_path, 'txt')
+    def test_txt(self, tmp_path):
+        self._test_io(tmp_path, 'txt')
