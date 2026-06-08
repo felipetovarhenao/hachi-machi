@@ -66,14 +66,14 @@ class MidiParser:
                                       tempo=tempo,
                                       time=0))
 
-        ticks_per_ms = ticks_per_beat / (tempo / 1000)
+        ticks_per_ms = ticks_per_beat / tempo
 
         messages = []
         current_onset_ms = 0.0
         for row in events:
-            ioi, pitch, velocity, chan, duration = row.tolist()
+            ioi, pitch, velocity, duration, chan = row.tolist()
             current_onset_ms += ioi
-            duration = 1000
+            duration = 1.0
             note = int(round(pitch))
             vel = int(round(velocity))
             channel = int(round(chan))

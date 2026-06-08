@@ -4,6 +4,7 @@ import torch
 from hachi_machi.io import FileIO
 from hachi_machi.cli import main
 from hachi_machi.nn.performer import PerformerModel
+from hachi_machi.midi import MidiParser
 from click.testing import CliRunner, Result
 from pathlib import Path
 
@@ -14,12 +15,20 @@ torch.manual_seed(1)
 def sample_files(tmp_path_factory):
     tmp: Path = tmp_path_factory.mktemp("data")
     x = torch.randn(20, 4)
+    y = torch.Tensor([[0., 60, 80, 0.25, 1],
+                     [0.5, 64, 75, 0.25, 1],
+                     [1.0, 67, 85, 0.25, 2],
+                     [2.0, 64, 70, 0.25, 2],
+                     [4.0, 60, 90, 0.5, 1]], device='cpu')
+    midi_file = tmp / 'midi.mid'
+    MidiParser.render(events=y,
+                      output_path=midi_file)
     features = {
         '1': {
             'masked': True
         },
     }
-    data = {}
+    data = {'midi': midi_file}
     for i, name in enumerate(['atemporal', 'temporal']):
         path = tmp / f"{name}.csv"
         FileIO.write(tensor=x,
@@ -81,3 +90,10 @@ class TestCli:
         assert bool(model.temporal) is True
         assert y.size(-1) == model.output_layer.output_size
         assert y.size(-1) != x.size(-1)
+
+    def test_format(self, sample_files: dict):
+        midi: Path = sample_files['midi']
+        out_path = str((midi.parent / 'data.csv').absolute())
+        result = self.cli.invoke(
+            main, ['format', str(midi.absolute()), out_path])
+        self._eval(result, out_path)
