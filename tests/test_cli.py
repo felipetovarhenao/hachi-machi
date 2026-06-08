@@ -1,3 +1,4 @@
+import sys
 import pytest
 import torch
 from hachi_machi.io import FileIO
@@ -46,6 +47,16 @@ class TestCli:
         result = self.cli.invoke(main, ['fork', in_path, out_path])
         assert result.exit_code == 0
         assert Path(out_path).exists()
+
+    def test_devices(self):
+        result = self.cli.invoke(main, ['devices'])
+        self._eval(result)
+        if sys.platform == 'darwin':
+            device = 'mps'
+        else:
+            device = 'cuda'
+        assert 'cpu' in result.output
+        assert device in result.output
 
     def test_train(self, sample_files):
         ds: Path = sample_files['temporal']
