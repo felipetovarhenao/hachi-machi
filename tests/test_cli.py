@@ -51,8 +51,13 @@ class TestCli:
         ds: Path = sample_files['temporal']
         in_path = str(ds.absolute())
         out_path = str((ds.parent / 'model.pt').absolute())
-        result = self.cli.invoke(
-            main, ['train', in_path, out_path, '--epochs', 2])
+        result = self.cli.invoke(main, ['train',
+                                        in_path,
+                                        out_path,
+                                        '--epochs', 2,
+                                        '--mixtures', 4,
+                                        '--layers', 2,
+                                        '--noise', 0.01, 0.9])
         self._eval(result, out_path)
         result = self.cli.invoke(main, ['info', out_path])
         self._eval(result, out_path)
