@@ -34,11 +34,12 @@ class FileIO:
     @classmethod
     def write(cls, tensor: torch.Tensor, path: str, temporal: bool = False, **kwargs) -> None:
         assert tensor.ndim == 2, f"Expected 2D tensor, got {tensor.ndim}D"
+        x = tensor.clone()
         if temporal:
-            tensor[..., 0] = tensor[..., 0].cumsum(0)
+            x[..., 0] = x[..., 0].cumsum(0)
         path, ext = cls.validate_path(path)
         writer = getattr(cls, f'write_{ext[1:]}')
-        writer(tensor, path, temporal, **kwargs)
+        writer(x, path, temporal, **kwargs)
 
     @classmethod
     def to_tensor(cls, data: list[list[float]]) -> torch.Tensor:
