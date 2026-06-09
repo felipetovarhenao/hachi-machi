@@ -24,16 +24,6 @@
     <text x="80" y="111" text-anchor="middle" dominant-baseline="central"
       style="fill:rgb(240, 240, 240);stroke:none;color:rgb(240, 240, 240);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:14px;font-weight:500;text-anchor:middle;dominant-baseline:central">data</text>
   </g>
-  <circle cx="57" cy="124" r="3" fill="var(--t)" opacity="0.25"
-    style="fill:rgb(156, 154, 146);stroke:none;color:rgb(240, 240, 240);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.25;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto" />
-  <circle cx="70" cy="130" r="2.5" fill="var(--t)" opacity="0.2"
-    style="fill:rgb(156, 154, 146);stroke:none;color:rgb(240, 240, 240);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.2;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto" />
-  <circle cx="84" cy="126" r="3.5" fill="var(--t)" opacity="0.2"
-    style="fill:rgb(156, 154, 146);stroke:none;color:rgb(240, 240, 240);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.2;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto" />
-  <circle cx="98" cy="131" r="2" fill="var(--t)" opacity="0.25"
-    style="fill:rgb(156, 154, 146);stroke:none;color:rgb(240, 240, 240);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.25;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto" />
-  <circle cx="110" cy="124" r="3" fill="var(--t)" opacity="0.2"
-    style="fill:rgb(156, 154, 146);stroke:none;color:rgb(240, 240, 240);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.2;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto" />
   <text x="80" y="156" text-anchor="middle"
     style="fill:rgb(194, 192, 182);stroke:none;color:rgb(240, 240, 240);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:12px;font-weight:400;text-anchor:middle;dominant-baseline:auto">per-example</text>
   <text x="80" y="170" text-anchor="middle"
@@ -103,20 +93,7 @@
     <text x="580" y="111" text-anchor="middle" dominant-baseline="central"
       style="fill:rgb(240, 240, 240);stroke:none;color:rgb(240, 240, 240);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:14px;font-weight:500;text-anchor:middle;dominant-baseline:central">data</text>
   </g>
-  <circle cx="537" cy="130" r="3" fill="var(--t)" opacity="0.25"
-    style="fill:rgb(156, 154, 146);stroke:none;color:rgb(240, 240, 240);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.25;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto" />
-  <circle cx="552" cy="130" r="3" fill="var(--t)" opacity="0.25"
-    style="fill:rgb(156, 154, 146);stroke:none;color:rgb(240, 240, 240);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.25;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto" />
-  <circle cx="567" cy="130" r="3" fill="var(--t)" opacity="0.25"
-    style="fill:rgb(156, 154, 146);stroke:none;color:rgb(240, 240, 240);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.25;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto" />
-  <circle cx="582" cy="130" r="3" fill="var(--t)" opacity="0.25"
-    style="fill:rgb(156, 154, 146);stroke:none;color:rgb(240, 240, 240);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.25;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto" />
-  <circle cx="597" cy="130" r="3" fill="var(--t)" opacity="0.25"
-    style="fill:rgb(156, 154, 146);stroke:none;color:rgb(240, 240, 240);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.25;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto" />
-  <circle cx="612" cy="130" r="3" fill="var(--t)" opacity="0.25"
-    style="fill:rgb(156, 154, 146);stroke:none;color:rgb(240, 240, 240);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.25;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto" />
-  <circle cx="627" cy="130" r="3" fill="var(--t)" opacity="0.25"
-    style="fill:rgb(156, 154, 146);stroke:none;color:rgb(240, 240, 240);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.25;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto" />
+
 
   <!-- Arrow down to training -->
   <line x1="580" y1="140" x2="580" y2="200" marker-end="url(#arrow)"
