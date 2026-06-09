@@ -22,7 +22,6 @@ class EventDataset(Dataset):
             data = data.unfold(dimension=0,
                                size=context_length + 1,
                                step=1)
-            self.size = len(data)
             data = data.transpose(2, 1)
 
         self.data = data
