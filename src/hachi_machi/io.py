@@ -19,7 +19,7 @@ class FileIO:
         file_ext = os.path.splitext(file)[1]
         if file_ext not in cls.EXT:
             raise TypeError(
-                f"Invalid extension: {file_ext}. Expected: {', '.join(cls.EXT)}")
+                f"Invalid file extension: {file_ext}. Expected one of the following: {', '.join(cls.EXT)}")
         return file, file_ext
 
     @classmethod
