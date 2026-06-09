@@ -27,11 +27,8 @@ class EventDataset(Dataset):
 
         self.data = data
 
-        self._in_dims = input_dims
-        self._out_dims = output_dims
-
-        self.input_size = len(self._in_dims)
-        self.output_size = len(self._out_dims)
+        self.input_dims = input_dims
+        self.output_dims = output_dims
 
         self.augmenter = augmenter
 
@@ -50,5 +47,5 @@ class EventDataset(Dataset):
         item = data[index]
         if self.augmenter is not None:
             item = self.augmenter(item)
-        x, y = item[..., :-1, self._in_dims], item[..., 1:, self._out_dims]
+        x, y = item[..., :-1, self.input_dims], item[..., 1:, self.output_dims]
         return x, y
