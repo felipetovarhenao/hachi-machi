@@ -8,7 +8,7 @@
 - [ ] Add support for multi-model hosting.
 - [ ] Try implementing truncated backpropagation through time.
 - [x] Add sort operation.
-- [] Add support for multivariate feature groups.
+- [ ] Add support for multivariate feature groups.
 - [x] add `rec` command.
 - [x] Figure out fix for device listing now that docs are web based.
 - [x] Implement wildcard OSC route to let user know when route is invalid.
