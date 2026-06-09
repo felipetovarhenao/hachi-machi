@@ -41,6 +41,10 @@ class Trainer:
         self.regularization = AdaptiveNoise(self.model,
                                             std=std,
                                             decay=decay) if std > 0 else NullContext()
+        Console.pretty({
+            'size': len(dataset),
+            'batches': len(dataset) // batch_size
+        }, 'dataset')
 
     def _loss(self, x) -> float:
         return 1 / (1 + math.exp(-min(x, 709)))
