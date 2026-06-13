@@ -5,7 +5,7 @@
 - [ ] Send 1/0 status via OSC for session start/end.
 - [ ] Improve augmentation speed by performing on batch instead of segments.
 - [ ] Add support for pre-trained models
-- [ ] Add support for multi-model hosting.
+- [x] Add support for multi-model hosting.
 - [ ] Try implementing truncated backpropagation through time.
 - [x] Add sort operation.
 - [ ] Add support for multivariate feature groups.
