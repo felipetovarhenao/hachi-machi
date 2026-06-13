@@ -1,7 +1,7 @@
 import click
 from .middleware import ClickMiddleware as M
 from ..io import FileIO
-from ..session import RecordingSession
+from ..osc.recording import RecordingSession
 
 
 @click.command(context_settings={'show_default': True})

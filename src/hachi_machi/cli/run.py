@@ -1,6 +1,6 @@
 
 import click
-from ..session import Session
+from ..osc.inference import Session
 from ..console import Console
 from .middleware import ClickMiddleware as M
 
