@@ -1,6 +1,6 @@
 
 import click
-from ..osc.inference import Session
+from ..osc.inference import InferenceSession
 from ..console import Console
 from .middleware import ClickMiddleware as M
 
@@ -43,7 +43,7 @@ def run(**config):
     if len(model) == 0:
         raise ValueError("You must provide at least one model")
     device = config['device']
-    session = Session(models=model,
+    session = InferenceSession(models=model,
                       in_port=config['in_port'],
                       out_port=config['out_port'],
                       host=config['address'],

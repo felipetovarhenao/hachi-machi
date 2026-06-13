@@ -5,7 +5,7 @@ from ..nn import PerformerModel
 from .base import BaseSession
 
 
-class Session(BaseSession):
+class InferenceSession(BaseSession):
     def __init__(self, models: list[str], **kwargs):
         self.models: dict = {}
         self.index = str(1)
