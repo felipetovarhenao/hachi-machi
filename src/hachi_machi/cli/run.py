@@ -7,6 +7,7 @@ from .middleware import ClickMiddleware as M
 
 @click.command(context_settings={'show_default': True})
 @click.argument('model',
+                nargs=-1,
                 type=click.Path(exists=True,
                                 file_okay=True,
                                 dir_okay=False,
@@ -39,8 +40,10 @@ def run(**config):
     :::
     """
     model = config['model']
+    if len(model) == 0:
+        raise ValueError("You must provide at least one model")
     device = config['device']
-    session = Session(model=model,
+    session = Session(models=model,
                       in_port=config['in_port'],
                       out_port=config['out_port'],
                       host=config['address'],

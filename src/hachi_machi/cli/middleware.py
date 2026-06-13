@@ -53,8 +53,12 @@ class ClickMiddleware:
             for (key, *ext) in self.path_args:
                 if key not in params:
                     continue
-                params[key] = validate_path(file=params[key],
-                                            ext=ext)
+                if isinstance(params[key], tuple):
+                    params[key] = tuple(validate_path(file=x,
+                                                      ext=ext) for x in params[key])
+                else:
+                    params[key] = validate_path(file=params[key],
+                                                ext=ext)
         if 'device' in params:
             params['device'] = self.resolve_device(params['device'])
         return params
