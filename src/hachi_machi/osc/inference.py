@@ -60,7 +60,7 @@ class Session(BaseSession):
 
         def _fire():
             with self._lock:
-                self.send(event[1:], f"/{index}/output/")
+                self.send(event[1:], f"/{index}/output")
                 self.models[index]['timers'].discard(t)
 
         t = threading.Timer(delay, _fire)
@@ -85,7 +85,7 @@ class Session(BaseSession):
             inference_ms = time.perf_counter() - now
             self.schedule(event, max(0.0, delay - inference_ms))
         else:
-            self.send(event, f"/{self.index}/output/")
+            self.send(event, f"/{self.index}/output")
 
     @property
     def current(self) -> dict:
@@ -126,7 +126,7 @@ class Session(BaseSession):
     def _handle_sample(self, *_):
         size = self.model.output_layer.output_size
         y = self.model.output_layer(torch.randn(size), True)
-        self.send(y[-self.output_size:].tolist(), f"/{self.index}/output/")
+        self.send(y[-self.output_size:].tolist(), f"/{self.index}/output")
 
     def _handle_input(self, *args):
         nargs = len(args)
