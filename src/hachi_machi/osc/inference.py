@@ -30,10 +30,11 @@ class InferenceSession(BaseSession):
                 'output_size': output_size,
                 'temporal': temporal,
                 'last_time': None,
+                'blocked': False,
                 'timers': set()
             }
 
-            for route in ['input', 'sample', 'reset']:
+            for route in ['input', 'sample', 'reset', 'cancel']:
                 base_method = getattr(self, f'_handle_{route}')
                 if i == 0:
                     wild_route = f"handle_{route}"
@@ -60,6 +61,7 @@ class InferenceSession(BaseSession):
 
         def _fire():
             with self._lock:
+                self.blocked = False
                 self.send(event[1:], f"/{index}/output")
                 self.models[index]['timers'].discard(t)
 
@@ -73,6 +75,7 @@ class InferenceSession(BaseSession):
         now = time.perf_counter()
         x = x.clone()
         if self.temporal:
+            self.blocked = True
             x[..., 0] = 0 if self.last_time is None else (
                 now - self.last_time)
             self.last_time = now
@@ -85,6 +88,7 @@ class InferenceSession(BaseSession):
             inference_ms = time.perf_counter() - now
             self.schedule(event, max(0.0, delay - inference_ms))
         else:
+            self.blocked = False
             self.send(event, f"/{self.index}/output")
 
     @property
@@ -94,6 +98,14 @@ class InferenceSession(BaseSession):
     @current.setter
     def current(self, value):
         self.models[self.index] = value
+
+    @property
+    def blocked(self) -> bool:
+        return self.current['blocked']
+
+    @blocked.setter
+    def blocked(self, value: bool):
+        self.current['blocked'] = value
 
     @property
     def model(self) -> PerformerModel:
@@ -129,6 +141,9 @@ class InferenceSession(BaseSession):
         self.send(y[-self.output_size:].tolist(), f"/{self.index}/output")
 
     def _handle_input(self, *args):
+        if self.blocked:
+            return
+        self.blocked = True
         nargs = len(args)
         if nargs not in [self.input_size, self.output_size]:
             raise ValueError(
@@ -145,7 +160,10 @@ class InferenceSession(BaseSession):
         self.predict(x)
 
     def _handle_reset(self, *_):
+        self.model.reset()
+
+    def _handle_cancel(self, *_):
         [t.cancel() for t in self.timers]
         self.timers.clear()
-        self.model.reset()
         self.last_time = None
+        self.blocked = False
