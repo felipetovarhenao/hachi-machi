@@ -31,8 +31,7 @@ class Normalize(BaseTransform):
 
     def fit(self, data: torch.Tensor) -> None:
         std = data.std(0)
-        eps = torch.finfo(data.dtype).eps
-        std[std < eps] = eps
+        std[std == 0] = 1
         self.register_buffer('mean', data.mean(0))
         self.register_buffer('std', std)
 
