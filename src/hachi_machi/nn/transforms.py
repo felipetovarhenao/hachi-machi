@@ -31,7 +31,8 @@ class Normalize(BaseTransform):
 
     def fit(self, data: torch.Tensor) -> None:
         std = data.std(0)
-        std[std == 0] = 1
+        eps = torch.finfo(data.dtype).eps
+        std[std < eps] = eps
         self.register_buffer('mean', data.mean(0))
         self.register_buffer('std', std)
 
@@ -194,7 +195,7 @@ class TransformFactory:
     def make(self,
              data: torch.Tensor,
              transforms: list[str] | None = None) -> tuple[Transform, Transform]:
-        
+
         transforms = list(set([*(transforms or []), *self.REQUIRED]))
         transform_layers = []
         for i, io in enumerate(['input', 'output']):
