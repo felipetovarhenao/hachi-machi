@@ -2,7 +2,7 @@
 - [x] Fix spacing keys in config files.
 - [x] Adjust batch size
 - [ ] Improve error messages
-- [ ] Send 1/0 status via OSC for session start/end.
+- [x] Send 1/0 status via OSC for session start/end.
 - [ ] Improve augmentation speed by performing on batch instead of segments.
 - [ ] Add support for pre-trained models
 - [x] Add support for multi-model hosting.
