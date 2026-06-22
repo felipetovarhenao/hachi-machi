@@ -53,4 +53,4 @@ class RecordingSession(BaseSession):
             tensor[1:, 0] = tensor[..., 0].diff(dim=0)
         FileIO.write(tensor, self.path, self.temporal, features=self.features)
         Console.success("DONE")
-        exit()
+        super().handle_stop(*_)

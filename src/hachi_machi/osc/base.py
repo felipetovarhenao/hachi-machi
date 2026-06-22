@@ -57,4 +57,9 @@ class BaseSession(ABC):
             server_address=(self.host, self.in_port),
             dispatcher=self.dispatcher
         )
+        self.send(1, '/status')
         server.serve_forever()
+
+    def handle_stop(self, *_) -> None:
+        self.send(0, '/status')
+        exit()
