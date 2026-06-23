@@ -29,12 +29,12 @@ from ..console import Console
               type=int,
               default=[],
               multiple=True,
-              help='Dimensions of masked features.')
+              help='Index position(s) for masked feature(s) (`0`-based).')
 @click.option('--categorical', '-c',
               type=int,
               default=[],
               multiple=True,
-              help='Dimensions of categorical features.')
+              help='Index position(s) for categorical feature(s) (`0`-based).')
 @M(path_args=[('output', *FileIO.EXT),],
    device='cpu').wrapper
 def rec(**params):
