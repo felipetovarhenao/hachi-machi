@@ -85,7 +85,7 @@ To see our model work in real-time, we use the `run` command.
 hxmx run model.pt
 ```
 
-This will expose the model to receive input and send output messages via [OSC](https://en.wikipedia.org/wiki/Open_Sound_Control). Input messages are received on the `/1/input` route, and output messages are sent via the `/1/output` route. To let the model generate data autoregressively, all we need to do is feed the messages from `/1/output` back to `/1/input`. Watch the following video for more details:
+This will expose the model to receive input and send output messages via [OSC](https://en.wikipedia.org/wiki/Open_Sound_Control). Input messages are received on the `/1/input` route, and output messages are sent via the `/1/output` route (`1` stands for the model ID, since it's possible to host more than one model at a time). To let the model generate data autoregressively, all we need to do is feed the messages from `/1/output` back to `/1/input`. Watch the following video for more details:
 
 <VideoCard videoId="Oug-8zPH12c" />
 
