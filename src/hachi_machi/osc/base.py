@@ -1,4 +1,5 @@
 import sys
+import signal
 import threading
 import traceback
 import functools
@@ -54,6 +55,7 @@ class BaseSession(ABC):
         self.client.send_message(route, msg)
 
     def start(self) -> None:
+        signal.signal(signal.SIGTERM, lambda s, f: self.handle_stop())
         server = BlockingOSCUDPServer(
             server_address=(self.host, self.in_port),
             dispatcher=self.dispatcher
