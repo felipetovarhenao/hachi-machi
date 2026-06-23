@@ -71,6 +71,9 @@ class InferenceSession(BaseSession):
             self.models[index]['timers'].add(t)
         t.start()
 
+    def on_error(self):
+        self.blocked = False
+
     def predict(self, x: torch.Tensor) -> None:
         now = time.perf_counter()
         x = x.clone()

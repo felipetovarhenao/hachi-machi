@@ -31,12 +31,15 @@ class BaseSession(ABC):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
             _, *rest = args
-            try:
-                with self._lock:
+            with self._lock:
+                try:
                     func(*rest, **kwargs)
-            except Exception:
-                Console.error(traceback.format_exc())
+                except Exception as e:
+                    self.on_error()
+                    Console.error('\n'.join(str(x) for x in e.args))
         return wrapper
+
+    def on_error(self): ...
 
     def _set_handlers(self) -> None:
         for attr in dir(self):
