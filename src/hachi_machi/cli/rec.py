@@ -20,7 +20,10 @@ from ..console import Console
               help='If true, output dataset has temporal information',
               default=False,
               flag_value=True)
-@click.option('--in-port', default=8000, help='Input OSC port.')
+@click.option('--in-port',
+              default=8000,
+              help='Input OSC port.',
+              type=click.IntRange(1000, 9999))
 @click.option('--address', default='127.0.0.1', help='OSC IP address')
 @click.option('--masked', '-m',
               type=int,
