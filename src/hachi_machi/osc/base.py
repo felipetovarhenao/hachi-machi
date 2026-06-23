@@ -1,3 +1,4 @@
+import sys
 import threading
 import traceback
 import functools
@@ -62,4 +63,4 @@ class BaseSession(ABC):
 
     def handle_stop(self, *_) -> None:
         self.send(0, '/status')
-        exit()
+        sys.exit(0)
