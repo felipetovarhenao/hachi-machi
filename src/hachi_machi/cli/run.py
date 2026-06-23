@@ -61,4 +61,4 @@ def run(**config):
         session.start()
     except KeyboardInterrupt:
         Console.action("\nClosing session...", italic=True)
-        return
+        session.handle_stop()

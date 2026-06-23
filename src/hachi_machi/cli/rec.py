@@ -2,6 +2,7 @@ import click
 from .middleware import ClickMiddleware as M
 from ..io import FileIO
 from ..osc.recording import RecordingSession
+from ..console import Console
 
 
 @click.command(context_settings={'show_default': True})
@@ -70,5 +71,8 @@ def rec(**params):
                          in_port=in_port,
                          host=addr,
                          device=device)
-
-    s.start()
+    try:
+        s.start()
+    except KeyboardInterrupt:
+        Console.action("\nClosing session...", italic=True)
+        s.handle_stop()
