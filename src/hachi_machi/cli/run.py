@@ -42,7 +42,7 @@ def run(**config):
 
     - `/<model_id>/output <...features>`: Model's predicted event (_unmasked_). The predicted event can be sent _as is_ back to `/input` for auto-regression, even if the model is trained on masked features.
 
-    - `/status <int>`: OSC server status. `1` when it's launched, and `0` when closed via the `/stop` message.
+    - `/status <int>`: OSC server status. `1` when it's launched, and `0` when closed.
 
     :::tip
     Note that, in some cases, running the model on CPU results in lower prediction latency.
