@@ -35,11 +35,9 @@ class BaseSession(ABC):
                 try:
                     func(*rest, **kwargs)
                 except Exception as e:
-                    self.on_error()
                     Console.error('\n'.join(str(x) for x in e.args))
+                    sys.exit(1)
         return wrapper
-
-    def on_error(self): ...
 
     def _set_handlers(self) -> None:
         for attr in dir(self):
