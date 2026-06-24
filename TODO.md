@@ -1,15 +1,16 @@
+- [ ] Improve error messages
+- [ ] Support non-auto-regressive models.
+- [ ] Improve augmentation speed by performing on batch instead of segments.
+- [ ] Add support for pre-trained models
+- [ ] Add support for multivariate feature groups.
+- [ ] Try implementing truncated backpropagation through time.
+- [ ] Allow multiple files for training data.
 - [x] Test on Windows.
 - [x] Fix spacing keys in config files.
 - [x] Adjust batch size
-- [ ] Improve error messages
-- [ ] Support non-auto-regressive models.
 - [x] Send 1/0 status via OSC for session start/end.
-- [ ] Improve augmentation speed by performing on batch instead of segments.
-- [ ] Add support for pre-trained models
 - [x] Add support for multi-model hosting.
-- [ ] Try implementing truncated backpropagation through time.
 - [x] Add sort operation.
-- [ ] Add support for multivariate feature groups.
 - [x] add `rec` command.
 - [x] Figure out fix for device listing now that docs are web based.
 - [x] Implement wildcard OSC route to let user know when route is invalid.
@@ -17,7 +18,6 @@
 - [x] Add support for CSV data files. Consider also h5
 - [x] Remove scheduled events on reset.
 - [x] Solve unstable channel to track ID assignment.
-- [ ] Allow multiple files for training data.
 - [x] Skip data split.
 - [x] Implement custom data API
 - [x] Midi augmentation:
