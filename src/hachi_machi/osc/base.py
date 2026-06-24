@@ -35,6 +35,7 @@ class BaseSession(ABC):
                 try:
                     func(*rest, **kwargs)
                 except Exception as e:
+                    self.send(0, '/status')
                     Console.error(e.args)
         return wrapper
 
