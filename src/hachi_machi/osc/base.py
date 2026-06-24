@@ -49,7 +49,7 @@ class BaseSession(ABC):
             handler = lambda *args, f=func: self.safe_handler(f)(*args)
             self.dispatcher.map(address=f"/{address}", handler=handler)
         self.dispatcher.set_default_handler(
-            lambda addr, *_: Console.warning(f"Invalid OSC route: {addr!r}")
+            lambda addr, *_: Console.warning(f"Invalid OSC route: {addr}")
         )
 
     def send(self, msg, route: str = '/output') -> None:
