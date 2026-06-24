@@ -147,8 +147,10 @@ class FileIO:
     def read_llll(cls, path: str) -> tuple[torch.Tensor, FeatureMap]:
         temporal = False
         l = llll.read(file=path)
-
-        data = cls.to_tensor(l['data'].to_python())
+        data = l['data']
+        if len(data) == 0:
+            raise RuntimeError(f'Data not found in llll:\n{l!r}')
+        data = cls.to_tensor(data.to_python())
         feature_list: list = l['features'].to_python()
         features = dict()
         if feature_list:
