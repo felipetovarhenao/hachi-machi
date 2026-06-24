@@ -42,9 +42,7 @@ class ClickMiddleware:
                 try:
                     func(**config)
                 except Exception as e:
-                    Console.error('\n'.join(str(x) for x in e.args)) if len(e.args) > 0 else Console.error(
-                        "Something went wrong. Please use --debug to view the traceback.")
-
+                    Console.error(e.args)
             else:
                 func(**config)
 

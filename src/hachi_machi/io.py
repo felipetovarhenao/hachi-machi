@@ -46,7 +46,7 @@ class FileIO:
         try:
             tensor = torch.tensor(data, dtype=torch.float32)
         except Exception as e:
-            raise RuntimeError(f"Invalid data formatting:\n{e.args[0]}")
+            raise RuntimeError(f"Invalid data formatting:\n{e.args}")
         return tensor
 
     @classmethod
@@ -82,7 +82,7 @@ class FileIO:
         try:
             data = cls.to_tensor(data)
         except:
-            ImportError(f"Invalid CSV formatting in {path!r}")
+            raise ImportError(f"Invalid CSV formatting in {path!r}")
         features = {}
         for (i, k) in enumerate(header[int(temporal):]):
             k = k.strip()

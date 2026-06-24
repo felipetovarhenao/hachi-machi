@@ -105,8 +105,7 @@ def exec(ctx, input):
                 raise ValueError(
                     f"Invalid argument name for {cmd_name!r} command: {p!r}")
     except Exception as e:
-        Console.error(e.args[0])
-        exit()
+        Console.error(e.args)
     ctx.invoke(cmd, **params)
 
 

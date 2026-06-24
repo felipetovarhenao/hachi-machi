@@ -66,8 +66,13 @@ class Console:
         return cls.print(msg, 'warning', **kwargs)
 
     @classmethod
-    def error(cls, msg: str, **kwargs) -> None:
-        return cls.print(msg, 'error', **kwargs)
+    def error(cls, msg: str | list, **kwargs) -> None:
+        if isinstance(msg, list | tuple):
+            msg = '\n'.join(str(x) for x in msg)
+        if msg.strip() == '':
+            msg = "Something went wrong. Please use --debug flag to print traceback."
+        cls.print(msg, 'error', **kwargs)
+        sys.exit(1)
 
     @classmethod
     def pretty(cls, obj: dict, header: str | None = None):
