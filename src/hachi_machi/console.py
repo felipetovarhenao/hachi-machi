@@ -43,7 +43,7 @@ class Console:
     @classmethod
     def print(cls, text: str, type: str = 'neutral', defer: bool = False, end: str | None = '\n', **kwargs):
         text = cls.style(text, type, **kwargs)
-        return text if defer else print(text, end=end, file=sys.stdout if type != 'error' else sys.stderr)
+        return text if defer else print(text, end=end, file=sys.stderr if type in ['error', 'warning'] else sys.stdout)
 
     @classmethod
     def style(cls, text: str, type: str = 'neutral', **kwargs):
