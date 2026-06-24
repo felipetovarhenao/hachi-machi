@@ -54,7 +54,7 @@ class Categorical(BaseTransform):
             is_class = data[..., dim].frac().eq(0).all()
             if not is_class:
                 raise ValueError(
-                    f"All values along feature dimension {dim} must be integers to be handled as categorical.")
+                    f"All values along feature dimension {dim} must be integers to be interpreted as categorical.")
             classes = data[..., dim].unique()
             self.register_buffer(f'classes_{i}', classes)
             self.get_buffer

@@ -97,7 +97,7 @@ def exec(ctx, input):
         cmd_name = params.pop('cmd', None)
         if cmd_name is None or cmd_name not in valid_cmds:
             raise ValueError(
-                f"Invalid command: {cmd_name!r}. Expected: {options}")
+                f"Invalid command: {cmd_name!r}. Expected one of the following: {options}")
         cmd = main.commands[cmd_name]
         valid_params = [p.name for p in cmd.get_params(ctx)]
         for p in params:

@@ -192,16 +192,12 @@ class FileIO:
 
         if not isinstance(content, dict) or 'data' not in content:
             raise TypeError(
-                f'Invalid data. Format sequence under "data" key and provide sequence as a 2D matrix.')
+                f'Invalid JSON formatting. Missing "data" key.')
 
         data = content['data']
         features: dict = content.get('features', dict())
 
-        try:
-            data = cls.to_tensor(data)
-        except:
-            raise ValueError(
-                "data must be structured as a 2D matrix, each row with the same number of elements")
+        data = cls.to_tensor(data)
 
         if 'time' in content:
             temporal = True

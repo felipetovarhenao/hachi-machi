@@ -8,7 +8,7 @@ def validate_path(file, ext: str | list) -> str:
     file_ext = os.path.splitext(file)[1]
     if file_ext not in ext:
         raise TypeError(
-            f"Invalid extension: {file_ext}. Expected: {', '.join(ext)}")
+            f"Invalid file extension: {file_ext}. Expected one of the following: {', '.join(ext)}")
     return file
 
 
