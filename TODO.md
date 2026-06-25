@@ -5,6 +5,7 @@
 - [ ] Add support for multivariate feature groups.
 - [ ] Try implementing truncated backpropagation through time.
 - [ ] Allow multiple files for training data.
+- [ ] Circular data option
 - [x] Test on Windows.
 - [x] Fix spacing keys in config files.
 - [x] Adjust batch size
