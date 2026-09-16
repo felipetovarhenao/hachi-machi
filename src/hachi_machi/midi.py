@@ -28,12 +28,14 @@ class MidiParser:
             channels.add(channel)
             pitch = msg.note
             key = (channel, pitch)
-            if msg.velocity > 0:
+            if msg.velocity > 0 and msg.type != 'note_off':
                 active_notes[key] = (onset, channel, pitch, msg.velocity)
             elif key in active_notes:
                 note = active_notes.pop(key)
                 duration = onset - note[0]
                 events.append((*note, duration))
+            else:
+                print(f'Faulty note event ignored: {msg}')
 
         self.channels = list(channels)
         events.sort(key=lambda x: x[0])
