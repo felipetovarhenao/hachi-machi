@@ -57,7 +57,7 @@ class CustomGroup(click.Group):
                     is_eager=True,
                     expose_value=False,
                     callback=cls.open_docs,
-                    help="Open documentation in browser.")
+                    help="Open web documentation in browser.")
 
     def add_command(self, cmd, name=None):
         cmd.params.append(

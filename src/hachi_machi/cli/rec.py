@@ -17,7 +17,7 @@ from ..console import Console
                                 resolve_path=True,))
 @click.option('--temporal', '-t',
               type=bool,
-              help='If true, output dataset has temporal information',
+              help='If true, output dataset has temporal information—i.e., each event has a time tag. The first event received will have a time-tag of zero and subsequent events will be timed since that moment.',
               default=False,
               flag_value=True)
 @click.option('--in-port',
@@ -38,7 +38,7 @@ from ..console import Console
 @M(path_args=[('output', *FileIO.EXT),],
    device='cpu').wrapper
 def rec(**params):
-    """Given a pre-defined feature size, records incoming data via OSC to create datasets in real-time. 
+    """Given a pre-defined feature size, it records incoming data via OSC to create datasets in real-time. 
     **OUTPUT** file can be `.csv`, `.txt`, `.llll`, or `.json`.
 
     ### Input routes
