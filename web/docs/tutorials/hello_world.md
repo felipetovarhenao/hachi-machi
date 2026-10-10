@@ -22,14 +22,15 @@ _A visual representation of a workflow in **hachi machi**._
 
 In addition to [installing](../installation.md) **hachi machi**, you will need the following for this tutorial:
 
-1. A test MIDI file of your choosing.
+1. A test MIDI file of your choosing. It is strongly recommended to start out with a simple MIDI file (i.e., two to three MIDI tracks, short duration, etc.), before jumping to more complex MIDI sequences.
 2. Basic understanding and familiarity of how to run commands in the [terminal](https://www.terminaltutor.com/).
+3. For real-time interaction, it is assumed you understand how to send and receive OSC data through third-party applications, such as Max, PureData, SuperCollider, etc.
 
 ---
 
 ## Formatting our data
 
-To train our models, we need to convert our data to a format **hachi machi** will understand. In this case, we will use the `format` command to convert our MIDI file to JSON. To start, we run the following command from the directory where our MIDI file is located.
+To train our models, we need to convert our data to a format **hachi machi** will understand. In this case, we will use the `format` command to convert our MIDI file to [JSON](https://en.wikipedia.org/wiki/JSON), which is one of a handful of data formats **hachi machi** supports. To start, we run the following command from the directory where our MIDI file is located.
 
 ```bash
 hxmx format file.mid data.json
@@ -51,13 +52,13 @@ We'll discuss later how to better understand each of these blocks. For now, let'
 
 ## Training the model
 
-Once the data is ready, we tell **hachi machi** to create a new model trained on our JSON-formatted MIDI data, using the `train` command, like so:
+Once the data is ready, we tell **hachi machi** to create a new model that will be trained on our JSON-formatted MIDI data, using the `train` command, like so:
 
 ```bash
 hxmx train data.json model.pt
 ```
 
-This will quick-off the training loop. Depending on the length of the MIDI file we're using, and our computer's capabilities, this might take from one to several minutes (or even hours if you're unlucky!). We should see our new model in the same directory, with the name `model.pt`.
+This will kick off the training loop. Depending on the length of the MIDI file we're using, and our computer's processing capabilities, this might take from one to several minutes (or even hours if you're unlucky!). We should see our new model in the same directory, with the name `model.pt`.
 
 <VideoCard videoId="tvDuF94ZP7Y" />
 
@@ -71,7 +72,7 @@ To quickly test our model, we can generate a new sequence of MIDI notes _off-lin
 hxmx gen model.pt output.csv
 ```
 
-This will create a CSV file with our model-generated sequence.
+This will create a CSV file with our model-generated sequence. Try running it again, and notice that the data is different each time. This means our model is able to generate new sequences every time we run it via the `gen` command.
 
 <VideoCard videoId="FwfK8vLKG6M" />
 
@@ -85,7 +86,7 @@ To see our model work in real-time, we use the `run` command.
 hxmx run model.pt
 ```
 
-This will expose the model to receive input and send output messages via [OSC](https://en.wikipedia.org/wiki/Open_Sound_Control). Input messages are received on the `/1/input` route, and output messages are sent via the `/1/output` route (`1` stands for the model ID, since it's possible to host more than one model at a time). To let the model generate data autoregressively, all we need to do is feed the messages from `/1/output` back to `/1/input`. Watch the following video for more details:
+This will expose the model to receive input and send output messages via [OSC](https://en.wikipedia.org/wiki/Open_Sound_Control). Input messages are received on the `/1/input` route, and output messages are sent via the `/1/output` route (`1` stands for the model ID, since it's possible to host more than one model at a time). To let the model generate data [autoregressively](https://aws.amazon.com/what-is/autoregressive-models/), all we need to do is feed the messages from `/1/output` back to `/1/input`. Watch the following video for more details:
 
 <VideoCard videoId="Oug-8zPH12c" />
 
@@ -95,7 +96,7 @@ This will expose the model to receive input and send output messages via [OSC](h
 
 As much of a platitude as this statement is, it's easy to get unrealistic expectations of what our models can and cannot do—especially when we compare them to commercial LLMs. We might, for instance, expect this model to have learned human-level understanding of concepts such as harmony and rhythm.
 
-As we'll see in the next tutorials, while there are things we can do to meaningfully improve our models, they will almost always require some degree of "manual" (i.e., rule-based) tweaking on our side—this is one of the current trade-offs to being able to locally train and run our own deep-learning models. In the case of our MIDI model, this can mean, for instance, applying quantization to the pitch values so that it adheres to some harmonic scheme, or clipping velocity values that ocassionally go outside of the `0-127` range. Naturally, the type of post-processing we need will vary based on factors such as use case, data quality, and training parameters.
+As we'll see in the next tutorials, while there are things we can do to meaningfully improve our models, they will almost always require some degree of "manual" (i.e., rule-based) tweaking on our side—this is one of the current trade-offs to being able to locally train and run our own deep-learning models. In the case of our MIDI model, this can mean, for instance, applying quantization to the pitch values so that it adheres to some harmonic scheme we want the model to follow, or clipping velocity values that ocassionally go outside of the `0-127` MIDI range. Naturally, the type of post-processing we need will vary based on factors such as use case, data quality, and training parameters.
 
 <VideoCard videoId="Z5IFn4GuJdY" />
 
