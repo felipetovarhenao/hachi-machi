@@ -87,7 +87,10 @@ def main():
 @click.pass_context
 def exec(ctx, input):
     """
-    Allows to run commands via YAML or TOML configuration files. 
+    Allows users to run any **hachi machi** command via YAML or TOML configuration files.
+    This is particularly useful when running commands such as `train`, where the number of optional arguments is often too large and impactical to type directly in the terminal.
+    To learn more, read [this](/docs/tutorials/config-files).
+
     All configuration files must provide values for the command, via the `cmd` key, and any required positional argument.
     """
     try:
