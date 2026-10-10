@@ -17,7 +17,8 @@ from ..io import FileIO
 @M([('input', '.mid', '.midi'),
     ('output', *FileIO.EXT)]).wrapper
 def format(**params):
-    """Convert a MIDI file into a CSV, JSON, LLLL, or TXT data format, to be used as training data.
+    """
+    Convert a MIDI file (`.mid` or `.midi`) into a `.csv`, `.json`, `.llll`, or `.txt` data format, to be used as training data.
     """
     input_file = params['input']
     output_file = params['output']

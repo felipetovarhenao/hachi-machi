@@ -10,7 +10,7 @@ from ..trainer import Trainer
 @click.argument('input')
 @M([('input', '.pt')]).wrapper
 def info(**params):
-    """Prints information for some **INPUT** pre-trained model."""
+    """Prints information about some **INPUT** pre-trained model."""
     input = params['input']
     device = params['device']
     model: PerformerModel = torch.load(f=input,
