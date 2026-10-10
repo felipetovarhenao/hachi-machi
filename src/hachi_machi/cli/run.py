@@ -25,14 +25,21 @@ from .middleware import ClickMiddleware as M
 @M(path_args=[('models', '.pt'),],
    device='cpu').wrapper
 def run(**config):
-    """Given a path to one or more pre-trained (`.pt`) **MODELS**, starts a sessions for real-time inference, via OSC.
+    """Given a path to one or more pre-trained (`.pt`) **MODELS**, the `run` command launches a session for real-time model inference, via [OSC](https://en.wikipedia.org/wiki/Open_Sound_Control).
     Each model can be individually addressed via the `<model_id>` route—e.g., the first model has ID of `1`, the second has ID of `2`, and so on.
     The following OSC routes are available:
 
     ### Input routes
 
+    Each model can receive OSC messages via the following routes:
+
     - `/<model_id>/input <...features>`: The current event, as a list of features, for the model to make the next prediction. 
-    The number of event features must match either the masked or unmasked event size.
+    The number of event features must match either the masked or unmasked event size. 
+    For example, if the first model was trained on _xy_ coordinates, the OSC message would look like this: 
+
+    ```js title="Example of input OSC route and message"
+    /1/input -0.1 0.3
+    ```
 
     - `/<model_id>/sample`: Request a random sample from the model's learned distribution, to be sent via the `/<model_id>/output` route. Useful for kicking off an auto-regressive loop. 
 
@@ -46,9 +53,17 @@ def run(**config):
 
     ### Output routes
 
-    - `/<model_id>/output <...features>`: Model's predicted event (_unmasked_). The predicted event can be sent _as is_ back to `/input` for auto-regression, even if the model is trained on masked features.
+    The model output can be received via the following OSC routes:
 
-    - `/status <int>`: OSC server status. `1` when it's launched, and `0` when closed.
+    - `/<model_id>/output <...features>`: Model's predicted event (_unmasked_). 
+    The predicted event can be sent _as is_ back to `/input` for auto-regression, even if the model is trained on masked features. 
+    For example, if three models are being run, and the third was trained to generate 4 values, the output OSC message could look something like this:
+
+    ```js title="Example of output OSC route and message"
+    /3/output -0.1 0.4 -1.2 2.0
+    ```
+
+    - `/status <int>`: OSC server status. `1` when it's launched, and `0` when closed. This is automatically sent at the start and end of each session.
 
     :::tip
     Note that, in some cases, running the model on CPU results in lower prediction latency.
