@@ -48,7 +48,7 @@ def run(**config):
     - `/stop`: Shuts down OSC server and stops session.
 
     :::info
-    For input routes, `/<model_id>` can be optionally ommitted as a way to address all models at once.
+    For input routes, `/<model_id>` can be optionally omitted as a way to address all models at once.
     :::
 
     ### Output routes
