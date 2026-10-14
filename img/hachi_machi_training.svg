@@ -19,7 +19,7 @@
     <rect x="50" y="64" width="76" height="52" rx="8" stroke-width="0.5"
       style="fill:rgb(88, 68, 165);stroke:rgb(240, 240, 240);color:rgb(240, 240, 240);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif" />
     <text x="88" y="84" text-anchor="middle" dominant-baseline="central"
-      style="fill:rgb(240, 240, 240);stroke:none;color:rgb(240, 240, 240);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif">event</text>
+      style="fill:rgb(240, 240, 240);stroke:none;color:rgb(240, 240, 240);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif">Event</text>
     <text x="87" y="100" text-anchor="middle" dominant-baseline="central"
       style="fill:rgb(240, 240, 240);stroke:none;color:rgb(240, 240, 240);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif">t-2</text>
   </g>
@@ -28,7 +28,7 @@
     <rect x="138" y="64" width="76" height="52" rx="8" stroke-width="0.5"
       style="fill:rgb(88, 68, 165);stroke:rgb(240, 240, 240);color:rgb(240, 240, 240);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif" />
     <text x="176" y="84" text-anchor="middle" dominant-baseline="central"
-      style="fill:rgb(240, 240, 240);stroke:none;color:rgb(240, 240, 240);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif">event</text>
+      style="fill:rgb(240, 240, 240);stroke:none;color:rgb(240, 240, 240);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif">Event</text>
     <text x="176" y="100" text-anchor="middle" dominant-baseline="central"
       style="fill:rgb(240, 240, 240);stroke:none;color:rgb(240, 240, 240);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif">t-1</text>
   </g>
@@ -37,7 +37,7 @@
     <rect x="226" y="64" width="76" height="52" rx="8" stroke-width="0.5"
       style="fill:rgb(88, 68, 165);stroke:rgb(240, 240, 240);color:rgb(240, 240, 240);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif" />
     <text x="264" y="84" text-anchor="middle" dominant-baseline="central"
-      style="fill:rgb(240, 240, 240);stroke:none;color:rgb(240, 240, 240);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif">event</text>
+      style="fill:rgb(240, 240, 240);stroke:none;color:rgb(240, 240, 240);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif">Event</text>
     <text x="264" y="100" text-anchor="middle" dominant-baseline="central"
       style="fill:rgb(240, 240, 240);stroke:none;color:rgb(240, 240, 240);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif">t</text>
   </g>
@@ -61,14 +61,14 @@
 
   <text x="612" y="52" text-anchor="middle"
     style="fill:rgb(120, 120, 120);stroke:none;color:rgb(240, 240, 240);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif">Next
-    event</text>
+    Event</text>
 
   <g
     style="fill:rgb(0, 0, 0);stroke:none;color:rgb(240, 240, 240);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif">
     <rect x="562" y="64" width="96" height="52" rx="8" stroke-width="0.5"
       style="fill:rgb(115, 123, 216);stroke:rgb(203, 202, 165);color:rgb(240, 240, 240);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif" />
     <text x="610" y="84" text-anchor="middle" dominant-baseline="central"
-      style="fill:rgb(240, 240, 240);stroke:none;color:rgb(240, 240, 240);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif">event</text>
+      style="fill:rgb(240, 240, 240);stroke:none;color:rgb(240, 240, 240);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif">Event</text>
     <text x="610" y="100" text-anchor="middle" dominant-baseline="central"
       style="fill:rgb(240, 240, 240);stroke:none;color:rgb(240, 240, 240);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family: Lato, 'Century Gothic', 'Gill Sans', -apple-system, sans-serif">t+1</text>
   </g>
