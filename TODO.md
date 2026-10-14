@@ -1,4 +1,3 @@
-- [ ] Improve error messages
 - [ ] Support non-auto-regressive models.
 - [ ] Improve augmentation speed by performing on batch instead of segments.
 - [ ] Add support for pre-trained models
@@ -6,6 +5,7 @@
 - [ ] Try implementing truncated backpropagation through time.
 - [ ] Allow multiple files for training data.
 - [ ] Circular data option
+- [x] Improve error messages
 - [x] Test on Windows.
 - [x] Fix spacing keys in config files.
 - [x] Adjust batch size
