@@ -68,7 +68,7 @@ class BinaryOperation(Operation):
     """When `value` is a statistic (e.g., `mean`, `std`), the axis along which it is computed is determined by `axis`, and its always relative to the input data before any operations."""
 
     DOCS = {
-        'value': ("A numeric constant, or one of the following input-dependent, statistical properties."
+        'value': ("A numeric constant, or one of the following input-dependent, statistical properties. Note that all of these are derived from the data prior to any operations in the pipeline."
                   "\n\t- `mean`: arithmetic mean along `axis`."
                   "\n\t- `std`: standard deviation along `axis`."
                   ),
