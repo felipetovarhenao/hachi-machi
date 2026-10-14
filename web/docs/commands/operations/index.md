@@ -43,13 +43,13 @@ import TabItem from "@theme/TabItem";
 Note that text-like values such as `mean` or `std` are not in quotes.
 :::
 
-In this example, the following series of operations will be applied to the input data:
+In this example, the operations are applied in the order below. The statistics `mean` and `std` are always computed feature-wise on the original, unaugmented data.
 
-1. Subtract the feature-wise mean
-2. Divide by its feature-wise standard deviation
-3. Multiply (i.e., scale) by some normally distributed random value between `2 ** -0.1` and `2 ** 0.1`.
-4. Multiply by its feature-wise standard deviation.
-5. Add feature-wise mean to bring feature back to initial scale.
+1. `sub`: Subtract the mean along the feature axis from the data.
+2. `div`: Divide the result by the standard deviation along the feature axis. The data is now standardized.
+3. `mulrand`: Multiply the result globally by random factor `2 ** u`, where `u` is drawn uniformly from the range `(-0.1, 0.1)`. The factor therefore lies between `2 ** -0.1` and `2 ** 0.1`.
+4. `mul`: Multiply the result by the standard deviation, undoing step 2.
+5. `add`: Add the mean to the result, undoing step 1. The data is back on its original scale.
 
 :::caution
 For any augmentation pipeline, make ensure your data always remains in a realistic range. Poorly designed data augmentation pipelines might result in worse training outcomes.
